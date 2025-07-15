@@ -1,9 +1,9 @@
 /* === Theme Variables (Light by Default) === */
 :root {
-  --color-light: #ffffff;
+  --color-light: #ecebe7;
   --color-dark: #2A3335;
   --color-gray: #f0f0f0;
-  --color-border: #dcdcdc;
+  --color-border: rgba(0, 0, 0, 0.2);
   --color-accent: #444;
 
   --bg-main: var(--color-light);
@@ -13,12 +13,12 @@
 /* === DARK THEME === */
 .theme-dark {
   --color-light: #1e1e1e;
-  --color-dark: #ffffff;
+  --color-dark: #ecebe7;
   --color-gray: #2d2d2d;
-  --color-border: #444;
+  --color-border: rgba(255, 255, 255, 0.2);
   --color-accent: #ddd;
   --bg-main: #121212;
-  --text-color: #f5f5f5;
+  --text-color: #ecebe7;
 }
 
 /* === Global Styles === */
@@ -113,7 +113,7 @@ textarea::placeholder {
 /* === Buttons === */
 .btn {
   background-color: var(--color-dark);
-  color: white;
+  color: #ecebe7;
   border: none;
   transition: background-color 0.2s ease;
 }
@@ -129,7 +129,7 @@ textarea::placeholder {
 
 .btn-outline-primary:hover {
   background-color: var(--color-dark);
-  color: white;
+  color: #ecebe7;
 }
 
 /* === Alert Boxes === */
@@ -155,6 +155,7 @@ textarea::placeholder {
   background-color: var(--color-gray);
   color: var(--color-accent);
 }
+
 /* === Input Fields === */
 input,
 textarea,
@@ -184,6 +185,6 @@ body.theme-dark textarea::placeholder {
 
 .btn-outline-primary:hover {
   background-color: var(--color-accent);
-  color: white;
+  color: #ecebe7;
   border-color: var(--color-accent);
 }

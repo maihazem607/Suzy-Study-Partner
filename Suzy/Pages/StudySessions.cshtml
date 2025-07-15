@@ -1,0 +1,467 @@
+@page
+@{
+    ViewData["Title"] = "Study Sessions";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Study Sessions - Suzy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6fa;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            padding: 15px 20px;
+            font-weight: 500;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: #eef1f5;
+            color: #007bff;
+        }
+
+        .participants-section {
+            background: linear-gradient(135deg, #c4a5a5 0%, #b8a0a0 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: #fff;
+            min-height: 400px;
+        }
+
+        .participant-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            border: 3px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .cover-upload {
+            background: linear-gradient(135deg, #f5f1f1 0%, #e8d8d8 100%);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px dashed #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cover-upload:hover {
+            border-color: #007bff;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+        }
+
+        .timer-area {
+            background: linear-gradient(135deg, #6c7ce6 0%, #5a67d8 100%);
+            border-radius: 12px;
+            padding: 30px;
+            color: #fff;
+            text-align: center;
+            min-height: 200px;
+        }
+
+        .progress-area {
+            background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+            border-radius: 12px;
+            padding: 30px;
+            color: #fff;
+            min-height: 200px;
+        }
+
+        .spotify-area {
+            background: linear-gradient(135deg, #8b6f47 0%, #7a5e3a 100%);
+            border-radius: 12px;
+            padding: 30px;
+            color: #fff;
+            min-height: 250px;
+        }
+
+        .todo-area {
+            background: linear-gradient(135deg, #cd6868 0%, #b85555 100%);
+            border-radius: 12px;
+            padding: 30px;
+            color: #fff;
+            min-height: 250px;
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .timer-controls .btn {
+            margin: 5px;
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(#fff 0deg 180deg, rgba(255, 255, 255, 0.3) 180deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px auto;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .todo-item {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .todo-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .spotify-controls {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .participant-name {
+            font-size: 0.9rem;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .topbar {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-flex flex-column p-0">
+                <div class="text-center py-4">
+                    <h4><i class="fas fa-graduation-cap me-2"></i>Suzy</h4>
+                </div>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="/"><i class="fas fa-home me-2"></i>Dashboard</a>
+                    <a class="nav-link" href="#"><i class="fas fa-user-plus me-2"></i>Register / Login</a>
+                    <a class="nav-link" href="#"><i class="fas fa-upload me-2"></i>Upload Notes</a>
+                    <a class="nav-link" href="#"><i class="fas fa-folder-plus me-2"></i>Categorize Notes</a>
+                    <a class="nav-link" href="/FlashcardsTest"><i class="fas fa-clone me-2"></i>Flashcards</a>
+                    <a class="nav-link" href="#"><i class="fas fa-edit me-2"></i>Mock Exams</a>
+                    <a class="nav-link" href="#"><i class="fas fa-chart-line me-2"></i>Progress</a>
+                    <a class="nav-link active" href="/StudySessions"><i class="fas fa-users me-2"></i>Study Sessions</a>
+                    <a class="nav-link" href="#"><i class="fas fa-bell me-2"></i>Reminders</a>
+                    <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i>To-Do List</a>
+                    <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i>Settings</a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <!-- Topbar -->
+                <div class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+                    <h5 class="m-0">Study Session: Advanced Biology</h5>
+                    <form class="d-flex" style="width: 40%;">
+                        <input class="form-control me-2" type="search" placeholder="Search participants, notes..."
+                            aria-label="Search">
+                        <button class="btn btn-outline-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="btn btn-success btn-sm">
+                            <i class="fas fa-plus me-1"></i>Invite
+                        </button>
+                        <i class="fas fa-user-circle fa-2x"></i>
+                    </div>
+                </div>
+
+                <!-- Cover Photo Upload Section -->
+                <div class="container mt-4">
+                    <div class="cover-upload" onclick="document.getElementById('coverUpload').click();">
+                        <i class="fas fa-camera fa-2x mb-2" style="color: #888;"></i>
+                        <p class="mb-0" style="color: #666;">Cover photo can also be uploaded and customized by user</p>
+                        <input type="file" id="coverUpload" style="display: none;" accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Main Session Layout -->
+                <div class="container">
+                    <div class="row g-4">
+                        <!-- Left Column: Participants -->
+                        <div class="col-md-3">
+                            <div class="participants-section">
+                                <h6 class="mb-4">
+                                    <i class="fas fa-users me-2"></i>Participants
+                                </h6>
+
+                                <!-- Session Creator -->
+                                <div class="text-center mb-4">
+                                    <div class="participant-avatar mx-auto">
+                                        <i class="fas fa-user fa-lg"></i>
+                                    </div>
+                                    <div class="participant-name">
+                                        <strong>You (Host)</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Other Participants -->
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="participant-avatar">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="participant-name">Sarah</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="participant-avatar">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="participant-name">Mike</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="participant-avatar">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="participant-name">Alex</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="participant-avatar">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="participant-name">Emma</div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 text-center">
+                                    <small>5 participants online</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Middle Column: Timer and Spotify -->
+                        <div class="col-md-4">
+                            <!-- Timer Area -->
+                            <div class="timer-area mb-4">
+                                <h6><i class="fas fa-clock me-2"></i>Study Timer</h6>
+                                <div class="timer-display" id="timerDisplay">25:00</div>
+                                <div class="timer-controls">
+                                    <button class="btn btn-light" onclick="startTimer()">
+                                        <i class="fas fa-play"></i> Start
+                                    </button>
+                                    <button class="btn btn-outline-light" onclick="pauseTimer()">
+                                        <i class="fas fa-pause"></i> Pause
+                                    </button>
+                                    <button class="btn btn-outline-light" onclick="resetTimer()">
+                                        <i class="fas fa-stop"></i> Reset
+                                    </button>
+                                </div>
+                                <div class="mt-3">
+                                    <small>Pomodoro: 25 min focus • 5 min break</small>
+                                </div>
+                            </div>
+
+                            <!-- Spotify Music Area -->
+                            <div class="spotify-area">
+                                <h6><i class="fab fa-spotify me-2"></i>Study Music</h6>
+                                <p style="font-size: 0.9rem;">Spotify music pulled from API</p>
+
+                                <div class="spotify-controls">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <div style="font-weight: bold; font-size: 0.9rem;">Lo-fi Hip Hop Radio</div>
+                                            <div style="font-size: 0.8rem; opacity: 0.8;">Chill Study Beats</div>
+                                        </div>
+                                        <button class="btn btn-sm btn-light">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-light btn-sm me-2">
+                                        <i class="fas fa-backward"></i>
+                                    </button>
+                                    <button class="btn btn-light btn-sm me-2">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                    <button class="btn btn-outline-light btn-sm">
+                                        <i class="fas fa-forward"></i>
+                                    </button>
+                                </div>
+
+                                <div class="mt-3">
+                                    <small>Volume</small>
+                                    <input type="range" class="form-range" style="accent-color: #fff;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Progress and Todo -->
+                        <div class="col-md-5">
+                            <!-- Progress Area -->
+                            <div class="progress-area mb-4">
+                                <h6><i class="fas fa-chart-line me-2"></i>Session Progress</h6>
+
+                                <div class="row">
+                                    <div class="col-4 text-center">
+                                        <div class="progress-circle">50%</div>
+                                        <small>Goals Complete</small>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div class="progress-circle">3/5</div>
+                                        <small>Tasks Done</small>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div class="progress-circle">2h</div>
+                                        <small>Time Studied</small>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between">
+                                        <small>Group Focus Score</small>
+                                        <small>85%</small>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-light" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Todo List Area -->
+                            <div class="todo-area">
+                                <h6><i class="fas fa-tasks me-2"></i>Todo List for This Session</h6>
+
+                                <div class="todo-item">
+                                    <input type="checkbox" checked>
+                                    <span style="text-decoration: line-through;">Review Chapter 5: Cell Division</span>
+                                </div>
+
+                                <div class="todo-item">
+                                    <input type="checkbox" checked>
+                                    <span style="text-decoration: line-through;">Complete practice problems 1-10</span>
+                                </div>
+
+                                <div class="todo-item">
+                                    <input type="checkbox">
+                                    <span>Create flashcards for mitosis</span>
+                                </div>
+
+                                <div class="todo-item">
+                                    <input type="checkbox">
+                                    <span>Study photosynthesis diagrams</span>
+                                </div>
+
+                                <div class="todo-item">
+                                    <input type="checkbox">
+                                    <span>Group discussion: enzyme functions</span>
+                                </div>
+
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-light btn-sm">
+                                        <i class="fas fa-plus me-1"></i>Add Task
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Timer Functionality -->
+    <script>
+        let timerInterval;
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let isRunning = false;
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateDisplay();
+                    } else {
+                        // Timer finished
+                        clearInterval(timerInterval);
+                        isRunning = false;
+                        alert('Study session complete! Time for a break.');
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            if (isRunning) {
+                clearInterval(timerInterval);
+                isRunning = false;
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = 25 * 60;
+            updateDisplay();
+        }
+
+        // Initialize display
+        updateDisplay();
+
+        // Cover photo upload handler
+        document.getElementById('coverUpload').addEventListener('change', function (e) {
+            if (e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    alert('Cover photo uploaded successfully!');
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+    </script>
+</body>
+
+</html>

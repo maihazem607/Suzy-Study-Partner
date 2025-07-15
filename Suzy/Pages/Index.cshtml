@@ -1,157 +1,99 @@
 ﻿@page
 @model Suzy.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
+    ViewData["PageTitle"] = "Welcome, Student";
+    ViewData["SearchPlaceholder"] = "Search notes, flashcards...";
+    ViewData["ShowThemeToggle"] = "true";
+    Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Suzy - Student Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <!-- Custom Theme CSS -->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-</head>
-
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 sidebar d-flex flex-column p-0">
-                <div class="text-center py-4">
-                    <h4><i class="fas fa-graduation-cap me-2"></i>Suzy</h4>
-                </div>
-                <nav class="nav flex-column">
-                    <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i>Dashboard</a>
-                    <a class="nav-link" href="#"><i class="fas fa-user-plus me-2"></i>Register / Login</a>
-                    <a class="nav-link" href="#"><i class="fas fa-upload me-2"></i>Upload Notes</a>
-                    <a class="nav-link" href="#"><i class="fas fa-folder-plus me-2"></i>Categorize Notes</a>
-                    <a class="nav-link" href="/Flashcards/Flashindex"><i class="fas fa-clone me-2"></i>Flashcards</a>
-                    <a class="nav-link" href="#"><i class="fas fa-edit me-2"></i>Mock Exams</a>
-                    <a class="nav-link" href="#"><i class="fas fa-chart-line me-2"></i>Progress</a>
-                    <a class="nav-link" href="#"><i class="fas fa-users me-2"></i>Study Sessions</a>
-                    <a class="nav-link" href="#"><i class="fas fa-bell me-2"></i>Reminders</a>
-                    <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i>To-Do List</a>
-                    <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i>Settings</a>
-                </nav>
+<!-- Dashboard Cards -->
+<div class="row g-4">
+    <div class="col-md-6 col-lg-4">
+        <a href="#" class="text-decoration-none">
+            <div class="dashboard-card">
+                <i class="fas fa-upload"></i>
+                <h6>Upload Notes</h6>
+                <p>Organize your materials.</p>
             </div>
-
-            <!-- Main Content -->
-            <div class="col-md-10">
-                <!-- Topbar -->
-                <div class="topbar d-flex justify-content-between align-items-center px-4 py-3">
-                    <h5 class="m-0">Welcome, Student</h5>
-                    <form class="d-flex" style="width: 40%;">
-                        <input class="form-control me-2" type="search" placeholder="Search notes, flashcards..." aria-label="Search">
-                        <button class="btn btn-outline-primary" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </form>
-                    <div class="d-flex align-items-center gap-3">
-                        <!-- Theme Toggle Button -->
-                        <button id="themeToggle" class="theme-toggle-btn" title="Toggle Theme">
-                            <i class="fas fa-adjust"></i>
-                        </button>
-                        <i class="fas fa-user-circle fa-2x"></i>
-                    </div>
-                </div>
-
-                <!-- Dashboard Cards -->
-                <div class="container mt-4">
-                    <div class="row g-4">
-                        <div class="col-md-6 col-lg-4">
-                            <a href="#" class="text-decoration-none">
-                                <div class="dashboard-card">
-                                    <i class="fas fa-upload"></i>
-                                    <h6>Upload Notes</h6>
-                                    <p>Organize your materials.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <a href="#" class="text-decoration-none">
-                                <div class="dashboard-card">
-                                    <i class="fas fa-tags"></i>
-                                    <h6>Tag by Subject</h6>
-                                    <p>Find content easily.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <a href="/Flashcards/Flashindex" class="text-decoration-none">
-                                <div class="dashboard-card">
-                                    <i class="fas fa-clone"></i>
-                                    <h6>Flashcards</h6>
-                                    <p>Generate, organize, shuffle and master concepts.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <a href="#" class="text-decoration-none">
-                                <div class="dashboard-card">
-                                    <i class="fas fa-edit"></i>
-                                    <h6>Mock Exams</h6>
-                                    <p>Custom settings, practice, and review history.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <a href="#" class="text-decoration-none">
-                                <div class="dashboard-card">
-                                    <i class="fas fa-users"></i>
-                                    <h6>Study Sessions</h6>
-                                    <p>Public/private sessions, timer, mood tracker.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <a href="#" class="text-decoration-none">
-                                <div class="dashboard-card">
-                                    <i class="fas fa-brain"></i>
-                                    <h6>AI Study Tips</h6>
-                                    <p>Get tips & analyze your study patterns (coming soon).</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <a href="#" class="text-decoration-none">
-                                <div class="dashboard-card">
-                                    <i class="fas fa-tasks"></i>
-                                    <h6>To-Do+Scheduler</h6>
-                                    <p>Plan with AI and manage tasks easily.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <a href="#" class="text-decoration-none">
-                                <div class="dashboard-card">
-                                    <i class="fas fa-music"></i>
-                                    <h6>Study Music</h6>
-                                    <p>Enhance focus with background tunes.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <a href="#" class="text-decoration-none">
-                                <div class="dashboard-card">
-                                    <i class="fas fa-chart-line"></i>
-                                    <h6>Progress+Leaderboard</h6>
-                                    <p>Track goals, hours studied, and compare scores.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </a>
     </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="#" class="text-decoration-none">
+            <div class="dashboard-card">
+                <i class="fas fa-tags"></i>
+                <h6>Tag by Subject</h6>
+                <p>Find content easily.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="/Flashcards/Flashindex" class="text-decoration-none">
+            <div class="dashboard-card">
+                <i class="fas fa-clone"></i>
+                <h6>Flashcards</h6>
+                <p>Generate, organize, shuffle and master concepts.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="#" class="text-decoration-none">
+            <div class="dashboard-card">
+                <i class="fas fa-edit"></i>
+                <h6>Mock Exams</h6>
+                <p>Custom settings, practice, and review history.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="/Sessions/StudySessions" class="text-decoration-none">
+            <div class="dashboard-card">
+                <i class="fas fa-users"></i>
+                <h6>Study Sessions</h6>
+                <p>Public/private sessions, timer, mood tracker.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="#" class="text-decoration-none">
+            <div class="dashboard-card">
+                <i class="fas fa-brain"></i>
+                <h6>AI Study Tips</h6>
+                <p>Get tips & analyze your study patterns (coming soon).</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="#" class="text-decoration-none">
+            <div class="dashboard-card">
+                <i class="fas fa-tasks"></i>
+                <h6>To-Do+Scheduler</h6>
+                <p>Plan with AI and manage tasks easily.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="#" class="text-decoration-none">
+            <div class="dashboard-card">
+                <i class="fas fa-music"></i>
+                <h6>Study Music</h6>
+                <p>Enhance focus with background tunes.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="#" class="text-decoration-none">
+            <div class="dashboard-card">
+                <i class="fas fa-chart-line"></i>
+                <h6>Progress+Leaderboard</h6>
+                <p>Track goals, hours studied, and compare scores.</p>
+            </div>
+        </a>
+    </div>
+</div>
 
-    <!-- Theme Toggle Script -->
+@section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             if (localStorage.getItem("theme") === "dark") {
@@ -165,5 +107,4 @@
             });
         });
     </script>
-</body>
-</html>
+}

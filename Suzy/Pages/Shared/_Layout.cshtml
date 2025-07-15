@@ -1,53 +1,139 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Suzy</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Theme CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Suzy.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-color);
+            height: 100vh;
+            overflow-y: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background-color: var(--color-light);
+            border-right: 1px solid var(--color-border);
+        }
+
+        .sidebar .nav-link {
+            color: var(--text-color);
+            padding: 12px 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--color-border);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: var(--color-gray);
+            color: var(--color-accent);
+        }
+
+        .topbar {
+            background-color: var(--color-light);
+            border-bottom: 1px solid var(--color-border);
+            height: 60px;
+        }
+
+        .main-content {
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+
+        .btn {
+            border: 1px solid var(--color-border);
+            background: var(--color-light);
+            color: var(--text-color);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .btn:hover {
+            background: var(--color-gray);
+        }
+
+        .form-control {
+            border: 1px solid var(--color-border);
+            background: var(--color-light);
+            color: var(--text-color);
+        }
+    </style>
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Suzy</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Flashcards">📚 Flashcards</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-flex flex-column p-0">
+                <div class="text-center py-4">
+                    <h4><i class="fas fa-graduation-cap me-2"></i>Suzy</h4>
+                </div>
+                <nav class="nav flex-column">
+                    <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "active" : "")"
+                        href="/"><i class="fas fa-home me-2"></i>Dashboard</a>
+                    <a class="nav-link" href="#"><i class="fas fa-user-plus me-2"></i>Register / Login</a>
+                    <a class="nav-link" href="#"><i class="fas fa-upload me-2"></i>Upload Notes</a>
+                    <a class="nav-link" href="#"><i class="fas fa-folder-plus me-2"></i>Categorize Notes</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("Flashcards") == true ? "active" : "")"
+                        href="/Flashcards/Flashindex"><i class="fas fa-clone me-2"></i>Flashcards</a>
+                    <a class="nav-link" href="#"><i class="fas fa-edit me-2"></i>Mock Exams</a>
+                    <a class="nav-link" href="#"><i class="fas fa-chart-line me-2"></i>Progress</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("StudySessions") == true ? "active" : "")"
+                        href="/Sessions/StudySessions"><i class="fas fa-users me-2"></i>Study Sessions</a>
+                    <a class="nav-link" href="#"><i class="fas fa-bell me-2"></i>Reminders</a>
+                    <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i>To-Do List</a>
+                    <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i>Settings</a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <!-- Topbar -->
+                <div class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+                    <h5 class="m-0">@ViewData["PageTitle"]</h5>
+                    <form class="d-flex" style="width: 40%;">
+                        <input class="form-control me-2" type="search" placeholder="@ViewData["SearchPlaceholder"]"
+                            aria-label="Search">
+                        <button class="btn btn-outline-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <div class="d-flex align-items-center gap-3">
+                        @if (ViewData["ShowInviteButton"]?.ToString() == "true")
+                        {
+                            <button class="btn btn-success btn-sm">
+                                <i class="fas fa-plus me-1"></i>Invite
+                            </button>
+                        }
+                        @if (ViewData["ShowThemeToggle"]?.ToString() == "true")
+                        {
+                            <button id="themeToggle" class="theme-toggle-btn" title="Toggle Theme">
+                                <i class="fas fa-adjust"></i>
+                            </button>
+                        }
+                        <i class="fas fa-user-circle fa-2x"></i>
+                    </div>
+                </div>
+
+                <!-- Page Content -->
+                <div class="container-fluid p-3">
+                    @RenderBody()
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Suzy - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
-    </footer>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -57,4 +143,3 @@
 </body>
 
 </html>
-
