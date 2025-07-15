@@ -1,0 +1,74 @@
+@page
+@model Suzy.Pages.FlashcardsTestModel
+@{
+    ViewData["Title"] = "Flashcard Test";
+}
+
+<div class="container mt-4">
+    <h2>🧪 Flashcard Generator Test</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-info">
+            @Model.Message
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <h6>Validation Errors:</h6>
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Test Form</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="TestInput" class="form-label">Enter some text:</label>
+                            <textarea class="form-control" name="TestInput" id="TestInput" rows="5"
+                                placeholder="Enter test content here..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            🧪 Test Generate
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            @if (Model.TestFlashcards?.Any() == true)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Test Results</h5>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var flashcard in Model.TestFlashcards)
+                        {
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h6 class="text-primary">Q: @flashcard.Front</h6>
+                                    <p class="text-success">A: @flashcard.Back</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

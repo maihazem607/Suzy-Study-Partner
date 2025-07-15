@@ -1,0 +1,32 @@
+Photosynthesis Study Notes
+
+Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods with carbon dioxide and water. 
+
+Key Components:
+- Chloroplasts: The organelles where photosynthesis occurs
+- Chlorophyll: The green pigment that captures light energy
+- Stomata: Tiny pores on leaves that allow gas exchange
+
+The Equation:
+6CO2 + 6H2O + light energy → C6H12O6 + 6O2
+
+Two Main Stages:
+1. Light-dependent reactions (occur in thylakoids)
+   - Capture light energy
+   - Split water molecules
+   - Produce ATP and NADPH
+
+2. Light-independent reactions (Calvin Cycle - occurs in stroma)
+   - Use ATP and NADPH to convert CO2 into glucose
+   - Don't require direct sunlight
+
+Factors Affecting Photosynthesis:
+- Light intensity
+- Carbon dioxide concentration  
+- Temperature
+- Water availability
+
+Importance:
+- Produces oxygen for life on Earth
+- Forms the base of most food chains
+- Removes carbon dioxide from atmosphere

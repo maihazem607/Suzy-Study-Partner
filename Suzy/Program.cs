@@ -1,7 +1,12 @@
+using Suzy.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<GeminiService>();
+builder.Services.AddHttpClient();
+builder.Services.AddAntiforgery();
 
 var app = builder.Build();
 

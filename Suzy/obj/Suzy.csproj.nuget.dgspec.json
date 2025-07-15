@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj": {}
+    "c:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj": {}
   },
   "projects": {
-    "C:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj": {
+    "c:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj",
+        "projectUniqueName": "c:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj",
         "projectName": "Suzy",
-        "projectPath": "C:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj",
+        "projectPath": "c:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj",
         "packagesPath": "C:\\Users\\maiha\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\obj\\",
+        "outputPath": "c:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -53,6 +53,10 @@
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[3.4.0, )"
+            },
+            "OpenAI": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             }
           },
           "imports": [

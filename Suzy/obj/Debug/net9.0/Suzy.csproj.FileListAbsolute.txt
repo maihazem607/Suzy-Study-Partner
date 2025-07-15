@@ -200,3 +200,6 @@ C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\bin\Debug\net9.0\ZstdSha
 C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\Suzy.csproj.AssemblyReference.cache
 C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\id59epy7xb-fwi2qr36b1.gz
 C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\Suzy.csproj.Up2Date
+C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\bin\Debug\net9.0\OpenAI.dll
+C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\bin\Debug\net9.0\System.ClientModel.dll
+C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\bin\Debug\net9.0\System.Memory.Data.dll
