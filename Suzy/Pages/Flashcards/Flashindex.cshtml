@@ -1,0 +1,119 @@
+@page
+@model Suzy.Pages.Flashcards.FlashindexModel
+
+@{
+    ViewData["Title"] = "Flashcard Generator";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<style>
+    body {
+        background-color: #f4f6fa;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h2 {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .flashcard-q {
+        font-weight: 600;
+        color: #007bff;
+    }
+
+    .flashcard-a {
+        font-weight: 500;
+        color: #28a745;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+</style>
+
+<div class="container mt-5">
+    <h2><i class="fas fa-magic me-2"></i>Flashcard Generator</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i>@Model.Message
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger mt-3">
+            <h6><i class="fas fa-exclamation-triangle me-2"></i>Validation Errors</h6>
+            <ul class="mb-0">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="row mt-4">
+        <!-- Form Column -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5><i class="fas fa-keyboard me-2"></i>Test Form</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="TestInput" class="form-label">Enter some text:</label>
+                            <textarea class="form-control" name="TestInput" id="TestInput" rows="5"
+                                      placeholder="Paste your notes or text here..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-wand-magic me-2"></i>Generate Flashcards
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Column -->
+        <div class="col-md-6">
+            @if (Model.TestFlashcards?.Any() == true)
+            {
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5><i class="fas fa-list-ul me-2"></i>Generated Flashcards</h5>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var flashcard in Model.TestFlashcards)
+                        {
+                            <div class="card mb-3 border-start border-4 border-primary">
+                                <div class="card-body">
+                                    <p class="flashcard-q">Q: @flashcard.Front</p>
+                                    <p class="flashcard-a">A: @flashcard.Back</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

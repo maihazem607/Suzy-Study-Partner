@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Suzy.Services;
 using System.ComponentModel.DataAnnotations;
 
-namespace Suzy.Pages
+namespace Suzy.Pages.Flashcards
 {
     [IgnoreAntiforgeryToken]
-    public class FlashcardsTestModel : PageModel
+    public class FlashindexModel : PageModel
     {
         private readonly GeminiService _geminiService;
-        private readonly ILogger<FlashcardsTestModel> _logger;
+        private readonly ILogger<FlashindexModel> _logger;
 
-        public FlashcardsTestModel(GeminiService geminiService, ILogger<FlashcardsTestModel> logger)
+        public FlashindexModel(GeminiService geminiService, ILogger<FlashindexModel> logger)
         {
             _geminiService = geminiService;
             _logger = logger;

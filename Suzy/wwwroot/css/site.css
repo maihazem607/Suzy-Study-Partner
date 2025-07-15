@@ -1,6 +1,189 @@
+/* === Theme Variables (Light by Default) === */
+:root {
+  --color-light: #ffffff;
+  --color-dark: #2A3335;
+  --color-gray: #f0f0f0;
+  --color-border: #dcdcdc;
+  --color-accent: #444;
+
+  --bg-main: var(--color-light);
+  --text-color: var(--color-dark);
+}
+
+/* === DARK THEME === */
+.theme-dark {
+  --color-light: #1e1e1e;
+  --color-dark: #ffffff;
+  --color-gray: #2d2d2d;
+  --color-border: #444;
+  --color-accent: #ddd;
+  --bg-main: #121212;
+  --text-color: #f5f5f5;
+}
+
+/* === Global Styles === */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
-  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+/* === Sidebar === */
+.sidebar {
+  background-color: var(--color-light);
+  border-right: 1px solid var(--color-border);
+  height: 100vh;
+  padding-top: 1rem;
+}
+
+.sidebar .nav-link {
+  color: var(--text-color);
+  font-weight: 500;
+  padding: 12px 18px;
+  border-radius: 5px;
+  transition: 0.2s ease;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background-color: var(--color-gray);
+  color: var(--color-accent);
+}
+
+/* === Topbar === */
+.topbar {
+  background-color: var(--color-light);
+  border-bottom: 1px solid var(--color-border);
+  padding: 10px 20px;
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* === Dashboard Cards === */
+.dashboard-card {
+  background-color: var(--color-light);
+  color: var(--text-color);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.03);
   padding: 20px;
+  border-radius: 12px;
+  transition: 0.3s ease;
+  text-align: center;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card i {
+  font-size: 30px;
+  color: var(--color-accent);
+  margin-bottom: 10px;
+}
+
+/* === Form Elements === */
+input,
+textarea,
+select,
+.form-control {
+  background-color: var(--color-light);
+  color: var(--text-color);
+  border: 1px solid var(--color-border);
+  transition: 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #888;
+}
+
+/* === Buttons === */
+.btn {
+  background-color: var(--color-dark);
+  color: white;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #000;
+}
+
+.btn-outline-primary {
+  color: var(--color-dark);
+  border-color: var(--color-border);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--color-dark);
+  color: white;
+}
+
+/* === Alert Boxes === */
+.alert {
+  border-radius: 6px;
+  padding: 15px;
+  font-size: 0.95rem;
+}
+
+/* === Theme Toggle Button === */
+.theme-toggle-btn {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--color-gray);
+  color: var(--color-accent);
+}
+/* === Input Fields === */
+input,
+textarea,
+select,
+.form-control {
+  background-color: var(--color-light);
+  color: var(--text-color);
+  border: 1px solid var(--color-border);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #888;
+}
+
+body.theme-dark input::placeholder,
+body.theme-dark textarea::placeholder {
+  color: #aaa;
+}
+
+/* === Fix for Search Button Outline === */
+.btn-outline-primary {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
 }
