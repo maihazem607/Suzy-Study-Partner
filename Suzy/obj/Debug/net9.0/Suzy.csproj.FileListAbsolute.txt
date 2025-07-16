@@ -235,7 +235,6 @@ c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\rjimswa
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\scopedcss\bundle\Suzy.styles.css
-c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\j41u0pgnbx-61n19gt1b8.gz
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\8apkv57hcb-xtxxf3hu2r.gz
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\b7ydxes5qa-bqjiyaj88i.gz
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\cxvo9fqkca-c2jlpeoesf.gz
@@ -308,3 +307,5 @@ c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\Suzy.ge
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\ref\Suzy.dll
 C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\id59epy7xb-qd7uypzlby.gz
 C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\na3exw449d-3ai8cd52gp.gz
+C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\s06ewwp3gk-jdhmu2y0t3.gz
+C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\j41u0pgnbx-jdhmu2y0t3.gz
