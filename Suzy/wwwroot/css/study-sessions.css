@@ -1,0 +1,163 @@
+.participants-section {
+    background: #fbf6ea;
+    padding: 20px;
+    color: #333;
+    height: 460px;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.participant-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.cover-upload {
+    background: #fbf6ea;
+    padding: 25px;
+    text-align: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 100px;
+}
+
+.cover-upload:hover {
+    background: rgba(0, 123, 255, 0.05);
+}
+
+.timer-area {
+    background: #fbf6ea;
+    padding: 15px;
+    color: #333;
+    text-align: center;
+    height: 200px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.progress-area {
+    background: #fbf6ea;
+    padding: 15px;
+    color: #333;
+    height: 200px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.spotify-area {
+    background: #fbf6ea;
+    padding: 20px;
+    color: #333;
+    height: 280px;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.todo-area {
+    background: #fbf6ea;
+    padding: 20px;
+    color: #333;
+    height: 280px;
+    overflow-y: auto;
+}
+
+.todo-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.todo-area::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 3px;
+}
+
+.todo-area::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+.todo-area::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.timer-display {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.timer-controls {
+    margin-top: 10px;
+}
+
+.timer-controls .btn {
+    margin: 2px;
+    padding: 6px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: #fbf6ea;
+    color: #333;
+    font-size: 0.85rem;
+}
+
+.timer-controls .btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.progress-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fbf6ea;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px auto;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.todo-item {
+    background: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.todo-item input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.1);
+}
+
+.spotify-controls {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    margin: 12px 0;
+}
+
+.participant-name {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.progress {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    background-color: #333 !important;
+}
+
+.form-range {
+    accent-color: #333;
+}

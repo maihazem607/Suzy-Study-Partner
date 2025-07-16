@@ -306,4 +306,5 @@ c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\refint\
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\Suzy.pdb
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\Suzy.genruntimeconfig.cache
 c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\ref\Suzy.dll
-c:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\id59epy7xb-pmjaptuwwz.gz
+C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\id59epy7xb-qd7uypzlby.gz
+C:\Users\maiha\OneDrive\Documents\GitHub\SmartPrep\Suzy\obj\Debug\net9.0\compressed\na3exw449d-3ai8cd52gp.gz

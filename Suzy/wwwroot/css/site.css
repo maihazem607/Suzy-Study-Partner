@@ -1,6 +1,6 @@
 /* === Theme Variables (Light by Default) === */
 :root {
-  --color-light: #ecebe7;
+  --color-light: #fbf6ea;
   --color-dark: #2A3335;
   --color-gray: #f0f0f0;
   --color-border: rgba(0, 0, 0, 0.2);
@@ -13,12 +13,12 @@
 /* === DARK THEME === */
 .theme-dark {
   --color-light: #1e1e1e;
-  --color-dark: #ecebe7;
+  --color-dark: #fbf6ea;
   --color-gray: #2d2d2d;
   --color-border: rgba(255, 255, 255, 0.2);
   --color-accent: #ddd;
   --bg-main: #121212;
-  --text-color: #ecebe7;
+  --text-color: #fbf6ea;
 }
 
 /* === Global Styles === */
@@ -113,7 +113,7 @@ textarea::placeholder {
 /* === Buttons === */
 .btn {
   background-color: var(--color-dark);
-  color: #ecebe7;
+  color: #fbf6ea;
   border: none;
   transition: background-color 0.2s ease;
 }
@@ -129,7 +129,7 @@ textarea::placeholder {
 
 .btn-outline-primary:hover {
   background-color: var(--color-dark);
-  color: #ecebe7;
+  color: #fbf6ea;
 }
 
 /* === Alert Boxes === */
@@ -185,6 +185,6 @@ body.theme-dark textarea::placeholder {
 
 .btn-outline-primary:hover {
   background-color: var(--color-accent);
-  color: #ecebe7;
+  color: #fbf6ea;
   border-color: var(--color-accent);
 }

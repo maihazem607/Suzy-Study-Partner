@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sSeJ59HsHCg=",
+  "dgSpecHash": "kZ0tHBz8/Gg=",
   "success": true,
-  "projectFilePath": "c:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj",
+  "projectFilePath": "C:\\Users\\maiha\\OneDrive\\Documents\\GitHub\\SmartPrep\\Suzy\\Suzy.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\maiha\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
     "C:\\Users\\maiha\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",

@@ -11,6 +11,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <!-- Custom Theme CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Head", required: false)
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -25,6 +26,63 @@
             height: 100vh;
             background-color: var(--color-light);
             border-right: 1px solid var(--color-border);
+            transition: width 0.3s ease;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 16.666667%;
+            /* Bootstrap col-md-2 width */
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+            /* Just enough for icons */
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            padding: 8px 10px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+        }
+
+        .sidebar-toggle:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
+        }
+
+        .sidebar-toggle i {
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            margin-left: 16.666667%;
+            /* Bootstrap col-md-2 width */
+            width: 83.333333%;
+            /* Bootstrap col-md-10 width */
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 80px;
+            /* Match collapsed sidebar width */
+            width: calc(100% - 80px);
+        }
+
+        .sidebar-brand {
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed .sidebar-brand {
+            opacity: 0;
         }
 
         .sidebar .nav-link {
@@ -34,12 +92,75 @@
             font-size: 0.9rem;
             border-bottom: 1px solid var(--color-border);
             transition: background-color 0.2s ease, color 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar .nav-link i {
+            width: 24px;
+            text-align: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+            /* Make icons bigger */
+        }
+
+        .sidebar.collapsed .nav-link {
+            justify-content: center;
+            padding: 12px 10px;
+        }
+
+        .sidebar.collapsed .nav-link span {
+            display: none;
+        }
+
+        .sidebar.collapsed .nav-link i {
+            margin-right: 0;
+            font-size: 1.3rem;
+            /* Even bigger when collapsed */
+        }
+
+        .sidebar .nav-link {
+            color: var(--text-color);
+            padding: 12px 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--color-border);
+            transition: background-color 0.2s ease, color 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar .nav-link i {
+            width: 24px;
+            text-align: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+            /* Make icons bigger */
+        }
+
+        .sidebar.collapsed .nav-link {
+            justify-content: center;
+            padding: 12px 10px;
+        }
+
+        .sidebar.collapsed .nav-link span {
+            display: none;
+        }
+
+        .sidebar.collapsed .nav-link i {
+            margin-right: 0;
+            font-size: 1.3rem;
+            /* Even bigger when collapsed */
         }
 
         .sidebar .nav-link:hover,
         .sidebar .nav-link.active {
-            background-color: var(--color-gray);
-            color: var(--color-accent);
+            background-color: rgba(0, 0, 0, 0.08);
+            color: var(--text-color);
         }
 
         .topbar {
@@ -51,6 +172,17 @@
         .main-content {
             height: calc(100vh - 60px);
             overflow-y: auto;
+            margin-left: 16.666667%;
+            /* Bootstrap col-md-2 width */
+            width: 83.333333%;
+            /* Bootstrap col-md-10 width */
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 80px;
+            /* Match collapsed sidebar width */
+            width: calc(100% - 80px);
         }
 
         .btn {
@@ -73,33 +205,37 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid p-0">
+        <div class="row g-0">
             <!-- Sidebar -->
-            <div class="col-md-2 sidebar d-flex flex-column p-0">
-                <div class="text-center py-4">
+            <div class="sidebar d-flex flex-column p-0" id="sidebar">
+                <!-- Sidebar Toggle Button -->
+                <div class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="text-center py-4 sidebar-brand">
                     <h4><i class="fas fa-graduation-cap me-2"></i>Suzy</h4>
                 </div>
                 <nav class="nav flex-column">
                     <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "active" : "")"
-                        href="/"><i class="fas fa-home me-2"></i>Dashboard</a>
-                    <a class="nav-link" href="#"><i class="fas fa-user-plus me-2"></i>Register / Login</a>
-                    <a class="nav-link" href="#"><i class="fas fa-upload me-2"></i>Upload Notes</a>
-                    <a class="nav-link" href="#"><i class="fas fa-folder-plus me-2"></i>Categorize Notes</a>
+                        href="/"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                    <a class="nav-link" href="#"><i class="fas fa-user-plus"></i><span>Register / Login</span></a>
+                    <a class="nav-link" href="#"><i class="fas fa-upload"></i><span>Upload Notes</span></a>
+                    <a class="nav-link" href="#"><i class="fas fa-folder-plus"></i><span>Categorize Notes</span></a>
                     <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("Flashcards") == true ? "active" : "")"
-                        href="/Flashcards/Flashindex"><i class="fas fa-clone me-2"></i>Flashcards</a>
-                    <a class="nav-link" href="#"><i class="fas fa-edit me-2"></i>Mock Exams</a>
-                    <a class="nav-link" href="#"><i class="fas fa-chart-line me-2"></i>Progress</a>
+                        href="/Flashcards/Flashindex"><i class="fas fa-clone"></i><span>Flashcards</span></a>
+                    <a class="nav-link" href="#"><i class="fas fa-edit"></i><span>Mock Exams</span></a>
+                    <a class="nav-link" href="#"><i class="fas fa-chart-line"></i><span>Progress</span></a>
                     <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("StudySessions") == true ? "active" : "")"
-                        href="/Sessions/StudySessions"><i class="fas fa-users me-2"></i>Study Sessions</a>
-                    <a class="nav-link" href="#"><i class="fas fa-bell me-2"></i>Reminders</a>
-                    <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i>To-Do List</a>
-                    <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i>Settings</a>
+                        href="/Sessions/StudySessions"><i class="fas fa-users"></i><span>Study Sessions</span></a>
+                    <a class="nav-link" href="#"><i class="fas fa-bell"></i><span>Reminders</span></a>
+                    <a class="nav-link" href="#"><i class="fas fa-tasks"></i><span>To-Do List</span></a>
+                    <a class="nav-link" href="#"><i class="fas fa-cogs"></i><span>Settings</span></a>
                 </nav>
             </div>
 
             <!-- Main Content -->
-            <div class="col-md-10 main-content">
+            <div class="main-content" id="mainContent">
                 <!-- Topbar -->
                 <div class="topbar d-flex justify-content-between align-items-center px-4 py-3">
                     <h5 class="m-0">@ViewData["PageTitle"]</h5>
@@ -138,6 +274,25 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Sidebar toggle functionality
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleIcon = this.querySelector('i');
+
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+
+            // Change icon based on state
+            if (sidebar.classList.contains('collapsed')) {
+                toggleIcon.className = 'fas fa-chevron-right';
+            } else {
+                toggleIcon.className = 'fas fa-bars';
+            }
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
