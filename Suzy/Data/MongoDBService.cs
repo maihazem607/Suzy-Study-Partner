@@ -14,11 +14,5 @@ public class MongoDBService
 
     public async Task InsertSampleDataAsync()
     {
-        var document = new BsonDocument
-        {
-            { "name", "Mai" },
-            { "email", "mai@example.com" }
-        };
-        await _collection.InsertOneAsync(document);
     }
 }
