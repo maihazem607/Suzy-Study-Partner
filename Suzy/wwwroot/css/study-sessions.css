@@ -2,8 +2,9 @@
     background: #fbf6ea;
     padding: 20px;
     color: #333;
-    height: 460px;
-    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    height: 536px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
 }
 
 .participant-avatar {
@@ -23,10 +24,11 @@
     padding: 25px;
     text-align: center;
     margin-bottom: 15px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: all 0.3s ease;
     height: 100px;
+    border-radius: 8px;
 }
 
 .cover-upload:hover {
@@ -38,32 +40,38 @@
     padding: 15px;
     color: #333;
     text-align: center;
-    height: 200px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    height: 190px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
 }
 
-.progress-area {
+.suzyvod-area{
     background: #fbf6ea;
-    padding: 15px;
+    padding: 10px;
     color: #333;
-    height: 200px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    text-align: center;
+    height: 250px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
 }
 
 .spotify-area {
     background: #fbf6ea;
     padding: 20px;
     color: #333;
-    height: 280px;
-    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    height: 270px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
 }
 
 .todo-area {
     background: #fbf6ea;
     padding: 20px;
     color: #333;
-    height: 280px;
+    height: 270px;
     overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
 }
 
 .todo-area::-webkit-scrollbar {
@@ -160,4 +168,52 @@
 
 .form-range {
     accent-color: #333;
+}
+
+/* New classes for previously inline styles */
+.camera-icon {
+    color: #666;
+}
+
+.cover-upload-text {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.timer-area-main {
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.timer-display-main {
+    font-size: 2rem;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.spotify-track-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.spotify-track-artist {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.spotify-description {
+    font-size: 0.85rem;
+}
+
+.suzyvod-video {
+    width: 100%;
+    border-radius: 8px;
+    height: 215px;
+    object-fit: cover;
+}
+
+.todo-completed {
+    text-decoration: line-through;
 }
