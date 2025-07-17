@@ -40,11 +40,11 @@ builder.Services.AddAntiforgery();
 
 var app = builder.Build();
 
-// Ensure DB is created
+// Ensure DB migrations are applied
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 
