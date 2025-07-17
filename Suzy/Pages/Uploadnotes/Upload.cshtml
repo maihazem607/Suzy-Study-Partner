@@ -1,0 +1,102 @@
+@page
+@model Suzy.Pages.Uploadnotes.UploadModel
+@{
+    ViewData["Title"] = "Upload Notes";
+    Layout = "_Layout";
+}
+
+<div class="page-container">
+    @await Html.PartialAsync("_Sidebar")
+
+    <div class="page-content">
+        <div class="container-fluid p-3">
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card shadow p-4">
+                            <h3 class="text-center mb-4">Upload Notes</h3>
+
+                            @if (TempData["Message"] != null)
+                            {
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    @TempData["Message"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            }
+
+                            @if (TempData["Error"] != null)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    @TempData["Error"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            }
+
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label asp-for="Title" class="form-label">Title</label>
+                                    <input asp-for="Title" class="form-control" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Upload" class="form-label">Select file</label>
+                                    <input asp-for="Upload" type="file" class="form-control" />
+                                    <span asp-validation-for="Upload" class="text-danger"></span>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn upload-btn">Upload</button>
+                                </div>
+                            </form>
+
+                            @if (Model.UserNotes.Any())
+                            {
+                                <hr />
+                                <h5 class="mt-4">Your Uploaded Notes</h5>
+                                <table class="table table-bordered mt-2">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var note in Model.UserNotes)
+                                        {
+                                            <tr>
+                                                <td>@note.Title</td>
+                                                <td>
+                                                    <a href="@note.FilePath" class="btn btn-sm btn-outline-primary me-2"
+                                                        style="color: var(--color-accent); border-color: var(--color-accent);"
+                                                        target="_blank">
+                                                        <i class="fas fa-eye me-1"></i> View
+                                                    </a>
+
+                                                    <form method="post" asp-page-handler="Delete" asp-route-id="@note.Id"
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Are you sure you want to delete this note?');">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                            style="color: #dc3545; border-color: #dc3545;">
+                                                            <i class="fas fa-trash me-1"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

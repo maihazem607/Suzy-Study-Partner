@@ -1,14 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Suzy": {
+    "SmartPrep": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "http://0.0.0.0:5000",
+      "applicationUrl": "http://localhost:5000/Identity/Account/Register",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "launchUrl": "Identity/Account/Register"
     }
   }
 }

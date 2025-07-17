@@ -11,230 +11,238 @@
     <link rel="stylesheet" href="~/css/study-sessions.css" />
 }
 
-<!-- Cover Photo Upload Section -->
-<div class="cover-upload" onclick="document.getElementById('coverUpload').click();">
-    <i class="fas fa-camera fa-lg mb-2 camera-icon"></i>
-    <p class="mb-0 cover-upload-text">Cover photo can also be uploaded and customized by user</p>
-    <input type="file" id="coverUpload" style="display: none;" accept="image/*">
-</div>
+<div class="page-container">
+@await Html.PartialAsync("_Sidebar")
 
-<!-- Main Session Layout -->
-<div class="row g-3">
-    <!-- Left Column: Participants -->
-    <div class="col-md-4">
-        <div class="participants-section">
-            <h6 class=" mb-3">
-                <i class="fas fa-users me-2"></i>Participants
-            </h6>
-
-            <!-- Session Creator -->
-            <div class="text-center mb-3">
-                <div class="participant-avatar mx-auto">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="participant-name">
-                    <strong>You (Host)</strong>
-                </div>
+    <div class="page-content">
+        <div class="container-fluid p-3">
+            <!-- Cover Photo Upload Section -->
+            <div class="cover-upload" onclick="document.getElementById('coverUpload').click();">
+                <i class="fas fa-camera fa-lg mb-2 camera-icon"></i>
+                <p class="mb-0 cover-upload-text">Cover photo can also be uploaded and customized by user</p>
+                <input type="file" id="coverUpload" style="display: none;" accept="image/*">
             </div>
 
-            <!-- Other Participants -->
-            <div class="row g-2">
-                <div class="col-6 text-center">
-                    <div class="participant-avatar mx-auto">
-                        <i class="fas fa-user"></i>
+            <!-- Main Session Layout -->
+            <div class="row g-3">
+                <!-- Left Column: Participants -->
+                <div class="col-md-4">
+                    <div class="participants-section">
+                        <h6 class=" mb-3">
+                            <i class="fas fa-users me-2"></i>Participants
+                        </h6>
+
+                        <!-- Session Creator -->
+                        <div class="text-center mb-3">
+                            <div class="participant-avatar mx-auto">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="participant-name">
+                                <strong>You (Host)</strong>
+                            </div>
+                        </div>
+
+                        <!-- Other Participants -->
+                        <div class="row g-2">
+                            <div class="col-6 text-center">
+                                <div class="participant-avatar mx-auto">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="participant-name">Sarah</div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div class="participant-avatar mx-auto">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="participant-name">Mike</div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div class="participant-avatar mx-auto">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="participant-name">Alex</div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div class="participant-avatar mx-auto">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="participant-name">Emma</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 text-center">
+                            <small>5 participants online</small>
+                        </div>
                     </div>
-                    <div class="participant-name">Sarah</div>
                 </div>
-                <div class="col-6 text-center">
-                    <div class="participant-avatar mx-auto">
-                        <i class="fas fa-user"></i>
+
+                <!-- Middle Column: Timer and Spotify -->
+                <div class="col-md-4">
+                    <!-- Timer Area -->
+                    <div class="timer-area mb-3 timer-area-main">
+                        <div>
+                            <h6><i class="fas fa-clock me-2"></i>Study Timer</h6>
+                            <div class="timer-display timer-display-main" id="timerDisplay">25:00</div>
+                            <div class="timer-controls text-center">
+                                <button class="btn btn-sm me-1" onclick="startTimer()">
+                                    <i class="fas fa-play"></i> Start
+                                </button>
+                                <button class="btn btn-sm me-1" onclick="pauseTimer()">
+                                    <i class="fas fa-pause"></i> Pause
+                                </button>
+                                <button class="btn btn-sm" onclick="resetTimer()">
+                                    <i class="fas fa-stop"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <small>Pomodoro: 25 min focus • 5 min break</small>
+                        </div>
                     </div>
-                    <div class="participant-name">Mike</div>
-                </div>
-                <div class="col-6 text-center">
-                    <div class="participant-avatar mx-auto">
-                        <i class="fas fa-user"></i>
+
+                    <!-- Spotify Music Area -->
+                    <div class="spotify-area">
+                        <h6><i class="fab fa-spotify me-2"></i>Study Music</h6>
+                        <p class="spotify-description">Spotify music pulled from API</p>
+
+                        <div class="spotify-controls">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="spotify-track-title">Lo-fi Hip Hop Radio</div>
+                                    <div class="spotify-track-artist">Chill Study Beats</div>
+                                </div>
+                                <button class="btn btn-sm">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <button class="btn btn-sm me-2">
+                                <i class="fas fa-backward"></i>
+                            </button>
+                            <button class="btn btn-sm me-2">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button class="btn btn-sm">
+                                <i class="fas fa-forward"></i>
+                            </button>
+                        </div>
+
+                        <div class="mt-2">
+                            <small>Volume</small>
+                            <input type="range" class="form-range">
+                        </div>
                     </div>
-                    <div class="participant-name">Alex</div>
                 </div>
-                <div class="col-6 text-center">
-                    <div class="participant-avatar mx-auto">
-                        <i class="fas fa-user"></i>
+
+                <!-- Right Column: SuzyVod and Todo -->
+                <div class="col-md-4">
+                    <!-- Video Area -->
+                    <div class="suzyvod-area mb-3">
+                        <div class="video-container">
+                            <img src="~/lib/assets/SuzyGif.gif" alt="SuzyGif" class="suzyvod-video">
+                        </div>
                     </div>
-                    <div class="participant-name">Emma</div>
-                </div>
-            </div>
 
-            <div class="mt-3 text-center">
-                <small>5 participants online</small>
-            </div>
-        </div>
-    </div>
+                    <!-- Todo List Area -->
+                    <div class="todo-area">
+                        <h6><i class="fas fa-tasks me-2"></i>Todo List for This Session</h6>
 
-    <!-- Middle Column: Timer and Spotify -->
-    <div class="col-md-4">
-        <!-- Timer Area -->
-        <div class="timer-area mb-3 timer-area-main">
-            <div>
-                <h6><i class="fas fa-clock me-2"></i>Study Timer</h6>
-                <div class="timer-display timer-display-main" id="timerDisplay">25:00</div>
-                <div class="timer-controls text-center">
-                    <button class="btn btn-sm me-1" onclick="startTimer()">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                    <button class="btn btn-sm me-1" onclick="pauseTimer()">
-                        <i class="fas fa-pause"></i> Pause
-                    </button>
-                    <button class="btn btn-sm" onclick="resetTimer()">
-                        <i class="fas fa-stop"></i> Reset
-                    </button>
-                </div>
-            </div>
-            <div class="text-center">
-                <small>Pomodoro: 25 min focus • 5 min break</small>
-            </div>
-        </div>
+                        <div class="todo-item">
+                            <input type="checkbox" checked>
+                            <span class="todo-completed">Review Chapter 5: Cell Division</span>
+                        </div>
 
-        <!-- Spotify Music Area -->
-        <div class="spotify-area">
-            <h6><i class="fab fa-spotify me-2"></i>Study Music</h6>
-            <p class="spotify-description">Spotify music pulled from API</p>
+                        <div class="todo-item">
+                            <input type="checkbox" checked>
+                            <span class="todo-completed">Complete practice problems 1-10</span>
+                        </div>
 
-            <div class="spotify-controls">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <div class="spotify-track-title">Lo-fi Hip Hop Radio</div>
-                        <div class="spotify-track-artist">Chill Study Beats</div>
+                        <div class="todo-item">
+                            <input type="checkbox">
+                            <span>Create flashcards for mitosis</span>
+                        </div>
+
+                        <div class="todo-item">
+                            <input type="checkbox">
+                            <span>Study photosynthesis diagrams</span>
+                        </div>
+
+                        <div class="todo-item">
+                            <input type="checkbox">
+                            <span>Group discussion: enzyme functions</span>
+                        </div>
+
+                        <div class="mt-2">
+                            <button class="btn btn-sm">
+                                <i class="fas fa-plus me-1"></i>Add Task
+                            </button>
+                        </div>
                     </div>
-                    <button class="btn btn-sm">
-                        <i class="fas fa-play"></i>
-                    </button>
                 </div>
             </div>
-
-            <div class="mt-2">
-                <button class="btn btn-sm me-2">
-                    <i class="fas fa-backward"></i>
-                </button>
-                <button class="btn btn-sm me-2">
-                    <i class="fas fa-pause"></i>
-                </button>
-                <button class="btn btn-sm">
-                    <i class="fas fa-forward"></i>
-                </button>
-            </div>
-
-            <div class="mt-2">
-                <small>Volume</small>
-                <input type="range" class="form-range">
-            </div>
-        </div>
-    </div>
-
-    <!-- Right Column: SuzyVod and Todo -->
-    <div class="col-md-4">
-        <!-- Video Area -->
-        <div class="suzyvod-area mb-3">
-            <div class="video-container">
-                <img src="~/lib/assets/SuzyGif.gif" alt="SuzyGif" class="suzyvod-video">
-            </div>
-        </div>
-
-        <!-- Todo List Area -->
-        <div class="todo-area">
-            <h6><i class="fas fa-tasks me-2"></i>Todo List for This Session</h6>
-
-            <div class="todo-item">
-                <input type="checkbox" checked>
-                <span class="todo-completed">Review Chapter 5: Cell Division</span>
-            </div>
-
-            <div class="todo-item">
-                <input type="checkbox" checked>
-                <span class="todo-completed">Complete practice problems 1-10</span>
-            </div>
-
-            <div class="todo-item">
-                <input type="checkbox">
-                <span>Create flashcards for mitosis</span>
-            </div>
-
-            <div class="todo-item">
-                <input type="checkbox">
-                <span>Study photosynthesis diagrams</span>
-            </div>
-
-            <div class="todo-item">
-                <input type="checkbox">
-                <span>Group discussion: enzyme functions</span>
-            </div>
-
-            <div class="mt-2">
-                <button class="btn btn-sm">
-                    <i class="fas fa-plus me-1"></i>Add Task
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @section Scripts {
-    <script>
-        let timerInterval;
-        let timeLeft = 25 * 60; // 25 minutes in seconds
-        let isRunning = false;
+                <script>
+                    let timerInterval;
+                    let timeLeft = 25 * 60; // 25 minutes in seconds
+                    let isRunning = false;
 
-        function updateDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            document.getElementById('timerDisplay').textContent =
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
+                    function updateDisplay() {
+                        const minutes = Math.floor(timeLeft / 60);
+                        const seconds = timeLeft % 60;
+                        document.getElementById('timerDisplay').textContent =
+                            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    }
 
-        function startTimer() {
-            if (!isRunning) {
-                isRunning = true;
-                timerInterval = setInterval(() => {
-                    if (timeLeft > 0) {
-                        timeLeft--;
-                        updateDisplay();
-                    } else {
-                        // Timer finished
+                    function startTimer() {
+                        if (!isRunning) {
+                            isRunning = true;
+                            timerInterval = setInterval(() => {
+                                if (timeLeft > 0) {
+                                    timeLeft--;
+                                    updateDisplay();
+                                } else {
+                                    // Timer finished
+                                    clearInterval(timerInterval);
+                                    isRunning = false;
+                                    alert('Study session complete! Time for a break.');
+                                }
+                            }, 1000);
+                        }
+                    }
+
+                    function pauseTimer() {
+                        if (isRunning) {
+                            clearInterval(timerInterval);
+                            isRunning = false;
+                        }
+                    }
+
+                    function resetTimer() {
                         clearInterval(timerInterval);
                         isRunning = false;
-                        alert('Study session complete! Time for a break.');
+                        timeLeft = 25 * 60;
+                        updateDisplay();
                     }
-                }, 1000);
-            }
-        }
 
-        function pauseTimer() {
-            if (isRunning) {
-                clearInterval(timerInterval);
-                isRunning = false;
-            }
-        }
+                    // Initialize display
+                    updateDisplay();
 
-        function resetTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            timeLeft = 25 * 60;
-            updateDisplay();
-        }
-
-        // Initialize display
-        updateDisplay();
-
-        // Cover photo upload handler
-        document.getElementById('coverUpload').addEventListener('change', function (e) {
-            if (e.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    // You can add logic here to display the uploaded image
-                    alert('Cover photo uploaded successfully!');
-                };
-                reader.readAsDataURL(e.target.files[0]);
-            }
-        });
-    </script>
+                    // Cover photo upload handler
+                    document.getElementById('coverUpload').addEventListener('change', function (e) {
+                        if (e.target.files[0]) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                // You can add logic here to display the uploaded image
+                                alert('Cover photo uploaded successfully!');
+                            };
+                            reader.readAsDataURL(e.target.files[0]);
+                        }
+                    });
+                </script>
+    </div>
+    </div>
+    </div>
 }
