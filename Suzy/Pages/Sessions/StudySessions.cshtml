@@ -16,7 +16,8 @@
 
     <div class="page-content">
         <div class="container-fluid p-3">
-            <img src="~/lib/assets/StudySessionBG.jpeg" alt="Cover Photo" class="cover-photo">
+            <!-- Cover Photo Section -->
+           <img src="~/lib/assets/StudySessionBG.jpeg" alt="Cover Photo" class="cover-photo">
             <!-- Main Session Layout -->
             <div class="row g-3">
                 <!-- Left Column: Participants -->
@@ -72,106 +73,83 @@
 
                 <!-- Middle Column: Timer and Spotify -->
                 <div class="col-md-4">
-                    <!-- Timer Area -->
-                    <div class="timer-area mb-3 timer-area-main">
-                        <div>
-                            <h6><i class="fas fa-clock me-2"></i>Study Timer</h6>
-                            <div class="timer-display timer-display-main" id="timerDisplay">25:00</div>
-                            <div class="timer-controls text-center">
-                                <button class="btn btn-sm me-1" onclick="startTimer()">
-                                    <i class="fas fa-play"></i> Start
-                                </button>
-                                <button class="btn btn-sm me-1" onclick="pauseTimer()">
-                                    <i class="fas fa-pause"></i> Pause
-                                </button>
-                                <button class="btn btn-sm" onclick="resetTimer()">
-                                    <i class="fas fa-stop"></i> Reset
-                                </button>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <small>Pomodoro: 25 min focus • 5 min break</small>
-                        </div>
-                    </div>
-
-                    <!-- Spotify Music Area -->
-                    <div class="spotify-area">
-                        <h6><i class="fab fa-spotify me-2"></i>Study Music</h6>
-                        <p class="spotify-description">Spotify music pulled from API</p>
-
-                        <div class="spotify-controls">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <div class="spotify-track-title">Lo-fi Hip Hop Radio</div>
-                                    <div class="spotify-track-artist">Chill Study Beats</div>
+                    <div class="middle-column">
+                        <!-- Timer Area -->
+                        <div class="timer-area timer-area-main">
+                            <div>
+                                <h6><i class="fas fa-clock me-2"></i>Study Timer</h6>
+                                <div class="timer-display timer-display-main" id="timerDisplay">25:00</div>
+                                <div class="timer-controls text-center">
+                                    <button class="btn btn-sm me-1" onclick="startTimer()">
+                                        <i class="fas fa-play"></i> Start
+                                    </button>
+                                    <button class="btn btn-sm me-1" onclick="pauseTimer()">
+                                        <i class="fas fa-pause"></i> Pause
+                                    </button>
+                                    <button class="btn btn-sm" onclick="resetTimer()">
+                                        <i class="fas fa-stop"></i> Reset
+                                    </button>
                                 </div>
-                                <button class="btn btn-sm">
-                                    <i class="fas fa-play"></i>
-                                </button>
+                            </div>
+                            <div class="text-center">
+                                <small>Pomodoro: 25 min focus • 5 min break</small>
                             </div>
                         </div>
-
-                        <div class="mt-2">
-                            <button class="btn btn-sm me-2">
-                                <i class="fas fa-backward"></i>
-                            </button>
-                            <button class="btn btn-sm me-2">
-                                <i class="fas fa-pause"></i>
-                            </button>
-                            <button class="btn btn-sm">
-                                <i class="fas fa-forward"></i>
-                            </button>
-                        </div>
-
-                        <div class="mt-2">
-                            <small>Volume</small>
-                            <input type="range" class="form-range">
+                        <!-- Spotify Area -->
+                        <div class="spotify-container">
+                            <iframe data-testid="embed-iframe" style="border-radius:12px"
+                                src="https://open.spotify.com/embed/playlist/4B3pmyimpUkTcu0sOfQlBS?utm_source=generator"
+                                width="100%" height="352" frameBorder="0" allowfullscreen=""
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy"></iframe>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Column: SuzyVod and Todo -->
                 <div class="col-md-4">
-                    <!-- Video Area -->
-                    <div class="suzyvod-area mb-3">
-                        <div class="video-container">
-                            <img src="~/lib/assets/SuzyGif.gif" alt="SuzyGif" class="suzyvod-video">
-                        </div>
-                    </div>
-
-                    <!-- Todo List Area -->
-                    <div class="todo-area">
-                        <h6><i class="fas fa-tasks me-2"></i>Todo List for This Session</h6>
-
-                        <div class="todo-item">
-                            <input type="checkbox" checked>
-                            <span class="todo-completed">Review Chapter 5: Cell Division</span>
+                    <div class="right-column">
+                        <!-- Video Area -->
+                        <div class="suzyvod-area">
+                            <div class="video-container">
+                                <img src="~/lib/assets/SuzyGif.gif" alt="SuzyGif" class="suzyvod-video">
+                            </div>
                         </div>
 
-                        <div class="todo-item">
-                            <input type="checkbox" checked>
-                            <span class="todo-completed">Complete practice problems 1-10</span>
-                        </div>
+                        <!-- Todo List Area -->
+                        <div class="todo-area">
+                            <h6><i class="fas fa-tasks me-2"></i>Todo List for This Session</h6>
 
-                        <div class="todo-item">
-                            <input type="checkbox">
-                            <span>Create flashcards for mitosis</span>
-                        </div>
+                            <div class="todo-item">
+                                <input type="checkbox" checked>
+                                <span class="todo-completed">Review Chapter 5: Cell Division</span>
+                            </div>
 
-                        <div class="todo-item">
-                            <input type="checkbox">
-                            <span>Study photosynthesis diagrams</span>
-                        </div>
+                            <div class="todo-item">
+                                <input type="checkbox" checked>
+                                <span class="todo-completed">Complete practice problems 1-10</span>
+                            </div>
 
-                        <div class="todo-item">
-                            <input type="checkbox">
-                            <span>Group discussion: enzyme functions</span>
-                        </div>
+                            <div class="todo-item">
+                                <input type="checkbox">
+                                <span>Create flashcards for mitosis</span>
+                            </div>
 
-                        <div class="mt-2">
-                            <button class="btn btn-sm">
-                                <i class="fas fa-plus me-1"></i>Add Task
-                            </button>
+                            <div class="todo-item">
+                                <input type="checkbox">
+                                <span>Study photosynthesis diagrams</span>
+                            </div>
+
+                            <div class="todo-item">
+                                <input type="checkbox">
+                                <span>Group discussion: enzyme functions</span>
+                            </div>
+
+                            <div class="mt-2">
+                                <button class="btn btn-sm">
+                                    <i class="fas fa-plus me-1"></i>Add Task
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

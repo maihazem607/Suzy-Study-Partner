@@ -12,7 +12,8 @@ public class MongoDBService
         _collection = database.GetCollection<BsonDocument>("users");
     }
 
-    public async Task InsertSampleDataAsync()
+    public Task InsertSampleDataAsync()
     {
+        return Task.CompletedTask;
     }
 }

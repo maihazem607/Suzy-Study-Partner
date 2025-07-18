@@ -1,210 +1,243 @@
 .participants-section {
-    background: var(--color-light);
-    padding: 20px;
-    color: var(--color-dark);
-    height: 536px;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+  background: var(--color-light);
+  padding: 20px;
+  color: var(--color-dark);
+  height: 618px;
+  overflow-x: auto;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
 }
 
 .participant-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--color-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 8px;
-    border: 1px solid var(--color-border);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px;
+  border: 1px solid var(--color-border);
 }
 
 .timer-area {
-    background: var(--color-light);
-    padding: 15px;
-    color: var(--color-dark);
-    text-align: center;
-    height: 190px;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+  background: var(--color-light);
+  padding: 15px;
+  color: var(--color-dark);
+  text-align: center;
+  height: 265px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin-bottom: 16px;
 }
 
-.suzyvod-area{
-    background: var(--color-light);
-    padding: 10px;
-    color: var(--color-dark);
-    text-align: center;
-    height: 250px;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-}
-
-.spotify-area {
-    background: var(--color-light);
-    padding: 20px;
-    color: var(--color-dark);
-    height: 270px;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+.suzyvod-area {
+  background: var(--color-light);
+  padding: 10px;
+  color: var(--color-dark);
+  text-align: center;
+  height: 250px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin-bottom: 17px;
 }
 
 .todo-area {
-    background: var(--color-light);
-    padding: 20px;
-    color: var(--color-dark);
-    height: 270px;
-    overflow-y: auto;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+  background: var(--color-light);
+  padding: 20px;
+  color: var(--color-dark);
+  height: 352px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+/* Middle and Right column containers */
+.middle-column,
+.right-column {
+  height: 618px;
+  display: flex;
+  flex-direction: column;
+}
+
+.spotify-container {
+  flex: 1;
+  min-height: 352px;
 }
 
 .todo-area::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 .todo-area::-webkit-scrollbar-track {
-    background: var(--color-scroller);
-    border-radius: 3px;
+  background: var(--color-scroller);
+  border-radius: 3px;
 }
 
 .todo-area::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 3px;
+  background: var(--color-border);
+  border-radius: 3px;
 }
 
 .todo-area::-webkit-scrollbar-thumb:hover {
-    background: var(--color-scroller-hover);
+  background: var(--color-scroller-hover);
 }
 
 .timer-display {
-    font-size: 2rem;
-    font-weight: bold;
-    margin: 10px 0;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 10px 0;
 }
 
 .timer-controls {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .timer-controls .btn {
-    margin: 2px;
-    padding: 6px 12px;
-    border: 1px solid var(--color-border);
-    background: var(--color-light);
-    color: var(--color-dark);
-    font-size: 0.85rem;
+  margin: 2px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-light);
+  color: var(--color-dark);
+  font-size: 0.85rem;
 }
 
 .timer-controls .btn:hover {
-    background: var(--color-button-hover);
+  background: var(--color-button-hover);
 }
 
 .progress-circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--color-light);
-    border: 1px solid var(--color-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 8px auto;
-    font-weight: bold;
-    font-size: 0.9rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--color-light);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px auto;
+  font-weight: bold;
+  font-size: 0.9rem;
 }
 
 .todo-item {
-    background: var(--color-scroller);
-    border-bottom: 1px solid var(--color-border);
-    padding: 8px;
-    margin: 4px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  background: var(--color-scroller);
+  border-bottom: 1px solid var(--color-border);
+  padding: 8px;
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .todo-item input[type="checkbox"] {
-    margin-right: 10px;
-    transform: scale(1.1);
+  margin-right: 10px;
+  transform: scale(1.1);
 }
 
 .cover-photo {
-    width: 100%;
-    border-radius: 8px;
-    height: 230px;
-    margin-bottom: 10px;
-}
-
-.spotify-controls {
-    background: var(--color-button-hover);
-    border: 1px solid var(--color-border);
-    padding: 12px;
-    margin: 12px 0;
+  width: 100%;
+  border-radius: 8px;
+  height: 230px;
+  margin-bottom: 10px;
 }
 
 .participant-name {
-    font-size: 0.8rem;
-    margin-top: 5px;
-    text-align: center;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  text-align: center;
 }
 
 .progress {
-    background-color: var(--color-scroller);
-    border: 1px solid var(--color-border);
+  background-color: var(--color-scroller);
+  border: 1px solid var(--color-border);
 }
 
 .progress-bar {
-    background-color: var(--color-dark)!important;
+  background-color: var(--color-dark) !important;
 }
 
 .form-range {
-    accent-color: var(--color-dark);
+  accent-color: var(--color-dark);
 }
 
 /* New classes for previously inline styles */
 .camera-icon {
-    color: var(--color-dark);
+  color: var(--color-dark);
 }
 
 .cover-upload-text {
-    color: var(--color-dark);
-    font-size: 0.9rem;
+  color: var(--color-dark);
+  font-size: 0.9rem;
 }
 
 .timer-area-main {
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .timer-display-main {
-    font-size: 2rem;
-    text-align: center;
-    margin: 20px 0;
-}
-
-.spotify-track-title {
-    font-weight: bold;
-    font-size: 0.9rem;
-}
-
-.spotify-track-artist {
-    font-size: 0.8rem;
-    opacity: 0.7;
-}
-
-.spotify-description {
-    font-size: 0.85rem;
+  font-size: 2rem;
+  text-align: center;
+  margin: 20px 0;
 }
 
 .suzyvod-video {
-    width: 100%;
-    border-radius: 8px;
-    height: 227px;
-    object-fit: cover;
+  width: 100%;
+  border-radius: 8px;
+  height: 227px;
+  object-fit: cover;
 }
 
 .todo-completed {
-    text-decoration: line-through;
+  text-decoration: line-through;
+}
+
+/* Layout fixes for study sessions */
+.row.g-3 {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.col-md-4 {
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+}
+
+/* Ensure equal column heights */
+.participants-section,
+.timer-area,
+.suzyvod-area,
+.todo-area {
+  box-sizing: border-box;
+}
+
+/* Fix for Spotify iframe container */
+.spotify-container {
+  height: 352px;
+  overflow: hidden;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 767.98px) {
+  .row.g-3 {
+    flex-wrap: wrap;
+  }
+
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .participants-section,
+  .timer-area,
+  .suzyvod-area,
+  .todo-area {
+    height: auto;
+    min-height: 200px;
+  }
 }
