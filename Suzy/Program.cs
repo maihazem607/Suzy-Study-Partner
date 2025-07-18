@@ -32,6 +32,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 
 // ✅ Register app-specific services
 builder.Services.AddRazorPages();
+builder.Services.AddControllers(); // Add controller support
 builder.Services.AddScoped<GeminiService>();
 builder.Services.AddHttpClient();
 builder.Services.AddAntiforgery();
@@ -61,6 +62,7 @@ app.UseAuthentication();         // ✅ Added for Identity
 app.UseAuthorization();
 
 app.MapRazorPages().WithStaticAssets();
+app.MapControllers(); // Add controller routing
 app.MapStaticAssets();
 
 app.Run();

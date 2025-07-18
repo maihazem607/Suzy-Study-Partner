@@ -1,7 +1,7 @@
 .participants-section {
   background: var(--color-light);
   padding: 20px;
-  color: var(--color-dark);
+  color: var(--text-color);
   height: 618px;
   overflow-x: auto;
   overflow-y: auto;
@@ -13,18 +13,21 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: var(--color-border);
+  background: var(--color-scroller);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 8px;
   border: 1px solid var(--color-border);
+  color: var(--text-color);
+  font-weight: bold;
+  font-size: 0.8rem;
 }
 
 .timer-area {
   background: var(--color-light);
   padding: 15px;
-  color: var(--color-dark);
+  color: var(--text-color);
   text-align: center;
   height: 265px;
   border: 1px solid var(--color-border);
@@ -35,7 +38,7 @@
 .suzyvod-area {
   background: var(--color-light);
   padding: 10px;
-  color: var(--color-dark);
+  color: var(--text-color);
   text-align: center;
   height: 250px;
   border: 1px solid var(--color-border);
@@ -46,7 +49,7 @@
 .todo-area {
   background: var(--color-light);
   padding: 20px;
-  color: var(--color-dark);
+  color: var(--text-color);
   height: 352px;
   overflow-y: auto;
   border: 1px solid var(--color-border);
@@ -76,8 +79,12 @@
 }
 
 .todo-area::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--color-text-muted);
   border-radius: 3px;
+}
+
+.todo-area::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scroller-hover);
 }
 
 .todo-area::-webkit-scrollbar-thumb:hover {
@@ -88,6 +95,7 @@
   font-size: 2rem;
   font-weight: bold;
   margin: 10px 0;
+  color: var(--text-color);
 }
 
 .timer-controls {
@@ -99,12 +107,20 @@
   padding: 6px 12px;
   border: 1px solid var(--color-border);
   background: var(--color-light);
-  color: var(--color-dark);
+  color: var(--text-color);
   font-size: 0.85rem;
+  transition: all 0.2s ease;
 }
 
 .timer-controls .btn:hover {
-  background: var(--color-button-hover);
+  background: var(--color-scroller-hover);
+  border-color: var(--color-primary);
+}
+
+.timer-controls .btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
 }
 
 .progress-circle {
@@ -122,18 +138,58 @@
 }
 
 .todo-item {
-  background: var(--color-scroller);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--color-light);
+  border: 1px solid var(--color-border);
+  color: var(--text-color);
   padding: 8px;
   margin: 4px 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.todo-item:hover {
+  background: var(--color-scroller-hover);
+  border-color: var(--color-primary);
 }
 
 .todo-item input[type="checkbox"] {
   margin-right: 10px;
   transform: scale(1.1);
+}
+
+.todo-item span {
+  flex: 1;
+  cursor: pointer;
+  word-break: break-word;
+  color: var(--text-color);
+}
+
+.todo-completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+  color: var(--color-text-muted);
+}
+
+.todo-item .btn {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+}
+
+.todo-item .btn:hover {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  opacity: 0.8;
+}
+
+.todo-item:hover .btn {
+  opacity: 1;
 }
 
 .cover-photo {
@@ -240,4 +296,156 @@
     height: auto;
     min-height: 200px;
   }
+}
+
+/* === Break Mode Styling for Study Sessions === */
+.break-mode .participants-section {
+  background: var(--break-bg);
+  border-color: var(--break-border);
+  color: var(--break-text);
+}
+
+.break-mode .timer-area {
+  background: var(--break-bg);
+  border-color: var(--break-border);
+  color: var(--break-text);
+}
+
+.break-mode .suzyvod-area {
+  background: var(--break-bg);
+  border-color: var(--break-border);
+  color: var(--break-text);
+}
+
+.break-mode .todo-area {
+  background: var(--break-bg);
+  border-color: var(--break-border);
+  color: var(--break-text);
+}
+
+.break-mode .participant-avatar {
+  background: var(--break-accent);
+  border-color: var(--break-border);
+  color: var(--break-text);
+}
+
+.break-mode .todo-item {
+  background: var(--break-accent);
+  border-color: var(--break-border);
+  color: var(--break-text);
+}
+
+.break-mode .todo-input {
+  background: var(--break-bg);
+  border-color: var(--break-border);
+  color: var(--break-text);
+}
+
+.break-mode .todo-input::placeholder {
+  color: var(--break-text);
+  opacity: 0.7;
+}
+
+.break-mode .btn-add-todo {
+  background: var(--break-border);
+  border-color: var(--break-border);
+  color: white;
+}
+
+.break-mode .btn-add-todo:hover {
+  background: var(--break-accent);
+  border-color: var(--break-accent);
+}
+
+.break-mode .timer-display {
+  color: var(--break-text);
+  font-weight: bold;
+}
+
+.break-mode .timer-controls .btn {
+  background: var(--break-border);
+  border-color: var(--break-border);
+  color: white;
+}
+
+.break-mode .timer-controls .btn:hover {
+  background: var(--break-accent);
+  border-color: var(--break-accent);
+}
+
+/* === Break Mode Page Container === */
+.break-mode .page-content {
+  background: var(--break-bg);
+}
+
+.break-mode h2,
+.break-mode h3,
+.break-mode h4,
+.break-mode h5 {
+  color: var(--break-text);
+}
+
+.break-mode .text-muted {
+  color: var(--break-text) !important;
+  opacity: 0.8;
+}
+
+/* === Todo Area Form Controls === */
+.todo-area .form-control {
+  background: var(--color-light);
+  border: 1px solid var(--color-border);
+  color: var(--text-color);
+}
+
+.todo-area .form-control:focus {
+  background: var(--color-light);
+  border-color: var(--color-primary);
+  color: var(--text-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.todo-area .form-control::placeholder {
+  color: var(--color-text-muted);
+}
+
+.todo-area .btn-success {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+.todo-area .btn-success:hover {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  opacity: 0.9;
+}
+
+.todo-area .btn-secondary {
+  background: var(--color-text-muted);
+  border-color: var(--color-text-muted);
+  color: white;
+}
+
+.todo-area .btn-secondary:hover {
+  background: var(--color-text-muted);
+  border-color: var(--color-text-muted);
+  opacity: 0.9;
+}
+
+.todo-area .btn-sm {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+}
+
+.todo-area .btn-sm:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.todo-area h6 {
+  color: var(--text-color);
+  margin-bottom: 15px;
 }
