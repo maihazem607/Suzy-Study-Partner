@@ -2,7 +2,7 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  #fbf6ea-space: normal;
+  --color-light-space: normal;
   text-align: center;
   word-break: break-all;
 }
@@ -43,6 +43,6 @@ button.accept-policy {
   position: absolute;
   bottom: 0;
   width: 100%;
-  #fbf6ea-space: nowrap;
+  --color-light-space: nowrap;
   line-height: 60px;
 }

@@ -1,9 +1,9 @@
 .participants-section {
-    background: #fbf6ea;
+    background: var(--color-light);
     padding: 20px;
-    color: #333;
+    color: var(--color-dark);
     height: 536px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
 }
 
@@ -11,66 +11,50 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.cover-upload {
-    background: #fbf6ea;
-    padding: 25px;
-    text-align: center;
-    margin-bottom: 15px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    height: 100px;
-    border-radius: 8px;
-}
-
-.cover-upload:hover {
-    background: rgba(0, 123, 255, 0.05);
+    border: 1px solid var(--color-border);
 }
 
 .timer-area {
-    background: #fbf6ea;
+    background: var(--color-light);
     padding: 15px;
-    color: #333;
+    color: var(--color-dark);
     text-align: center;
     height: 190px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
 }
 
 .suzyvod-area{
-    background: #fbf6ea;
+    background: var(--color-light);
     padding: 10px;
-    color: #333;
+    color: var(--color-dark);
     text-align: center;
     height: 250px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
 }
 
 .spotify-area {
-    background: #fbf6ea;
+    background: var(--color-light);
     padding: 20px;
-    color: #333;
+    color: var(--color-dark);
     height: 270px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
 }
 
 .todo-area {
-    background: #fbf6ea;
+    background: var(--color-light);
     padding: 20px;
-    color: #333;
+    color: var(--color-dark);
     height: 270px;
     overflow-y: auto;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
 }
 
@@ -79,17 +63,17 @@
 }
 
 .todo-area::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.02);
+    background: var(--color-scroller);
     border-radius: 3px;
 }
 
 .todo-area::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--color-border);
     border-radius: 3px;
 }
 
 .todo-area::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.15);
+    background: var(--color-scroller-hover);
 }
 
 .timer-display {
@@ -105,22 +89,22 @@
 .timer-controls .btn {
     margin: 2px;
     padding: 6px 12px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    background: #fbf6ea;
-    color: #333;
+    border: 1px solid var(--color-border);
+    background: var(--color-light);
+    color: var(--color-dark);
     font-size: 0.85rem;
 }
 
 .timer-controls .btn:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--color-button-hover);
 }
 
 .progress-circle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #fbf6ea;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: var(--color-light);
+    border: 1px solid var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -130,8 +114,8 @@
 }
 
 .todo-item {
-    background: rgba(0, 0, 0, 0.03);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--color-scroller);
+    border-bottom: 1px solid var(--color-border);
     padding: 8px;
     margin: 4px 0;
     display: flex;
@@ -144,9 +128,16 @@
     transform: scale(1.1);
 }
 
+.cover-photo {
+    width: 100%;
+    border-radius: 8px;
+    height: 230px;
+    margin-bottom: 10px;
+}
+
 .spotify-controls {
-    background: rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--color-button-hover);
+    border: 1px solid var(--color-border);
     padding: 12px;
     margin: 12px 0;
 }
@@ -158,25 +149,25 @@
 }
 
 .progress {
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: var(--color-scroller);
+    border: 1px solid var(--color-border);
 }
 
 .progress-bar {
-    background-color: #333 !important;
+    background-color: var(--color-dark)!important;
 }
 
 .form-range {
-    accent-color: #333;
+    accent-color: var(--color-dark);
 }
 
 /* New classes for previously inline styles */
 .camera-icon {
-    color: #666;
+    color: var(--color-dark);
 }
 
 .cover-upload-text {
-    color: #666;
+    color: var(--color-dark);
     font-size: 0.9rem;
 }
 
