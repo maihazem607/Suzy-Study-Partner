@@ -374,3 +374,13 @@ main {
   color: var(--break-text);
   opacity: 0.7;
 }
+/* Light mode: white text */
+.view-btn {
+    color: #ffffff !important;
+    border-color: var(--color-accent);
+}
+
+/* Dark mode: black text */
+body.theme-dark .view-btn {
+    color: #000000 !important;
+}
