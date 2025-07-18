@@ -37,9 +37,14 @@
                     var name = User.FindFirst("FullName")?.Value ?? "Student";
                 }
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end align-items-center">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end align-items-center gap-3">
                     <h5 class="m-0 text-color">Welcome, @name</h5>
+                    <button id="themeToggle" class="theme-toggle-btn" title="Toggle Theme">
+                        <i class="fas fa-adjust"></i>
+                    </button>
+
                 </div>
+
             </div>
         </nav>
     </header>
@@ -50,26 +55,27 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted mt-4"
-        style="border-color: var(--color-border); background-color: var(--color-light);">
-        <div class="container">
-            &copy; 2025 - Suzy - <a asp-area="" asp-page="/Privacy">Privacy</a>
+     <footer class="border-top footer text-muted mt-4"
+            style="border-color: var(--color-border); background-color: var(--color-light);">
+        <div class="container text-center">
+            <a href="https://github.com/maihazem607/SmartPrep" target="_blank">© 2025 - Developed by</a>
+            <a href="https://www.linkedin.com/in/ajay-anand-s-8a30a62b7/" target="_blank">Ajay Anand</a>, 
+            <a href="https://www.linkedin.com/in/mai-hazem-7a5459251/" target="_blank">Mai Hazem</a>, 
+            <a href="https://www.linkedin.com/in/haya-zaheer-715b871b0/" target="_blank">Haya Zaheer</a> – 
+            <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
+
+
+
+
+</footer>
+
 
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <!-- Theme Initialization (no toggle button) -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            if (localStorage.getItem("theme") === "dark") {
-                document.body.classList.add("theme-dark");
-            }
-        });
-    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
