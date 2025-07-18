@@ -22,8 +22,8 @@
             href="/Flashcards/Flashindex"><i class="fas fa-clone me-2"></i><span>Flashcards</span></a>
         <a class="nav-link" href="#"><i class="fas fa-edit me-2"></i><span>Mock Exams</span></a>
         <a class="nav-link" href="#"><i class="fas fa-chart-line me-2"></i><span>Progress</span></a>
-        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("StudySessions") == true ? "active" : "")"
-            href="/Sessions/StudySessions"><i class="fas fa-users me-2"></i><span>Study Sessions</span></a>
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("SessionManager") == true ? "active" : "")"
+            href="/Sessions/SessionManager"><i class="fas fa-users me-2"></i><span>Study Sessions</span></a>
         <a class="nav-link" href="#"><i class="fas fa-bell me-2"></i><span>Reminders</span></a>
         <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i><span>To-Do List</span></a>
         <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i><span>Settings</span></a>
@@ -47,7 +47,7 @@
         left: 0;
         top: 0;
         width: 16.666667%;
-        z-index: 1000;
+        z-index: 1020;
         overflow: hidden;
     }
 
@@ -57,13 +57,14 @@
 
     .sidebar-toggle {
         position: absolute;
-        top: 0px;
+        top: 15px;
+        /* Position at the top level with the navbar */
         right: 15px;
         background: transparent;
         border: none;
         padding: 8px 10px;
         cursor: pointer;
-        z-index: 1001;
+        z-index: 1021;
         transition: all 0.2s ease;
         border-radius: 4px;
     }
@@ -77,13 +78,17 @@
         font-size: 1.1rem;
     }
 
-    .main-content {
+    .main-content,
+    .page-content {
         margin-left: 16.666667%;
         width: 83.333333%;
         transition: margin-left 0.3s ease, width 0.3s ease;
+        padding-top: 0;
+        /* No extra padding since body handles navbar spacing */
     }
 
-    .main-content.expanded {
+    .main-content.expanded,
+    .page-content.expanded {
         margin-left: 80px;
         width: calc(100% - 80px);
     }
