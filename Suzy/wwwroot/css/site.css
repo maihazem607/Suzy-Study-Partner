@@ -139,22 +139,25 @@ textarea::placeholder {
   font-size: 0.95rem;
 }
 
-/* === Theme Toggle Button === */
+/* === Theme Toggle Button (Unified style across themes) === */
 .theme-toggle-btn {
   font-size: 0.9rem;
   padding: 6px 12px;
-  border: 1px solid var(--color-border);
-  background-color: var(--color-light);
-  color: var(--color-dark);
+  border: 1px solid #000;
+  background-color: #000; /* Always black */
+  color: #fff;            /* Always white icon */
   border-radius: 6px;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.theme-toggle-btn:hover {
-  background-color: var(--color-gray);
-  color: var(--color-accent);
+body.theme-dark .theme-toggle-btn {
+  /* Keep styles same in dark mode */
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #fff;
 }
+
 
 /* === Input Fields === */
 input,
@@ -187,4 +190,39 @@ body.theme-dark textarea::placeholder {
   background-color: var(--color-accent);
   color: #fbf6ea;
   border-color: var(--color-accent);
+}
+
+/* === Auth Button Base === */
+.auth-btn {
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* Light Mode */
+body:not(.theme-dark) .auth-btn {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+/* Dark Mode */
+body.theme-dark .auth-btn {
+  background-color: var(--bg-main);
+  color: #fff;
+  border: 1px solid #000;
+}
+
+
+/* === Responsive footer === */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
