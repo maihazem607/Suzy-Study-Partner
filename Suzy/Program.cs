@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Suzy.Data;
 using Suzy.Services;
-using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,12 +23,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// ✅ Kestrel: Listen on all network interfaces (localhost + LAN)
+// ✅ Kestrel: Configure for HTTPS on localhost:5000
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    serverOptions.ListenAnyIP(5000); // HTTP
-    // Optional: HTTPS
-    // serverOptions.ListenAnyIP(5001, listenOptions => listenOptions.UseHttps());
+    serverOptions.ListenLocalhost(5000, listenOptions => listenOptions.UseHttps()); // HTTPS on localhost:5000
+    serverOptions.ListenAnyIP(5001); // HTTP on any IP for development access
 });
 
 // ✅ Register app-specific services
@@ -66,18 +64,3 @@ app.MapRazorPages().WithStaticAssets();
 app.MapStaticAssets();
 
 app.Run();
-
-// ✅ Optional Debug: Show LAN IP
-Console.WriteLine($"✅ Access your app from other devices using: http://{GetLocalIPAddress()}:5000");
-
-// Helper method
-static string GetLocalIPAddress()
-{
-    var host = Dns.GetHostEntry(Dns.GetHostName());
-    foreach (var ip in host.AddressList)
-    {
-        if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-            return ip.ToString();
-    }
-    return "localhost";
-}

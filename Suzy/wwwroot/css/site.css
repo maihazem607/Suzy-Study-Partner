@@ -8,6 +8,9 @@
 
   --bg-main: var(--color-light);
   --text-color: var(--color-dark);
+  --color-scroller:rgba(0, 0, 0, 0.02);
+  --color-scroller-hover: rgba(0, 0, 0, 0.15);
+  --color-button-hover:rgba(0, 0, 0, 0.05)
 }
 
 /* === DARK THEME === */
@@ -15,10 +18,13 @@
   --color-light: #1e1e1e;
   --color-dark: #fbf6ea;
   --color-gray: #2d2d2d;
-  --color-border: rgba(255, 255, 255, 0.2);
+  --color-border: rgba(251, 246, 234, 0.2);
   --color-accent: #ddd;
   --bg-main: #121212;
   --text-color: #fbf6ea;
+  --color-scroller: rgba(251, 246, 234, 0.02);
+  --color-scroller-hover: rgba(251, 246, 234, 0.15);
+  --color-button-hover: rgba(251, 246, 234, 0.05)
 }
 
 /* === Global Styles === */
