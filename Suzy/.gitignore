@@ -1,3 +1,10 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# VS Code settings (optional)
+.vscode/
+
 # User secrets
 secrets.json
 

@@ -1,13 +1,29 @@
 /* === Theme Variables (Light by Default) === */
 :root {
   --color-light: #fbf6ea;
-  --color-dark: #2A3335;
+  --color-dark: #2a3335;
   --color-gray: #f0f0f0;
   --color-border: rgba(0, 0, 0, 0.2);
   --color-accent: #444;
+  --color-primary: #007bff;
+  --color-primary-dark: #0056b3;
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-warning: #ffc107;
+  --color-info: #17a2b8;
+  --color-text-muted: #6c757d;
 
   --bg-main: var(--color-light);
   --text-color: var(--color-dark);
+  --color-scroller: rgba(0, 0, 0, 0.02);
+  --color-scroller-hover: rgba(0, 0, 0, 0.15);
+  --color-button-hover: rgba(0, 0, 0, 0.05);
+
+  /* Break Mode Colors */
+  --break-bg: #e8f5e8;
+  --break-border: #392710;
+  --break-text: #180b07;
+  --break-accent: #f9f0ac;
 }
 
 /* === DARK THEME === */
@@ -15,15 +31,32 @@
   --color-light: #1e1e1e;
   --color-dark: #fbf6ea;
   --color-gray: #2d2d2d;
-  --color-border: rgba(255, 255, 255, 0.2);
+  --color-border: rgba(251, 246, 234, 0.2);
   --color-accent: #ddd;
+  --color-primary: #0d6efd;
+  --color-primary-dark: #0a58ca;
+  --color-success: #198754;
+  --color-danger: #dc3545;
+  --color-warning: #fd7e14;
+  --color-info: #0dcaf0;
+  --color-text-muted: #adb5bd;
+
   --bg-main: #121212;
   --text-color: #fbf6ea;
+  --color-scroller: rgba(251, 246, 234, 0.02);
+  --color-scroller-hover: rgba(251, 246, 234, 0.15);
+  --color-button-hover: rgba(251, 246, 234, 0.05);
+
+  /* Break Mode Colors (Dark Theme) */
+  --break-bg: #1e1b11;
+  --break-border: #f0eed6;
+  --break-text: #f4fdd2;
+  --break-accent: #1e1b11;
 }
 
 /* === Global Styles === */
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   background-color: var(--bg-main);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -112,24 +145,69 @@ textarea::placeholder {
 
 /* === Buttons === */
 .btn {
-  background-color: var(--color-dark);
-  color: #fbf6ea;
   border: none;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
-.btn:hover {
-  background-color: #000;
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: var(--color-text-muted);
+  color: white;
+  border-color: var(--color-text-muted);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
 }
 
 .btn-outline-primary {
-  color: var(--color-dark);
-  border-color: var(--color-border);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background-color: transparent;
 }
 
 .btn-outline-primary:hover {
-  background-color: var(--color-dark);
-  color: #fbf6ea;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.btn-outline-secondary {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+  background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--color-text-muted);
+  border-color: var(--color-text-muted);
+  color: white;
+}
+
+.btn-outline-danger {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+  background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--color-danger);
+  border-color: var(--color-danger);
+  color: white;
 }
 
 /* === Alert Boxes === */
@@ -139,21 +217,23 @@ textarea::placeholder {
   font-size: 0.95rem;
 }
 
-/* === Theme Toggle Button === */
+/* === Theme Toggle Button (Unified style across themes) === */
 .theme-toggle-btn {
   font-size: 0.9rem;
   padding: 6px 12px;
-  border: 1px solid var(--color-border);
-  background-color: var(--color-light);
-  color: var(--color-dark);
+  border: 1px solid #000;
+  background-color: #000; /* Always black */
+  color: #fff; /* Always white icon */
   border-radius: 6px;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.theme-toggle-btn:hover {
-  background-color: var(--color-gray);
-  color: var(--color-accent);
+body.theme-dark .theme-toggle-btn {
+  /* Keep styles same in dark mode */
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #fff;
 }
 
 /* === Input Fields === */
@@ -187,4 +267,110 @@ body.theme-dark textarea::placeholder {
   background-color: var(--color-accent);
   color: #fbf6ea;
   border-color: var(--color-accent);
+}
+
+/* === Auth Button Base === */
+.auth-btn {
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* Light Mode */
+body:not(.theme-dark) .auth-btn {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+/* Dark Mode */
+body.theme-dark .auth-btn {
+  background-color: var(--bg-main);
+  color: #fff;
+  border: 1px solid #000;
+}
+
+/* === Responsive footer === */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* === Text Color Classes === */
+.text-color {
+  color: var(--text-color) !important;
+}
+
+.text-primary {
+  color: var(--color-primary) !important;
+}
+
+.text-success {
+  color: var(--color-success) !important;
+}
+
+.text-danger {
+  color: var(--color-danger) !important;
+}
+
+.text-warning {
+  color: var(--color-warning) !important;
+}
+
+.text-info {
+  color: var(--color-info) !important;
+}
+
+.text-muted-theme {
+  color: var(--color-text-muted) !important;
+}
+
+/* === Form Control Styling === */
+.form-control,
+.form-select {
+  background-color: var(--color-light);
+  color: var(--text-color);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--color-light);
+  color: var(--text-color);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-control::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Break mode form styling */
+.break-mode .form-control,
+.break-mode .form-select {
+  background-color: var(--break-bg);
+  color: var(--break-text);
+  border-color: var(--break-border);
+}
+
+.break-mode .form-control:focus,
+.break-mode .form-select:focus {
+  background-color: var(--break-bg);
+  color: var(--break-text);
+  border-color: var(--break-border);
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.break-mode .form-control::placeholder {
+  color: var(--break-text);
+  opacity: 0.7;
 }

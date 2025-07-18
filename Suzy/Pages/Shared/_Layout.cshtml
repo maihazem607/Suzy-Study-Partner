@@ -13,32 +13,191 @@
     <!-- Theme Styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
+    <!-- Custom navbar styles -->
+    <style>
+        #navbarContainer {
+            transition: margin-left 0.3s ease, width 0.3s ease;
+            margin-left: 16.666667%;
+            width: 83.333333%;
+        }
+
+        .navbar-text {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .btn-group .btn {
+            border-radius: 4px;
+        }
+
+        .btn-group .btn+.btn {
+            margin-left: 4px;
+        }
+
+        /* Navbar theme styling */
+        .navbar {
+            background-color: var(--color-light) !important;
+            border-color: var(--color-border) !important;
+        }
+
+        .navbar .text-color {
+            color: var(--text-color) !important;
+        }
+
+        .navbar .text-muted {
+            color: var(--color-text-muted) !important;
+        }
+
+        /* Button styling in navbar */
+        .navbar .btn-outline-primary {
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .navbar .btn-outline-primary:hover {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+
+        .navbar .btn-outline-danger {
+            color: var(--color-danger);
+            border-color: var(--color-danger);
+        }
+
+        .navbar .btn-outline-danger:hover {
+            background-color: var(--color-danger);
+            border-color: var(--color-danger);
+            color: white;
+        }
+
+        .navbar .btn-outline-secondary {
+            color: var(--color-text-muted);
+            border-color: var(--color-border);
+        }
+
+        .navbar .btn-outline-secondary:hover {
+            background-color: var(--color-text-muted);
+            border-color: var(--color-text-muted);
+            color: white;
+        }
+
+        /* Fix for fixed navbar spacing */
+        body {
+            padding-top: 60px;
+        }
+
+        .page-container {
+            padding-top: 0;
+        }
+
+        /* Break mode navbar styling */
+        .break-mode .navbar {
+            background-color: var(--break-bg) !important;
+            border-color: var(--break-border) !important;
+        }
+
+        .break-mode .navbar .text-color {
+            color: var(--break-text) !important;
+        }
+
+        .break-mode .navbar .text-muted {
+            color: var(--break-text) !important;
+            opacity: 0.8;
+        }
+
+        .break-mode .navbar .btn-outline-primary {
+            color: var(--break-border);
+            border-color: var(--break-border);
+        }
+
+        .break-mode .navbar .btn-outline-primary:hover {
+            background-color: var(--break-border);
+            color: white;
+        }
+
+        .break-mode .navbar .btn-outline-danger:hover {
+            background-color: var(--color-danger);
+            color: white;
+        }
+
+        .break-mode .navbar .btn-outline-secondary {
+            color: var(--break-text);
+            border-color: var(--break-border);
+            opacity: 0.7;
+        }
+
+        .break-mode .navbar .btn-outline-secondary:hover {
+            background-color: var(--break-text);
+            color: var(--break-bg);
+        }
+    </style>
+
     @await RenderSectionAsync("Head", required: false)
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom mb-3"
-            style="background-color: var(--color-light); border-color: var(--color-border);">
-            <div class="container">
-                <a href="/Index" class="text-decoration-none">
-                    <h4 class="m-0 text-color">
-                        <i class="fas fa-graduation-cap me-2"></i>Suzy
-                    </h4>
-                </a>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom mb-3 fixed-top"
+            style="background-color: var(--color-light); border-color: var(--color-border); z-index: 1010;">
+            <div class="container-fluid" id="navbarContainer">
+                <!-- Left side: Logo and Session Title -->
+                <div class="d-flex align-items-center">
+                    <a href="/Index" class="text-decoration-none">
+                        <h4 class="m-0 text-color">
+                            <i class="fas fa-graduation-cap me-2"></i>Suzy
+                        </h4>
+                    </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <!-- Session Title Display -->
+                    <div id="sessionTitleNavbar" class="d-none ms-3">
+                        <span class="text-muted">|</span>
+                        <span class="ms-2 text-color">
+                            <i class="fas fa-users me-1"></i>
+                            <span id="sessionTitleText">Loading Session...</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Mobile toggle button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                @using System.Security.Claims
-                @{
-                    var name = User.FindFirst("FullName")?.Value ?? "Student";
-                }
+                <!-- Right side: Session Actions and User Info -->
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto d-flex align-items-center gap-2">
+                        <!-- Session Actions (only show in study sessions) -->
+                        <div id="sessionActions" class="d-none me-3">
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-outline-primary btn-sm" onclick="copyInviteLink()">
+                                    <i class="fas fa-share me-1"></i>Share
+                                </button>
+                                <button id="deleteSessionBtn" class="btn btn-outline-danger btn-sm d-none"
+                                    onclick="deleteSession()">
+                                    <i class="fas fa-trash me-1"></i>Delete
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="leaveSession()">
+                                    <i class="fas fa-sign-out-alt me-1"></i>Leave
+                                </button>
+                            </div>
+                        </div>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end align-items-center">
-                    <h5 class="m-0 text-color">Welcome, @name</h5>
+                        @using System.Security.Claims
+                        @{
+                            var name = User.FindFirst("FullName")?.Value ?? "Student";
+                        }
+
+                        <!-- User Info and Theme Toggle -->
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="navbar-text text-color">Welcome, @name</span>
+                            <button id="themeToggle" class="theme-toggle-btn" title="Toggle Theme">
+                                <i class="fas fa-adjust"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -52,27 +211,182 @@
 
     <footer class="border-top footer text-muted mt-4"
         style="border-color: var(--color-border); background-color: var(--color-light);">
-        <div class="container">
-            &copy; 2025 - Suzy - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        <div class="container text-center">
+            <a href="https://github.com/maihazem607/SmartPrep" target="_blank">© 2025 - Developed by</a>
+            <a href="https://www.linkedin.com/in/ajay-anand-s-8a30a62b7/" target="_blank">Ajay Anand</a>,
+            <a href="https://www.linkedin.com/in/mai-hazem-7a5459251/" target="_blank">Mai Hazem</a>,
+            <a href="https://www.linkedin.com/in/haya-zaheer-715b871b0/" target="_blank">Haya Zaheer</a> –
+            <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
+
+
+
+
+    </footer>
+
 
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <!-- Theme Initialization (no toggle button) -->
+    <!-- Global Session Functions -->
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            if (localStorage.getItem("theme") === "dark") {
-                document.body.classList.add("theme-dark");
+        // These functions are made available globally for the navbar
+        function copyInviteLink() {
+            // This will be called from the navbar, so we need to check if it's available
+            if (window.sessionData && window.sessionData.inviteCode) {
+                const inviteText = `Join my study session "${window.sessionData.title}" with code: ${window.sessionData.inviteCode}`;
+                navigator.clipboard.writeText(inviteText).then(() => {
+                    alert('Invite link copied to clipboard!');
+                }).catch(() => {
+                    prompt('Copy this invite text:', inviteText);
+                });
+            } else if (window.sessionData && window.sessionData.isPublic) {
+                const shareUrl = `${window.location.origin}/Sessions/SessionManager`;
+                navigator.clipboard.writeText(`Join my study session "${window.sessionData.title}" at: ${shareUrl}`).then(() => {
+                    alert('Session link copied to clipboard!');
+                }).catch(() => {
+                    prompt('Copy this link:', shareUrl);
+                });
+            } else {
+                alert('This session cannot be shared.');
             }
-        });
+        }
+
+        function leaveSession() {
+            if (!window.sessionId) {
+                alert('No active session found.');
+                return;
+            }
+
+            if (confirm('Are you sure you want to leave this study session?')) {
+                fetch(`/api/StudySession/LeaveSession/${window.sessionId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to leave session');
+                    }
+                }).then(result => {
+                    if (result.success) {
+                        // Clean up break mode styling
+                        document.body.classList.remove('break-mode');
+
+                        // Hide navbar session elements
+                        const sessionTitleNavbar = document.getElementById('sessionTitleNavbar');
+                        const sessionActions = document.getElementById('sessionActions');
+
+                        if (sessionTitleNavbar) {
+                            sessionTitleNavbar.classList.add('d-none');
+                        }
+                        if (sessionActions) {
+                            sessionActions.classList.add('d-none');
+                        }
+
+                        // Redirect to session manager
+                        window.location.href = '/Sessions/SessionManager';
+                    } else {
+                        alert(result.message || 'Failed to leave session');
+                    }
+                }).catch(error => {
+                    console.error('Error leaving session:', error);
+                    alert('Error leaving session. Please try again.');
+                });
+            }
+        }
+
+        function deleteSession() {
+            if (!window.sessionId) {
+                alert('No active session found.');
+                return;
+            }
+
+            if (confirm('Are you sure you want to delete this study session? This action cannot be undone and will remove all participants from the session.')) {
+                fetch(`/api/StudySession/DeleteSession/${window.sessionId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to delete session');
+                    }
+                }).then(result => {
+                    if (result.success) {
+                        alert('Session deleted successfully');
+
+                        // Hide navbar session elements
+                        const sessionTitleNavbar = document.getElementById('sessionTitleNavbar');
+                        const sessionActions = document.getElementById('sessionActions');
+
+                        if (sessionTitleNavbar) {
+                            sessionTitleNavbar.classList.add('d-none');
+                        }
+                        if (sessionActions) {
+                            sessionActions.classList.add('d-none');
+                        }
+
+                        // Redirect to session manager
+                        window.location.href = '/Sessions/SessionManager';
+                    } else {
+                        alert(result.message || 'Failed to delete session');
+                    }
+                }).catch(error => {
+                    console.error('Error deleting session:', error);
+                    alert('Error deleting session. Please try again.');
+                });
+            }
+        }
+
+        // Navbar responsive adjustment for sidebar
+        function adjustNavbarForSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const navbarContainer = document.getElementById('navbarContainer');
+
+            if (sidebar && navbarContainer) {
+                const updateNavbar = () => {
+                    const isCollapsed = sidebar.classList.contains('collapsed');
+                    if (isCollapsed) {
+                        navbarContainer.style.marginLeft = '80px';
+                        navbarContainer.style.width = 'calc(100% - 80px)';
+                    } else {
+                        navbarContainer.style.marginLeft = '16.666667%';
+                        navbarContainer.style.width = '83.333333%';
+                    }
+                };
+
+                // Initial adjustment (already set in CSS, but ensure it's applied)
+                updateNavbar();
+
+                // Listen for sidebar toggle
+                const sidebarToggle = document.getElementById('sidebarToggle');
+                if (sidebarToggle) {
+                    sidebarToggle.addEventListener('click', () => {
+                        setTimeout(updateNavbar, 50); // Small delay to ensure sidebar animation completes
+                    });
+                }
+
+                // Also observe for class changes (in case sidebar is toggled elsewhere)
+                const observer = new MutationObserver(updateNavbar);
+                observer.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
+            }
+        }
+
+        // Initialize navbar adjustment when DOM is loaded
+        document.addEventListener('DOMContentLoaded', adjustNavbarForSidebar);
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>
+
 
