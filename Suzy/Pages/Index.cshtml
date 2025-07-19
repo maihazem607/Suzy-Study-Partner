@@ -8,15 +8,54 @@
     Layout = "_Layout";
 }
 
+<style>
+    .dashboard-card {
+        background-color: var(--bs-dark);
+        color: white;
+        border-radius: 1rem;
+        padding: 2rem 1rem;
+        text-align: center;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        transition: transform 0.3s ease;
+        min-height: 220px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .dashboard-card i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.2);
+    }
+
+    .dashboard-card h6 {
+        margin-top: 0.5rem;
+        font-weight: 600;
+    }
+
+    .dashboard-card p {
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+        color: #cccccc;
+    }
+</style>
+
 <div class="page-container">
-@await Html.PartialAsync("_Sidebar")
+    @await Html.PartialAsync("_Sidebar")
 
     <div class="page-content">
         <div class="container-fluid p-3">
             <!-- Dashboard Cards -->
             <div class="row g-4">
                 <div class="col-md-6 col-lg-4">
-                    <a href="/Uploadnotes/Upload" class="text-decoration-none">
+                    <a href="/Uploadnotes/Upload" class="text-decoration-none h-100 d-block">
                         <div class="dashboard-card">
                             <i class="fas fa-upload"></i>
                             <h6>Upload Notes</h6>
@@ -25,7 +64,7 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="/Categorize/Categorize" class="text-decoration-none">
+                    <a href="/Categorize/Categorize" class="text-decoration-none h-100 d-block">
                         <div class="dashboard-card">
                             <i class="fas fa-tags"></i>
                             <h6>Tag by Subject</h6>
@@ -34,7 +73,7 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="/Flashcards/Flashindex" class="text-decoration-none">
+                    <a href="/Flashcards/Flashindex" class="text-decoration-none h-100 d-block">
                         <div class="dashboard-card">
                             <i class="fas fa-clone"></i>
                             <h6>Flashcards</h6>
@@ -43,7 +82,7 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
+                    <a href="#" class="text-decoration-none h-100 d-block">
                         <div class="dashboard-card">
                             <i class="fas fa-edit"></i>
                             <h6>Mock Exams</h6>
@@ -52,7 +91,7 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="/Sessions/StudySessions" class="text-decoration-none">
+                    <a href="/Sessions/StudySessions" class="text-decoration-none h-100 d-block">
                         <div class="dashboard-card">
                             <i class="fas fa-users"></i>
                             <h6>Study Sessions</h6>
@@ -61,7 +100,7 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
+                    <a href="#" class="text-decoration-none h-100 d-block">
                         <div class="dashboard-card">
                             <i class="fas fa-brain"></i>
                             <h6>AI Study Tips</h6>
@@ -70,7 +109,7 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
+                    <a href="#" class="text-decoration-none h-100 d-block">
                         <div class="dashboard-card">
                             <i class="fas fa-tasks"></i>
                             <h6>To-Do+Scheduler</h6>
@@ -79,7 +118,7 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
+                    <a href="#" class="text-decoration-none h-100 d-block">
                         <div class="dashboard-card">
                             <i class="fas fa-music"></i>
                             <h6>Study Music</h6>
@@ -88,7 +127,7 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
+                    <a href="#" class="text-decoration-none h-100 d-block">
                         <div class="dashboard-card">
                             <i class="fas fa-chart-line"></i>
                             <h6>Progress+Leaderboard</h6>
@@ -99,5 +138,4 @@
             </div>
         </div>
     </div>
-
-
+</div>
