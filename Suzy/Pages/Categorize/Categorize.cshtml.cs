@@ -27,12 +27,13 @@ namespace Suzy.Pages.Categorize
 
         public List<Note> Notes { get; set; } = new();
         public List<Category> Categories { get; set; } = new();
-
         public Dictionary<int, List<int>> NoteCategories { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Challenge(); // Handles null user
+
             Notes = _context.Notes.Where(n => n.UserId == user.Id).ToList();
             Categories = _context.Categories.Where(c => c.UserId == user.Id).ToList();
 
@@ -53,6 +54,7 @@ namespace Suzy.Pages.Categorize
             }
 
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Challenge();
 
             var category = new Category
             {
@@ -69,16 +71,16 @@ namespace Suzy.Pages.Categorize
 
         public async Task<IActionResult> OnPostDeleteCategoryAsync(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Challenge();
 
+            var category = await _context.Categories.FindAsync(id);
             if (category == null || category.UserId != user.Id)
             {
                 TempData["Error"] = "Category not found or unauthorized.";
                 return RedirectToPage();
             }
 
-            // Remove associated mappings
             var mappings = _context.NoteCategories.Where(nc => nc.CategoryId == id).ToList();
             _context.NoteCategories.RemoveRange(mappings);
 
@@ -92,6 +94,8 @@ namespace Suzy.Pages.Categorize
         public async Task<IActionResult> OnPostSaveCategorizationAsync(Dictionary<int, int> Selections)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Challenge();
+
             var allNotes = _context.Notes.Where(n => n.UserId == user.Id).ToList();
             var allCategories = _context.Categories.Where(c => c.UserId == user.Id).ToList();
 
@@ -101,16 +105,20 @@ namespace Suzy.Pages.Categorize
 
             _context.NoteCategories.RemoveRange(existingMappings);
 
-            // Re-add selections
+            // Safe parsing and re-adding selections
             foreach (var kvp in Request.Form.Where(k => k.Key.StartsWith("Selections[")))
             {
-                var noteId = int.Parse(kvp.Key.Split('[', ']')[1]);
-                var selectedCategoryId = int.Parse(kvp.Value);
-                _context.NoteCategories.Add(new NoteCategory
+                var keyPart = kvp.Key.Split('[', ']');
+                if (keyPart.Length >= 2 &&
+                    int.TryParse(keyPart[1], out int noteId) &&
+                    int.TryParse(kvp.Value, out int categoryId))
                 {
-                    NoteId = noteId,
-                    CategoryId = selectedCategoryId
-                });
+                    _context.NoteCategories.Add(new NoteCategory
+                    {
+                        NoteId = noteId,
+                        CategoryId = categoryId
+                    });
+                }
             }
 
             await _context.SaveChangesAsync();

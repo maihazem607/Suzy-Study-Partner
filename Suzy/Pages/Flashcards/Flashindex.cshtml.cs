@@ -1,78 +1,182 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Suzy.Data;
+using Suzy.Models;
 using Suzy.Services;
-using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace Suzy.Pages.Flashcards
 {
-    [IgnoreAntiforgeryToken]
     public class FlashindexModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         private readonly GeminiService _geminiService;
-        private readonly ILogger<FlashindexModel> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public FlashindexModel(GeminiService geminiService, ILogger<FlashindexModel> logger)
+        public FlashindexModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
-            _geminiService = geminiService;
-            _logger = logger;
+            _context = context;
+            _userManager = userManager;
+            _geminiService = new GeminiService(); // You can inject this via DI if desired
         }
 
-        [BindProperty]
-        public string? TestInput { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int SelectedCategoryId { get; set; }
 
-        public List<Flashcard> TestFlashcards { get; set; } = new();
-        public string Message { get; set; } = string.Empty;
+        [BindProperty(SupportsGet = true)]
+        public int SelectedNoteId { get; set; }
 
-        public void OnGet()
+        public List<SelectListItem> CategoryOptions { get; set; } = new();
+        public List<SelectListItem> NoteOptions { get; set; } = new();
+
+        public string LoadedContent { get; set; } = "";
+        public List<Suzy.Models.Flashcard> Flashcards { get; set; } = new();
+
+        public async Task OnGetAsync()
         {
-            Message = "Enter some text to test the flashcard generator.";
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                await LoadCategoriesAsync(user.Id);
+
+                if (SelectedCategoryId > 0)
+                {
+                    await LoadNotesAsync(user.Id);
+                }
+            }
         }
-        public async Task<IActionResult> OnPostAsync()
+
+        public async Task<IActionResult> OnPostLoadAsync()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Challenge();
+
+            await LoadCategoriesAsync(user.Id);
+            await LoadNotesAsync(user.Id);
+
+            var note = await _context.Notes.FindAsync(SelectedNoteId);
+            if (note == null)
+            {
+                TempData["Error"] = "Note not found.";
+                return Page();
+            }
+
+            LoadedContent = note.Content ?? "(No content found)";
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostGenerateAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Challenge();
+
+            await LoadCategoriesAsync(user.Id);
+            await LoadNotesAsync(user.Id);
+
+            var note = await _context.Notes.FindAsync(SelectedNoteId);
+            if (note == null)
+            {
+                TempData["Error"] = "Note not found.";
+                return Page();
+            }
+
+            LoadedContent = note.Content ?? "(No content found)";
+
             try
             {
-                // Debug all form keys and values
-                _logger.LogInformation("=== FORM SUBMISSION DEBUG ===");
-                _logger.LogInformation("Form keys count: {Count}", Request.Form.Keys.Count);
+                var prompt = @"Generate exactly 5 flashcards based on the following note content.
+Return the result strictly as JSON in the following format:
+[
+  { ""Question"": ""What is ...?"", ""Answer"": ""..."" },
+  ...
+]
+Content:
+" + LoadedContent;
 
-                foreach (var key in Request.Form.Keys)
+                var jsonResponse = await _geminiService.GenerateContentAsync(prompt);
+
+                var root = JsonDocument.Parse(jsonResponse).RootElement;
+                var responseText = root
+                    .GetProperty("candidates")[0]
+                    .GetProperty("content")
+                    .GetProperty("parts")[0]
+                    .GetProperty("text")
+                    .GetString() ?? "";
+
+                responseText = responseText.Trim();
+                if (responseText.StartsWith("```"))
                 {
-                    _logger.LogInformation("Form key: '{Key}' = '{Value}'", key, Request.Form[key]);
+                    int firstNewline = responseText.IndexOf('\n');
+                    int lastBackticks = responseText.LastIndexOf("```");
+
+                    if (firstNewline != -1 && lastBackticks > firstNewline)
+                    {
+                        responseText = responseText.Substring(firstNewline + 1, lastBackticks - firstNewline - 1).Trim();
+                    }
                 }
 
-                // Get the value directly from the form
-                string? formInput = Request.Form["TestInput"];
-
-                _logger.LogInformation("Direct form input: '{Input}'", formInput ?? "null");
-                _logger.LogInformation("TestInput property: '{Property}'", TestInput ?? "null");
-
-                // Use the direct form input
-                string inputToUse = formInput ?? "";
-
-                if (string.IsNullOrWhiteSpace(inputToUse))
+                if (!responseText.StartsWith("["))
                 {
-                    Message = "Please enter some text in the textarea.";
-                    _logger.LogWarning("No input provided in form");
-                    return Page();
+                    throw new Exception("Response did not contain valid JSON flashcards.\nContent: " + responseText);
                 }
 
-                _logger.LogInformation("Using input: '{Input}', calling Gemini service...", inputToUse);
-                TestFlashcards = await _geminiService.GenerateFlashcardsAsync(inputToUse);
-                Message = $"Generated {TestFlashcards.Count} test flashcards successfully!";
-
-                _logger.LogInformation("Test completed successfully. Generated {Count} flashcards", TestFlashcards.Count);
+                Flashcards = JsonSerializer.Deserialize<List<Suzy.Models.Flashcard>>(responseText) ?? new();
+                TempData["Message"] = "Flashcards generated successfully.";
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error in test page");
-                Message = $"Test failed: {ex.Message}";
-                TestFlashcards = new List<Flashcard>
-                {
-                    new Flashcard { Front = "Error Test", Back = $"Exception: {ex.Message}" }
-                };
+                TempData["Error"] = $"Error generating flashcards: {ex.Message}";
             }
 
             return Page();
+        }
+
+        public async Task<JsonResult> OnGetNotesAsync(int categoryId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return new JsonResult(new List<SelectListItem>());
+
+            var notes = await _context.NoteCategories
+                .Where(nc => nc.CategoryId == categoryId && nc.Note.UserId == user.Id)
+                .Select(nc => nc.Note)
+                .Distinct()
+                .Select(n => new SelectListItem
+                {
+                    Value = n.Id.ToString(),
+                    Text = n.Title
+                })
+                .ToListAsync();
+
+            return new JsonResult(notes);
+        }
+
+        private async Task LoadCategoriesAsync(string userId)
+        {
+            CategoryOptions = await _context.Categories
+                .Where(c => c.UserId == userId)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                })
+                .ToListAsync();
+        }
+
+        private async Task LoadNotesAsync(string userId)
+        {
+            NoteOptions = await _context.NoteCategories
+                .Where(nc => nc.CategoryId == SelectedCategoryId && nc.Note.UserId == userId)
+                .Select(nc => nc.Note)
+                .Distinct()
+                .Select(n => new SelectListItem
+                {
+                    Value = n.Id.ToString(),
+                    Text = n.Title
+                })
+                .ToListAsync();
         }
     }
 }

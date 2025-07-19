@@ -103,6 +103,46 @@
                             {
                                 <p class="text-muted mt-4">No notes to categorize.</p>
                             }
+
+                            @* ✅ CATEGORIZATION OVERVIEW TABLE *@
+                            @if (Model.NoteCategories.Any())
+                            {
+                                <hr />
+                                <h5 class="mt-5">Categorization Overview</h5>
+                                <table class="table table-striped table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Note Title</th>
+                                            <th>Assigned Categories</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var note in Model.Notes)
+                                        {
+                                            <tr>
+                                                <td>@note.Title</td>
+                                                <td>
+                                                    @{
+                                                        if (Model.NoteCategories.ContainsKey(note.Id))
+                                                        {
+                                                            var categoryIds = Model.NoteCategories[note.Id];
+                                                            var categoryNames = Model.Categories
+                                                                .Where(c => categoryIds.Contains(c.Id))
+                                                                .Select(c => c.Name);
+                                                            <text>@string.Join(", ", categoryNames)</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">No category assigned</span>
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+
                         </div>
                     </div>
                 </div>
