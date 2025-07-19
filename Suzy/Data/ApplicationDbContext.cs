@@ -15,47 +15,25 @@ namespace Suzy.Data
         public DbSet<TodoItem> TodoItems { get; set; } = null!;
         public DbSet<StudySession> StudySessions { get; set; } = null!;
         public DbSet<StudySessionParticipant> StudySessionParticipants { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<NoteCategory> NoteCategories { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            // Configure TodoItem
-            builder.Entity<TodoItem>(entity =>
-            {
-                entity.HasIndex(e => e.UserId);
-                entity.HasIndex(e => e.StudySessionId);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
-            });
+            builder.Entity<NoteCategory>()
+                .HasKey(nc => new { nc.NoteId, nc.CategoryId });
 
-            // Configure StudySession
-            builder.Entity<StudySession>(entity =>
-            {
-                entity.HasIndex(e => e.CreatorUserId);
-                entity.HasIndex(e => e.IsPublic);
-                entity.HasIndex(e => e.InviteCode).IsUnique();
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
-                
-                // Configure one-to-many relationship with TodoItems
-                entity.HasMany(s => s.TodoItems)
-                      .WithOne()
-                      .HasForeignKey(t => t.StudySessionId)
-                      .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<NoteCategory>()
+                .HasOne(nc => nc.Note)
+                .WithMany()
+                .HasForeignKey(nc => nc.NoteId);
 
-                // Configure one-to-many relationship with Participants
-                entity.HasMany(s => s.Participants)
-                      .WithOne(p => p.StudySession)
-                      .HasForeignKey(p => p.StudySessionId)
-                      .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            // Configure StudySessionParticipant
-            builder.Entity<StudySessionParticipant>(entity =>
-            {
-                entity.HasIndex(e => new { e.StudySessionId, e.UserId }).IsUnique();
-                entity.HasIndex(e => e.UserId);
-                entity.Property(e => e.JoinedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
-            });
+            builder.Entity<NoteCategory>()
+                .HasOne(nc => nc.Category)
+                .WithMany(c => c.NoteCategories)
+                .HasForeignKey(nc => nc.CategoryId);
         }
     }
 }
