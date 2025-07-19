@@ -10,10 +10,8 @@
                 style="position: relative; top: 7px; margin-left: 3px;">Suzy</span></h3>
     </div>
     <nav class="nav flex-column">
-        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "active" : "")" href="/"><i
-                class="fas fa-home me-2"></i><span>Dashboard</span></a>
-        <a class="nav-link" href="/Identity/Account/Register"><i class="fas fa-user-plus me-2"></i><span>Register /
-                Login</span></a>
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Dashboard/dashboard" ? "active" : "")"
+            href="/Dashboard/dashboard"><i class="fas fa-home me-2"></i><span>Dashboard</span></a>
         <a class="nav-link" href="/Uploadnotes/Upload"><i class="fas fa-upload me-2"></i><span>Upload
                 Notes</span></a>
         <a class="nav-link" href="#"><i class="fas fa-folder-plus me-2"></i><span>Categorize

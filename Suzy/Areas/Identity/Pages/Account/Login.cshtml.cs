@@ -115,7 +115,7 @@ namespace Suzy.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToPage("/Index");
+                    return RedirectToPage("/Dashboard/dashboard");
 
                 }
                 if (result.RequiresTwoFactor)
