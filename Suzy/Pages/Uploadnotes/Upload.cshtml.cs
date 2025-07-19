@@ -68,12 +68,15 @@ namespace Suzy.Pages.Uploadnotes
                     await Upload.CopyToAsync(stream);
                 }
 
-                var note = new Note
-                {
-                    Title = Title,
-                    FilePath = $"/uploads/{fileName}",
-                    UserId = user.Id
-                };
+                var storedPath = $"/uploads/{fileName}";
+var note = new Note
+{
+    Title = Title,
+    FilePath = storedPath,
+    StoredFilePath = storedPath, // <-- ADD THIS LINE
+    UserId = user.Id
+};
+
 
                 _context.Notes.Add(note);
                 await _context.SaveChangesAsync();

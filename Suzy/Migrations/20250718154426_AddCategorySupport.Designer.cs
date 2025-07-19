@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Suzy.Data;
 
@@ -10,9 +11,11 @@ using Suzy.Data;
 namespace Suzy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250718154426_AddCategorySupport")]
+    partial class AddCategorySupport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
@@ -213,32 +216,17 @@ namespace Suzy.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Suzy.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Suzy.Models.Note", b =>
+            modelBuilder.Entity("Note", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OriginalFileName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -259,6 +247,25 @@ namespace Suzy.Migrations
                     b.ToTable("Notes");
                 });
 
+            modelBuilder.Entity("Suzy.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Suzy.Models.NoteCategory", b =>
                 {
                     b.Property<int>("NoteId")
@@ -267,14 +274,9 @@ namespace Suzy.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("NoteId1")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("NoteId", "CategoryId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("NoteId1");
 
                     b.ToTable("NoteCategories");
                 });
@@ -467,15 +469,11 @@ namespace Suzy.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Suzy.Models.Note", "Note")
+                    b.HasOne("Note", "Note")
                         .WithMany()
                         .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Suzy.Models.Note", null)
-                        .WithMany("NoteCategories")
-                        .HasForeignKey("NoteId1");
 
                     b.Navigation("Category");
 
@@ -501,11 +499,6 @@ namespace Suzy.Migrations
                 });
 
             modelBuilder.Entity("Suzy.Models.Category", b =>
-                {
-                    b.Navigation("NoteCategories");
-                });
-
-            modelBuilder.Entity("Suzy.Models.Note", b =>
                 {
                     b.Navigation("NoteCategories");
                 });
