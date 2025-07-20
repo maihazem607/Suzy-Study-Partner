@@ -79,7 +79,7 @@ namespace Suzy.Controllers
         public async Task<IActionResult> GetMySessions()
         {
             var userId = _userManager.GetUserId(User);
-            
+
             var sessions = await _context.StudySessions
                 .Where(s => s.CreatorUserId == userId && s.IsActive)
                 .Select(s => new
@@ -106,7 +106,7 @@ namespace Suzy.Controllers
         public async Task<IActionResult> CreateSession([FromBody] CreateSessionRequest request)
         {
             var userId = _userManager.GetUserId(User);
-            
+
             var session = new StudySession
             {
                 Title = request.Title,
@@ -134,10 +134,11 @@ namespace Suzy.Controllers
             _context.StudySessionParticipants.Add(participant);
             await _context.SaveChangesAsync();
 
-            return Ok(new { 
-                success = true, 
-                sessionId = session.Id, 
-                inviteCode = session.InviteCode 
+            return Ok(new
+            {
+                success = true,
+                sessionId = session.Id,
+                inviteCode = session.InviteCode
             });
         }
 
@@ -151,7 +152,7 @@ namespace Suzy.Controllers
             {
                 session = await _context.StudySessions
                     .FirstOrDefaultAsync(s => s.Id == request.SessionId.Value && s.IsActive);
-                
+
                 // If session ID is provided but it's a private session, validate the invite code
                 // UNLESS the user is the creator (host) of the session
                 if (session != null && !session.IsPublic && session.CreatorUserId != userId)
@@ -198,7 +199,7 @@ namespace Suzy.Controllers
             };
 
             _context.StudySessionParticipants.Add(participant);
-            
+
             // Update participant count
             session.CurrentParticipants++;
             await _context.SaveChangesAsync();
@@ -210,7 +211,7 @@ namespace Suzy.Controllers
         public async Task<IActionResult> GetSession(int id)
         {
             var userId = _userManager.GetUserId(User);
-            
+
             var session = await _context.StudySessions
                 .Include(s => s.Participants)
                 .FirstOrDefaultAsync(s => s.Id == id && s.IsActive);
@@ -256,7 +257,7 @@ namespace Suzy.Controllers
         public async Task<IActionResult> LeaveSession(int id)
         {
             var userId = _userManager.GetUserId(User);
-            
+
             var session = await _context.StudySessions
                 .FirstOrDefaultAsync(s => s.Id == id && s.IsActive);
 
@@ -286,7 +287,9 @@ namespace Suzy.Controllers
                     // Transfer ownership to first participant
                     var newHost = otherParticipants.First();
                     newHost.IsHost = true;
-                } else {
+                }
+                else
+                {
                     // No other participants, mark session as inactive
                     session.IsActive = false;
                     session.EndedAt = DateTime.UtcNow;
@@ -295,10 +298,10 @@ namespace Suzy.Controllers
 
             // Remove participant
             _context.StudySessionParticipants.Remove(participant);
-            
+
             // Update participant count
             session.CurrentParticipants = Math.Max(0, session.CurrentParticipants - 1);
-            
+
             await _context.SaveChangesAsync();
 
             return Ok(new { success = true, message = "Left session successfully" });
@@ -308,7 +311,7 @@ namespace Suzy.Controllers
         public async Task<IActionResult> DeleteSession(int id)
         {
             var userId = _userManager.GetUserId(User);
-            
+
             var session = await _context.StudySessions
                 .FirstOrDefaultAsync(s => s.Id == id && s.IsActive);
 
@@ -330,24 +333,257 @@ namespace Suzy.Controllers
             var participants = await _context.StudySessionParticipants
                 .Where(p => p.StudySessionId == id)
                 .ToListAsync();
-            
+
             _context.StudySessionParticipants.RemoveRange(participants);
 
             // Remove all todos associated with this session
             var todos = await _context.TodoItems
                 .Where(t => t.StudySessionId == id)
                 .ToListAsync();
-            
+
             _context.TodoItems.RemoveRange(todos);
 
             // Mark session as inactive/deleted
             session.IsActive = false;
             session.EndedAt = DateTime.UtcNow;
             session.CurrentParticipants = 0;
-            
+
             await _context.SaveChangesAsync();
 
             return Ok(new { success = true, message = "Session deleted successfully" });
+        }
+
+        [HttpPost("StartSession/{sessionId}")]
+        public async Task<IActionResult> StartSession(int sessionId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+
+            var userName = User.FindFirstValue(ClaimTypes.Name) ?? User.FindFirstValue(ClaimTypes.Email) ?? "Unknown User";
+
+            var session = await _context.StudySessions.FindAsync(sessionId);
+
+            if (session == null)
+                return NotFound(new { success = false, message = "Session not found" });
+
+            // Check if user is a participant in this session
+            var participant = await _context.StudySessionParticipants
+                .FirstOrDefaultAsync(p => p.StudySessionId == sessionId && p.UserId == userId);
+
+            if (participant == null)
+                return Forbid("You are not a participant in this session");
+
+            // Check if user already has an active timer session
+            var activeTimerSession = await _context.StudyTimerSessions
+                .FirstOrDefaultAsync(t => t.StudySessionId == sessionId &&
+                                         t.UserId == userId &&
+                                         t.EndTime == null);
+
+            if (activeTimerSession != null)
+                return BadRequest(new { success = false, message = "You already have an active timer session" });
+
+            // Create new timer session
+            var timerSession = new StudyTimerSession
+            {
+                StudySessionId = sessionId,
+                UserId = userId,
+                UserName = userName,
+                StartTime = DateTime.UtcNow,
+                SessionType = TimerSessionType.Study,
+                Notes = "Timer started by user"
+            };
+
+            _context.StudyTimerSessions.Add(timerSession);
+
+            // Update participant's last activity
+            participant.LastActivityAt = DateTime.UtcNow;
+
+            // Update session's StartedAt if this is the first timer session
+            if (session.StartedAt == null)
+            {
+                session.StartedAt = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                success = true,
+                message = "Timer session started",
+                timerSessionId = timerSession.Id,
+                startedAt = timerSession.StartTime
+            });
+        }
+
+        [HttpPost("EndSession/{sessionId}")]
+        public async Task<IActionResult> EndSession(int sessionId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+
+            var session = await _context.StudySessions.FindAsync(sessionId);
+
+            if (session == null)
+                return NotFound(new { success = false, message = "Session not found" });
+
+            // Find the user's active timer session
+            var activeTimerSession = await _context.StudyTimerSessions
+                .FirstOrDefaultAsync(t => t.StudySessionId == sessionId &&
+                                         t.UserId == userId &&
+                                         t.EndTime == null);
+
+            if (activeTimerSession == null)
+                return BadRequest(new { success = false, message = "No active timer session found" });
+
+            // End the timer session
+            activeTimerSession.EndTime = DateTime.UtcNow;
+            activeTimerSession.DurationMinutes = (int)(activeTimerSession.EndTime.Value - activeTimerSession.StartTime).TotalMinutes;
+            activeTimerSession.IsCompleted = true;
+            activeTimerSession.Notes = "Timer stopped by user";
+
+            // Update participant's total study time and last activity
+            var participant = await _context.StudySessionParticipants
+                .FirstOrDefaultAsync(p => p.StudySessionId == sessionId && p.UserId == userId);
+
+            if (participant != null)
+            {
+                participant.TotalStudyTimeMinutes += activeTimerSession.DurationMinutes;
+                participant.LastActivityAt = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                success = true,
+                message = "Timer session ended",
+                endedAt = activeTimerSession.EndTime,
+                durationMinutes = activeTimerSession.DurationMinutes,
+                totalStudyTimeMinutes = participant?.TotalStudyTimeMinutes ?? 0
+            });
+        }
+
+        [HttpPost("StartBreak/{sessionId}")]
+        public async Task<IActionResult> StartBreak(int sessionId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+
+            var userName = User.FindFirstValue(ClaimTypes.Name) ?? User.FindFirstValue(ClaimTypes.Email) ?? "Unknown User";
+
+            var session = await _context.StudySessions.FindAsync(sessionId);
+
+            if (session == null)
+                return NotFound(new { success = false, message = "Session not found" });
+
+            // Check if user is a participant in this session
+            var participant = await _context.StudySessionParticipants
+                .FirstOrDefaultAsync(p => p.StudySessionId == sessionId && p.UserId == userId);
+
+            if (participant == null)
+                return Forbid("You are not a participant in this session");
+
+            // Check if user already has an active timer session
+            var activeTimerSession = await _context.StudyTimerSessions
+                .FirstOrDefaultAsync(t => t.StudySessionId == sessionId &&
+                                         t.UserId == userId &&
+                                         t.EndTime == null);
+
+            if (activeTimerSession != null)
+                return BadRequest(new { success = false, message = "You already have an active timer session" });
+
+            // Create new break timer session
+            var timerSession = new StudyTimerSession
+            {
+                StudySessionId = sessionId,
+                UserId = userId,
+                UserName = userName,
+                StartTime = DateTime.UtcNow,
+                SessionType = TimerSessionType.Break,
+                Notes = "Break timer started by user"
+            };
+
+            _context.StudyTimerSessions.Add(timerSession);
+
+            // Update participant's last activity
+            participant.LastActivityAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                success = true,
+                message = "Break timer started",
+                timerSessionId = timerSession.Id,
+                startedAt = timerSession.StartTime
+            });
+        }
+
+        [HttpGet("GetTimerStats/{sessionId}")]
+        public async Task<IActionResult> GetTimerStats(int sessionId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+
+            var session = await _context.StudySessions.FindAsync(sessionId);
+
+            if (session == null)
+                return NotFound(new { success = false, message = "Session not found" });
+
+            // Get participant's timer sessions
+            var timerSessions = await _context.StudyTimerSessions
+                .Where(t => t.StudySessionId == sessionId && t.UserId == userId)
+                .OrderBy(t => t.StartTime)
+                .ToListAsync();
+
+            // Get participant info
+            var participant = await _context.StudySessionParticipants
+                .FirstOrDefaultAsync(p => p.StudySessionId == sessionId && p.UserId == userId);
+
+            // Calculate stats
+            var studySessions = timerSessions.Where(t => t.SessionType == TimerSessionType.Study).ToList();
+            var breakSessions = timerSessions.Where(t => t.SessionType == TimerSessionType.Break).ToList();
+
+            var totalStudyTime = studySessions.Sum(t => t.DurationMinutes);
+            var totalBreakTime = breakSessions.Sum(t => t.DurationMinutes);
+            var completedStudySessions = studySessions.Count(t => t.IsCompleted);
+            var completedBreakSessions = breakSessions.Count(t => t.IsCompleted);
+
+            // Check for active session
+            var activeSession = timerSessions.FirstOrDefault(t => t.EndTime == null);
+
+            return Ok(new
+            {
+                success = true,
+                sessionId = sessionId,
+                totalStudyTimeMinutes = totalStudyTime,
+                totalBreakTimeMinutes = totalBreakTime,
+                completedStudySessions = completedStudySessions,
+                completedBreakSessions = completedBreakSessions,
+                totalSessions = timerSessions.Count,
+                activeSession = activeSession != null ? new
+                {
+                    id = activeSession.Id,
+                    sessionType = activeSession.SessionType.ToString(),
+                    startTime = activeSession.StartTime,
+                    elapsedMinutes = (int)(DateTime.UtcNow - activeSession.StartTime).TotalMinutes
+                } : null,
+                participantTotalStudyTime = participant?.TotalStudyTimeMinutes ?? 0,
+                sessions = timerSessions.Select(t => new
+                {
+                    id = t.Id,
+                    sessionType = t.SessionType.ToString(),
+                    startTime = t.StartTime,
+                    endTime = t.EndTime,
+                    durationMinutes = t.DurationMinutes,
+                    isCompleted = t.IsCompleted,
+                    notes = t.Notes
+                })
+            });
         }
 
         private string GenerateInviteCode()
