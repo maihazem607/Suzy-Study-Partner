@@ -449,11 +449,12 @@ namespace Suzy.Controllers
 
             if (participant != null)
             {
-                // Update last activity time
+                // Only add to study time if this was a study session, not a break session
+                if (activeTimerSession.SessionType == TimerSessionType.Study)
+                {
+                    participant.TotalStudyTimeMinutes += activeTimerSession.DurationMinutes;
+                }
                 participant.LastActivityAt = DateTime.UtcNow;
-
-                // Recalculate study time from timer sessions
-                participant.TotalStudyTimeMinutes = await CalculateParticipantStudyTimeAsync(activeTimerSession.StudySessionId, userId!);
             }
 
             await _context.SaveChangesAsync();
@@ -642,38 +643,6 @@ namespace Suzy.Controllers
                 message = $"Recalculated study times for {updatedCount} participant records",
                 updatedCount
             });
-        }
-
-        /// <summary>
-        /// Calculate total study time for a participant dynamically from timer sessions
-        /// </summary>
-        private async Task<int> CalculateParticipantStudyTimeAsync(int studySessionId, string userId)
-        {
-            var studyTime = await _context.StudyTimerSessions
-                .Where(t => t.StudySessionId == studySessionId &&
-                           t.UserId == userId &&
-                           t.SessionType == TimerSessionType.Study)
-                .SumAsync(t => t.DurationMinutes);
-
-            return studyTime;
-        }
-
-        /// <summary>
-        /// Update the TotalStudyTimeMinutes property for participants (for compatibility)
-        /// This should be called after timer sessions are updated
-        /// </summary>
-        private async Task UpdateParticipantStudyTimesAsync(int studySessionId)
-        {
-            var participants = await _context.StudySessionParticipants
-                .Where(p => p.StudySessionId == studySessionId)
-                .ToListAsync();
-
-            foreach (var participant in participants)
-            {
-                participant.TotalStudyTimeMinutes = await CalculateParticipantStudyTimeAsync(studySessionId, participant.UserId);
-            }
-
-            await _context.SaveChangesAsync();
         }
     }
 

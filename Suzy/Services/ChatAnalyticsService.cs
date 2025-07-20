@@ -18,12 +18,30 @@ namespace Suzy.Services
 
         public async Task<StudyAnalytics> GetTodayAnalyticsAsync(string userId)
         {
-            var today = DateTime.Today;
+            var utcToday = DateTime.UtcNow.Date;
             var analytics = await _context.StudyAnalytics
-                .FirstOrDefaultAsync(a => a.UserId == userId && a.Date.Date == today);
+                .FirstOrDefaultAsync(a => a.UserId == userId && a.Date.Date == utcToday);
 
-            if (analytics == null)
+            // Check if there are newer timer sessions or todos
+            var lastTimerSession = await _context.StudyTimerSessions
+                .Where(t => t.UserId == userId && t.StartTime.Date == utcToday)
+                .OrderByDescending(t => t.StartTime)
+                .FirstOrDefaultAsync();
+
+            var lastTodo = await _context.TodoItems
+                .Where(t => t.UserId == userId && t.CreatedAt.Date == utcToday)
+                .OrderByDescending(t => t.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (analytics == null ||
+                (lastTimerSession != null && lastTimerSession.StartTime > analytics.CreatedAt) ||
+                (lastTodo != null && lastTodo.CreatedAt > analytics.CreatedAt))
             {
+                if (analytics != null)
+                {
+                    _context.StudyAnalytics.Remove(analytics); // Remove stale analytics
+                    await _context.SaveChangesAsync();
+                }
                 analytics = await GenerateTodayAnalyticsAsync(userId);
             }
 
@@ -32,16 +50,98 @@ namespace Suzy.Services
 
         public async Task<WeeklySummary> GetWeeklySummaryAsync(string userId)
         {
-            var weekStart = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            var utcToday = DateTime.UtcNow.Date;
+            var weekStart = utcToday.AddDays(-(int)utcToday.DayOfWeek);
             var summary = await _context.WeeklySummaries
                 .FirstOrDefaultAsync(w => w.UserId == userId && w.WeekStartDate.Date == weekStart);
 
-            if (summary == null)
+            // Check if there are newer timer sessions or todos since last generation
+            var lastTimerSession = await _context.StudyTimerSessions
+                .Where(t => t.UserId == userId && t.StartTime >= weekStart)
+                .OrderByDescending(t => t.StartTime)
+                .FirstOrDefaultAsync();
+
+            var lastTodo = await _context.TodoItems
+                .Where(t => t.UserId == userId && t.CreatedAt >= weekStart)
+                .OrderByDescending(t => t.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (summary == null ||
+                (lastTimerSession != null && lastTimerSession.StartTime > summary.GeneratedAt) ||
+                (lastTodo != null && lastTodo.CreatedAt > summary.GeneratedAt))
             {
+                if (summary != null)
+                {
+                    _context.WeeklySummaries.Remove(summary); // Remove stale summary
+                    await _context.SaveChangesAsync();
+                }
                 summary = await GenerateWeeklySummaryAsync(userId);
             }
 
             return summary;
+        }
+
+        public async Task UpdateDailyAnalyticsAsync(string userId)
+        {
+            var utcToday = DateTime.UtcNow.Date;
+
+            // Find existing analytics for today
+            var existingAnalytics = await _context.StudyAnalytics
+                .FirstOrDefaultAsync(a => a.UserId == userId && a.Date.Date == utcToday);
+
+            if (existingAnalytics != null)
+            {
+                // Update existing analytics
+                await UpdateExistingAnalyticsAsync(existingAnalytics, userId);
+            }
+            else
+            {
+                // Generate new analytics for today
+                await GenerateTodayAnalyticsAsync(userId);
+            }
+        }
+
+        private async Task UpdateExistingAnalyticsAsync(StudyAnalytics analytics, string userId)
+        {
+            var utcToday = DateTime.UtcNow.Date;
+
+            // Get todos for today (UTC)
+            var todayTodos = await _context.TodoItems
+                .Where(t => t.UserId == userId && t.CreatedAt.Date == utcToday)
+                .ToListAsync();
+
+            // Update todo-related analytics
+            analytics.CompletedTodos = todayTodos.Count(t => t.IsCompleted);
+            analytics.TotalTodos = todayTodos.Count;
+
+            // Recalculate study and break time from timer sessions
+            var todayTimerSessions = await _context.StudyTimerSessions
+                .Where(t => t.UserId == userId && t.StartTime.Date == utcToday)
+                .ToListAsync();
+
+            var totalStudyMinutes = 0;
+            var totalBreakMinutes = 0;
+
+            foreach (var timerSession in todayTimerSessions)
+            {
+                var duration = timerSession.EndTime.HasValue
+                    ? timerSession.DurationMinutes // Use stored duration for completed sessions
+                    : (int)(DateTime.UtcNow - timerSession.StartTime).TotalMinutes; // Calculate for ongoing
+
+                if (timerSession.SessionType == TimerSessionType.Study)
+                {
+                    totalStudyMinutes += Math.Max(0, duration);
+                }
+                else if (timerSession.SessionType == TimerSessionType.Break)
+                {
+                    totalBreakMinutes += Math.Max(0, duration);
+                }
+            }
+
+            analytics.TotalStudyMinutes = totalStudyMinutes;
+            analytics.TotalBreakMinutes = totalBreakMinutes;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<ChatConversation> StartConversationAsync(string userId, ChatPathType pathType)
@@ -205,25 +305,16 @@ namespace Suzy.Services
 
         private async Task<StudyAnalytics> GenerateTodayAnalyticsAsync(string userId)
         {
-            var today = DateTime.Today;
-            var tomorrow = today.AddDays(1);
             var utcToday = DateTime.UtcNow.Date;
-            var utcTomorrow = utcToday.AddDays(1);
 
-            // Get ALL timer sessions for the user (not just today) to show total study time
-            var allTimerSessions = await _context.StudyTimerSessions
-                .Where(t => t.UserId == userId)
+            // Get timer sessions for today (UTC)
+            var todayTimerSessions = await _context.StudyTimerSessions
+                .Where(t => t.UserId == userId && t.StartTime.Date == utcToday)
                 .ToListAsync();
 
-            // Get timer sessions for today only for today's specific metrics
-            var todayTimerSessions = allTimerSessions
-                .Where(t => t.StartTime.Date == today || t.StartTime.Date == utcToday)
-                .ToList();
-
-            // Get todos for today (check both local and UTC dates)
+            // Get todos for today (UTC)
             var todayTodos = await _context.TodoItems
-                .Where(t => t.UserId == userId &&
-                           (t.CreatedAt.Date == today || t.CreatedAt.Date == utcToday))
+                .Where(t => t.UserId == userId && t.CreatedAt.Date == utcToday)
                 .ToListAsync();
 
             // Calculate study and break time from timer sessions
@@ -232,37 +323,24 @@ namespace Suzy.Services
 
             foreach (var timerSession in todayTimerSessions)
             {
-                if (timerSession.EndTime.HasValue)
+                var duration = timerSession.EndTime.HasValue
+                    ? timerSession.DurationMinutes // Use stored duration for completed sessions
+                    : (int)(DateTime.UtcNow - timerSession.StartTime).TotalMinutes; // Calculate for ongoing
+
+                if (timerSession.SessionType == TimerSessionType.Study)
                 {
-                    // Completed timer session - use recorded duration
-                    if (timerSession.SessionType == TimerSessionType.Study)
-                    {
-                        totalStudyMinutes += timerSession.DurationMinutes;
-                    }
-                    else if (timerSession.SessionType == TimerSessionType.Break)
-                    {
-                        totalBreakMinutes += timerSession.DurationMinutes;
-                    }
+                    totalStudyMinutes += Math.Max(0, duration);
                 }
-                else
+                else if (timerSession.SessionType == TimerSessionType.Break)
                 {
-                    // Ongoing timer session - calculate current duration
-                    var currentDuration = (int)(DateTime.UtcNow - timerSession.StartTime).TotalMinutes;
-                    if (timerSession.SessionType == TimerSessionType.Study)
-                    {
-                        totalStudyMinutes += Math.Max(0, currentDuration);
-                    }
-                    else if (timerSession.SessionType == TimerSessionType.Break)
-                    {
-                        totalBreakMinutes += Math.Max(0, currentDuration);
-                    }
+                    totalBreakMinutes += Math.Max(0, duration);
                 }
             }
 
             var analytics = new StudyAnalytics
             {
                 UserId = userId,
-                Date = today,
+                Date = utcToday,
                 TotalStudyMinutes = totalStudyMinutes,
                 TotalBreakMinutes = totalBreakMinutes,
                 CompletedTodos = todayTodos.Count(t => t.IsCompleted),
@@ -278,7 +356,8 @@ namespace Suzy.Services
 
         private async Task<WeeklySummary> GenerateWeeklySummaryAsync(string userId)
         {
-            var weekStart = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            var utcToday = DateTime.UtcNow.Date;
+            var weekStart = utcToday.AddDays(-(int)utcToday.DayOfWeek);
             var weekEnd = weekStart.AddDays(7);
 
             // Try to get existing analytics for the week
@@ -293,37 +372,22 @@ namespace Suzy.Services
             if (!weeklyAnalytics.Any())
             {
                 var weekTimerSessions = await _context.StudyTimerSessions
-                    .Where(t => t.UserId == userId &&
-                               ((t.StartTime >= weekStart && t.StartTime < weekEnd) ||
-                                (t.StartTime.Date >= weekStart && t.StartTime.Date < weekEnd)))
+                    .Where(t => t.UserId == userId && t.StartTime >= weekStart && t.StartTime < weekEnd)
                     .ToListAsync();
 
                 foreach (var timerSession in weekTimerSessions)
                 {
-                    if (timerSession.EndTime.HasValue)
+                    var duration = timerSession.EndTime.HasValue
+                        ? timerSession.DurationMinutes // Use stored duration for completed sessions
+                        : (int)(DateTime.UtcNow - timerSession.StartTime).TotalMinutes; // Calculate for ongoing
+
+                    if (timerSession.SessionType == TimerSessionType.Study)
                     {
-                        // Completed timer session
-                        if (timerSession.SessionType == TimerSessionType.Study)
-                        {
-                            totalStudyMinutes += timerSession.DurationMinutes;
-                        }
-                        else if (timerSession.SessionType == TimerSessionType.Break)
-                        {
-                            totalBreakMinutes += timerSession.DurationMinutes;
-                        }
+                        totalStudyMinutes += Math.Max(0, duration);
                     }
-                    else
+                    else if (timerSession.SessionType == TimerSessionType.Break)
                     {
-                        // Ongoing timer session - calculate current duration
-                        var currentDuration = (int)(DateTime.UtcNow - timerSession.StartTime).TotalMinutes;
-                        if (timerSession.SessionType == TimerSessionType.Study)
-                        {
-                            totalStudyMinutes += Math.Max(0, currentDuration);
-                        }
-                        else if (timerSession.SessionType == TimerSessionType.Break)
-                        {
-                            totalBreakMinutes += Math.Max(0, currentDuration);
-                        }
+                        totalBreakMinutes += Math.Max(0, duration);
                     }
                 }
             }
@@ -334,9 +398,7 @@ namespace Suzy.Services
             }
 
             var weeklyTodos = await _context.TodoItems
-                .Where(t => t.UserId == userId &&
-                           ((t.CreatedAt >= weekStart && t.CreatedAt < weekEnd) ||
-                            (t.CreatedAt.Date >= weekStart && t.CreatedAt.Date < weekEnd)))
+                .Where(t => t.UserId == userId && t.CreatedAt >= weekStart && t.CreatedAt < weekEnd)
                 .ToListAsync();
 
             var summary = new WeeklySummary
@@ -361,8 +423,8 @@ namespace Suzy.Services
 
         private async Task<object> GetUserDataContextAsync(string userId, ChatPathType pathType)
         {
-            var today = DateTime.Today;
-            var weekStart = today.AddDays(-(int)today.DayOfWeek);
+            var utcToday = DateTime.UtcNow.Date;
+            var weekStart = utcToday.AddDays(-(int)utcToday.DayOfWeek);
 
             return pathType switch
             {
@@ -393,7 +455,7 @@ namespace Suzy.Services
                 ChatPathType.TodoProductivity => new
                 {
                     TodayTodos = await _context.TodoItems
-                        .Where(t => t.UserId == userId && t.CreatedAt.Date == today)
+                        .Where(t => t.UserId == userId && t.CreatedAt.Date == utcToday)
                         .ToListAsync(),
                     WeeklyTodos = await _context.TodoItems
                         .Where(t => t.UserId == userId && t.CreatedAt >= weekStart)
