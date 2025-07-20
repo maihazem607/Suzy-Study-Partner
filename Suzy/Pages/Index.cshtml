@@ -1,141 +1,245 @@
-﻿@page
+@page
 @model Suzy.Pages.IndexModel
 @{
-    ViewData["Title"] = "Dashboard";
-    ViewData["PageTitle"] = "Welcome, Student";
-    ViewData["SearchPlaceholder"] = "Search notes, flashcards...";
-    ViewData["ShowThemeToggle"] = "true";
-    Layout = "_Layout";
+    ViewData["Title"] = "Home";
+    Layout = null; // Use a custom layout for the landing page
 }
 
-<style>
-    .dashboard-card {
-        background-color: var(--bs-dark);
-        color: white;
-        border-radius: 1rem;
-        padding: 2rem 1rem;
-        text-align: center;
-        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
-        transition: transform 0.3s ease;
-        min-height: 220px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-    }
+<!DOCTYPE html>
+<html lang="en">
 
-    .dashboard-card i {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-    }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suzy - Aesthetic Study Platform</title>
+    <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true">
+    <link rel="icon" href="~/favicon.ico">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
 
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.2);
-    }
+<body>
+    <div class="page-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <nav class="nav">
+                    <div class="logo">
+                        <i data-lucide="heart" class="logo-icon"></i>
+                        <h1 class="logo-text">Suzy</h1>
+                    </div>
+                    <div class="nav-links">
+                        <a href="#features" class="nav-link">Features</a>
+                        <a href="#about" class="nav-link">About</a>
+                        <a href="#contact" class="nav-link">Contact</a>
+                        <a href="/Identity/Account/Login" class="btn btn-outline">Login</a>
+                    </div>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i data-lucide="menu"></i>
+                    </button>
+                </nav>
+            </div>
+        </header>
 
-    .dashboard-card h6 {
-        margin-top: 0.5rem;
-        font-weight: 600;
-    }
+        <main>
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-grid">
+                        <!-- Image Side -->
+                        <div class="hero-image">
+                            <img src="~/lib/assets/SuzyLandingPage.png" alt="Cozy study space with person studying"
+                                class="hero-img">
+                            <div class="hero-badge">
+                                <i data-lucide="leaf" class="badge-icon"></i>
+                                Study in Style
+                            </div>
+                        </div>
 
-    .dashboard-card p {
-        font-size: 0.9rem;
-        margin-top: 0.25rem;
-        color: #cccccc;
-    }
-</style>
+                        <!-- Content Side -->
+                        <div class="hero-content">
+                            <h2 class="hero-title">
+                                Welcome to<br>
+                                <span class="hero-accent">Suzy</span>
+                            </h2>
+                            <p class="hero-description">
+                                Create your perfect aesthetic study environment with cozy vibes,
+                                productivity tools, and a supportive community that inspires learning.
+                            </p>
 
-<div class="page-container">
-    @await Html.PartialAsync("_Sidebar")
+                            <!-- Sign Up Section -->
+                            <div class="signup-card">
+                                <h3 class="signup-title">Start Your Study Journey</h3>
+                                <div class="signup-buttons">
+                                    <a href="/Identity/Account/Register" class="btn btn-primary btn-full">
+                                        Sign Up for Free
+                                    </a>
+                                    <p class="form-footer">
+                                        Already have an account?
+                                        <a href="/Identity/Account/Login" class="link-btn">
+                                            Sign in here
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <div class="page-content">
-        <div class="container-fluid p-3">
-            <!-- Dashboard Cards -->
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-4">
-                    <a href="/Uploadnotes/Upload" class="text-decoration-none h-100 d-block">
-                        <div class="dashboard-card">
-                            <i class="fas fa-upload"></i>
-                            <h6>Upload Notes</h6>
-                            <p>Organize your materials.</p>
+            <!-- Features Section -->
+            <section id="features" class="features">
+                <div class="container">
+                    <h3 class="section-title">
+                        Everything You Need to Study Better
+                    </h3>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <i data-lucide="coffee" class="feature-icon"></i>
+                            <h4 class="feature-title">Cozy Study Vibes</h4>
+                            <p class="feature-description">
+                                Aesthetic study environments designed to keep you motivated and focused during long
+                                study sessions.
+                            </p>
                         </div>
-                    </a>
+                        <div class="feature-card">
+                            <i data-lucide="target" class="feature-icon"></i>
+                            <h4 class="feature-title">Smart Goal Setting</h4>
+                            <p class="feature-description">
+                                Track your progress with beautiful visual goal tracking that makes studying feel
+                                rewarding.
+                            </p>
+                        </div>
+                        <div class="feature-card">
+                            <i data-lucide="users" class="feature-icon"></i>
+                            <h4 class="feature-title">Study Community</h4>
+                            <p class="feature-description">
+                                Connect with like-minded learners in our aesthetic, supportive study community.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="/Categorize/Categorize" class="text-decoration-none h-100 d-block">
-                        <div class="dashboard-card">
-                            <i class="fas fa-tags"></i>
-                            <h6>Tag by Subject</h6>
-                            <p>Find content easily.</p>
+            </section>
+
+
+            <!-- About Section -->
+            <section id="about" class="about">
+                <div class="container">
+                    <div class="about-grid">
+                        <div class="about-content">
+                            <h3 class="about-title">
+                                Study with Aesthetic & Purpose
+                            </h3>
+                            <p class="about-description">
+                                Suzy combines beautiful, cozy study aesthetics with powerful productivity features.
+                                Our platform creates an environment where studying feels inspiring, not overwhelming.
+                            </p>
+                            <div class="features-list">
+                                <div class="features-item">
+                                    <i data-lucide="clock" class="features-icon"></i>
+                                    <span>Flexible Study Schedules</span>
+                                </div>
+                                <div class="features-item">
+                                    <i data-lucide="pen-tool" class="features-icon"></i>
+                                    <span>Beautiful Study Tools</span>
+                                </div>
+                                <div class="features-item">
+                                    <i data-lucide="book-open" class="features-icon"></i>
+                                    <span>Curated Learning Resources</span>
+                                </div>
+                            </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="/Flashcards/Flashindex" class="text-decoration-none h-100 d-block">
-                        <div class="dashboard-card">
-                            <i class="fas fa-clone"></i>
-                            <h6>Flashcards</h6>
-                            <p>Generate, organize, shuffle and master concepts.</p>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="cta">
+                <div class="container">
+                    <div class="cta-content">
+                        <h3 class="cta-title">
+                            Ready to Fall in Love with Studying?
+                        </h3>
+                        <p class="cta-description">
+                            Join Suzy today and discover how beautiful, organized study spaces can transform your
+                            learning experience.
+                        </p>
+                        <div class="cta-buttons">
+                            <a href="/Identity/Account/Register" class="btn btn-accent btn-large">
+                                Start Studying Today
+                            </a>
+                            <button class="btn btn-outline btn-large" id="learnMoreBtn">
+                                Learn More
+                            </button>
                         </div>
-                    </a>
+                    </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none h-100 d-block">
-                        <div class="dashboard-card">
-                            <i class="fas fa-edit"></i>
-                            <h6>Mock Exams</h6>
-                            <p>Custom settings, practice, and review history.</p>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <i data-lucide="heart" class="footer-logo-icon"></i>
+                            <span class="footer-logo-text">Suzy</span>
                         </div>
-                    </a>
+                        <p class="footer-description">
+                            Creating beautiful, inspiring study experiences for every learner.
+                        </p>
+                    </div>
+                    <div class="footer-column">
+                        <h6 class="footer-title">Platform</h6>
+                        <ul class="footer-links">
+                            <li><a href="#features" class="footer-link">Features</a></li>
+                            <li><a href="#" class="footer-link">Study Tools</a></li>
+                            <li><a href="#" class="footer-link">Resources</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h6 class="footer-title">Community</h6>
+                        <ul class="footer-links">
+                            <li><a href="#" class="footer-link">Study Groups</a></li>
+                            <li><a href="#" class="footer-link">Help Center</a></li>
+                            <li><a href="#contact" class="footer-link">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h6 class="footer-title">About</h6>
+                        <ul class="footer-links">
+                            <li><a href="#about" class="footer-link">Our Story</a></li>
+                            <li><a href="#" class="footer-link">Blog</a></li>
+                            <li><a href="#" class="footer-link">Careers</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="/Sessions/StudySessions" class="text-decoration-none h-100 d-block">
-                        <div class="dashboard-card">
-                            <i class="fas fa-users"></i>
-                            <h6>Study Sessions</h6>
-                            <p>Public/private sessions, timer, mood tracker.</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none h-100 d-block">
-                        <div class="dashboard-card">
-                            <i class="fas fa-brain"></i>
-                            <h6>AI Study Tips</h6>
-                            <p>Get tips & analyze your study patterns (coming soon).</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none h-100 d-block">
-                        <div class="dashboard-card">
-                            <i class="fas fa-tasks"></i>
-                            <h6>To-Do+Scheduler</h6>
-                            <p>Plan with AI and manage tasks easily.</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none h-100 d-block">
-                        <div class="dashboard-card">
-                            <i class="fas fa-music"></i>
-                            <h6>Study Music</h6>
-                            <p>Enhance focus with background tunes.</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none h-100 d-block">
-                        <div class="dashboard-card">
-                            <i class="fas fa-chart-line"></i>
-                            <h6>Progress+Leaderboard</h6>
-                            <p>Track goals, hours studied, and compare scores.</p>
-                        </div>
-                    </a>
+                <div class="footer-bottom">
+                    <p class="footer-copyright mb-2">
+                        &copy; 2025 Suzy. Made with <i data-lucide="heart" class="footer-heart"></i> for learners
+                        everywhere.
+                    </p>
+                    <p class="footer-developers">
+                        <a href="https://github.com/maihazem607/SmartPrep" target="_blank" class="footer-link">Developed
+                            by</a>
+                        <a href="https://www.linkedin.com/in/ajay-anand-s-8a30a62b7/" target="_blank"
+                            class="footer-link">Ajay Anand</a>,
+                        <a href="https://www.linkedin.com/in/mai-hazem-7a5459251/" target="_blank"
+                            class="footer-link">Mai Hazem</a>,
+                        <a href="https://www.linkedin.com/in/haya-zaheer-715b871b0/" target="_blank"
+                            class="footer-link">Haya Zaheer</a>
+                    </p>
                 </div>
             </div>
-        </div>
+        </footer>
     </div>
-</div>
+
+    <script src="~/js/landing.js" asp-append-version="true"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
