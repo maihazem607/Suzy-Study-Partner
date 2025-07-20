@@ -36,6 +36,8 @@ builder.Services.AddControllers(); // Add controller support
 builder.Services.AddScoped<GeminiService>();
 builder.Services.AddHttpClient();
 builder.Services.AddAntiforgery();
+builder.Services.AddHttpClient<GeminiService>();
+builder.Services.AddScoped<GeminiService>();
 
 var app = builder.Build();
 

@@ -1,0 +1,9 @@
+Photosynthesis is the process by which green plants use sunlight to synthesize food from carbon dioxide and water. It generally involves the green pigment chlorophyll and generates oxygen as a byproduct.
+
+The process occurs mainly in the leaves, in cell structures called chloroplasts. It consists of two main stages: the light-dependent reactions and the Calvin cycle (light-independent reactions).
+
+In the light-dependent reactions, sunlight is absorbed by chlorophyll, leading to the production of ATP and NADPH.
+
+The Calvin cycle then uses ATP and NADPH to convert carbon dioxide into glucose.
+
+Photosynthesis is vital because it provides the oxygen we breathe and is the foundation of the food chain.
