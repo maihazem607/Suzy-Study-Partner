@@ -5,6 +5,138 @@
     Layout = "_Layout";
 }
 
+<style>
+    :root {
+        --primary: #00bcd4;
+        --danger: #f44336;
+        --text-light: #f1f1f1;
+        --text-dark: #1a1a1a;
+        --card-bg-light: rgba(255, 255, 255, 0.85);
+        --card-bg-dark: rgba(18, 18, 18, 0.85);
+        --glow-light: 0 0 10px #00bcd4;
+        --glow-dark: 0 0 20px #00bcd4;
+        --glass-blur: blur(10px);
+    }
+
+    body.light-mode .futuristic-card {
+        background-color: var(--card-bg-light);
+        color: var(--text-dark);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        backdrop-filter: var(--glass-blur);
+    }
+
+    body.dark-mode .futuristic-card {
+        background-color: var(--card-bg-dark);
+        color: var(--text-light);
+        box-shadow: var(--glow-dark);
+        backdrop-filter: var(--glass-blur);
+    }
+
+    .futuristic-card {
+        border-radius: 2rem;
+        padding: 2rem;
+        border: 1px solid var(--primary);
+        transition: all 0.4s ease-in-out;
+        height: 100%;
+    }
+
+    .futuristic-heading {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        color: inherit;
+        margin-bottom: 1.8rem;
+    }
+
+    .futuristic-label {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: inherit;
+        margin-bottom: 0.4rem;
+    }
+
+    .futuristic-input,
+    .futuristic-textarea {
+        background-color: rgba(255, 255, 255, 0.03);
+        border: 2px solid var(--primary);
+        color: inherit;
+        padding: 0.7rem 1rem;
+        border-radius: 14px;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 0 8px rgba(0, 188, 212, 0.15);
+    }
+
+    /* FIXED: Created a separate, permanent style for the dropdowns */
+    .futuristic-select {
+        background-color: var(--text-dark); /* Permanent black background */
+        border: 2px solid var(--primary);
+        color: var(--text-light); /* Permanent white text */
+        padding: 0.7rem 1rem;
+        border-radius: 14px;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 0 8px rgba(0, 188, 212, 0.15);
+    }
+    
+    /* This rule styles the options list itself for browsers that support it */
+    .futuristic-select option {
+        background: var(--text-dark);
+        color: var(--text-light);
+    }
+
+    .futuristic-input:focus,
+    .futuristic-select:focus,
+    .futuristic-textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 12px rgba(0, 188, 212, 0.6);
+    }
+
+    .futuristic-btn {
+        background: linear-gradient(145deg, #00acc1, #008ba3);
+        border: none;
+        padding: 0.85rem;
+        color: white;
+        font-weight: 600;
+        letter-spacing: 0.6px;
+        border-radius: 16px;
+        box-shadow: 0 6px 12px rgba(0, 188, 212, 0.25);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .futuristic-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 188, 212, 0.45);
+    }
+
+    /* Style for the generated flashcards */
+    .flashcard-futuristic {
+        border: 1px solid var(--primary);
+        background-color: rgba(0, 188, 212, 0.08);
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        height: 100%;
+        transition: all 0.3s ease;
+        color: inherit;
+    }
+
+    .flashcard-futuristic:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 188, 212, 0.2);
+    }
+
+    .flashcard-futuristic-q {
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .flashcard-futuristic-a {
+        opacity: 0.9;
+    }
+</style>
+
 <div class="page-container">
     @await Html.PartialAsync("_Sidebar")
 
@@ -13,8 +145,8 @@
             <div class="container mt-5">
                 <div class="row justify-content-center">
                     <div class="col-md-10">
-                        <div class="card shadow p-4">
-                            <h3 class="text-center mb-4">Generate Flashcards from Notes</h3>
+                        <div class="futuristic-card">
+                            <h3 class="futuristic-heading">Generate Flashcards from Notes</h3>
 
                             @if (TempData["Message"] != null)
                             {
@@ -28,21 +160,21 @@
                             <form method="post" asp-page-handler="Load" class="mb-3" id="flashForm">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Select Subject</label>
-                                        <select asp-for="SelectedCategoryId" class="form-select" asp-items="Model.CategoryOptions" id="categorySelect">
+                                        <label class="futuristic-label">Select Subject</label>
+                                        <select asp-for="SelectedCategoryId" class="futuristic-select" asp-items="Model.CategoryOptions" id="categorySelect">
                                             <option value="">-- Select Subject --</option>
                                         </select>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="form-label">Select Note</label>
-                                        <select asp-for="SelectedNoteId" class="form-select" asp-items="Model.NoteOptions" id="noteSelect">
+                                        <label class="futuristic-label">Select Note</label>
+                                        <select asp-for="SelectedNoteId" class="futuristic-select" asp-items="Model.NoteOptions" id="noteSelect">
                                             <option value="">-- Select Note --</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn btn-primary w-100">Load Content</button>
+                                    <div class="col-md-12 d-grid">
+                                        <button type="submit" class="futuristic-btn">Load Content</button>
                                     </div>
                                 </div>
                             </form>
@@ -50,14 +182,16 @@
                             @if (!string.IsNullOrEmpty(Model.LoadedContent))
                             {
                                 <div class="mb-3">
-                                    <label class="form-label">Loaded Note Content</label>
-                                    <textarea class="form-control" rows="6" readonly>@Model.LoadedContent</textarea>
+                                    <label class="futuristic-label">Loaded Note Content</label>
+                                    <textarea class="futuristic-textarea" rows="6" readonly>@Model.LoadedContent</textarea>
                                 </div>
 
                                 <form method="post" asp-page-handler="Generate">
                                     <input type="hidden" asp-for="SelectedCategoryId" />
                                     <input type="hidden" asp-for="SelectedNoteId" />
-                                    <button type="submit" class="btn btn-success w-100 mb-3">Generate Flashcards</button>
+                                    <div class="d-grid">
+                                        <button type="submit" class="futuristic-btn mb-3">Generate Flashcards</button>
+                                    </div>
                                 </form>
                             }
 
@@ -69,11 +203,9 @@
                                     @foreach (var card in Model.Flashcards)
                                     {
                                         <div class="col-md-6 mb-3">
-                                            <div class="card border-primary shadow-sm">
-                                                <div class="card-body">
-                                                    <h6 class="card-title fw-bold">Q: @card.Question</h6>
-                                                    <p class="card-text">A: @card.Answer</p>
-                                                </div>
+                                            <div class="flashcard-futuristic">
+                                                <h6 class="flashcard-futuristic-q">Q: @card.Question</h6>
+                                                <p class="flashcard-futuristic-a mb-0">A: @card.Answer</p>
                                             </div>
                                         </div>
                                     }

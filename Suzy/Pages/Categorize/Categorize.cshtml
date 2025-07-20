@@ -5,16 +5,238 @@
     Layout = "_Layout";
 }
 
+<style>
+    :root {
+        --primary: #00bcd4;
+        --danger: #f44336;
+        --text-light: #f1f1f1;
+        --text-dark: #1a1a1a;
+        --card-bg-light: rgba(255, 255, 255, 0.85);
+        --card-bg-dark: rgba(18, 18, 18, 0.85);
+        --glow-light: 0 0 10px #00bcd4;
+        --glow-dark: 0 0 20px #00bcd4;
+        --glass-blur: blur(10px);
+    }
+
+    body.light-mode .futuristic-card {
+        background-color: var(--card-bg-light);
+        color: var(--text-dark);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        backdrop-filter: var(--glass-blur);
+    }
+
+    body.dark-mode .futuristic-card {
+        background-color: var(--card-bg-dark);
+        color: var(--text-light);
+        box-shadow: var(--glow-dark);
+        backdrop-filter: var(--glass-blur);
+    }
+
+    .futuristic-card {
+        border-radius: 2rem;
+        padding: 2rem;
+        border: 1px solid var(--primary);
+        transition: all 0.4s ease-in-out;
+        height: 100%; /* Make cards in a row equal height */
+    }
+
+    /* NEW: CSS tag for the second card to make it always white */
+    .futuristic-card.card-static-white {
+        background-color: #ffffff; /* Solid white background */
+        color: var(--text-dark);   /* Always use dark text for readability */
+        backdrop-filter: none;     /* Remove blur for a solid look */
+    }
+    /* Ensure it stays white even in dark mode */
+    body.dark-mode .futuristic-card.card-static-white {
+        background-color: #ffffff;
+        color: var(--text-dark);
+    }
+
+
+    .futuristic-heading {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        color: inherit;
+        margin-bottom: 1.8rem;
+    }
+
+    .futuristic-label {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: inherit;
+        margin-bottom: 0.4rem;
+    }
+
+    .futuristic-input {
+        background-color: rgba(255, 255, 255, 0.03);
+        border: 2px solid var(--primary);
+        color: inherit;
+        padding: 0.7rem 1rem;
+        border-radius: 14px;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 0 8px rgba(0, 188, 212, 0.15);
+    }
+
+    .futuristic-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 12px rgba(0, 188, 212, 0.6);
+    }
+
+    .futuristic-btn {
+        background: linear-gradient(145deg, #00acc1, #008ba3);
+        border: none;
+        padding: 0.85rem;
+        color: white;
+        font-weight: 600;
+        letter-spacing: 0.6px;
+        border-radius: 16px;
+        box-shadow: 0 6px 12px rgba(0, 188, 212, 0.25);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .futuristic-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 188, 212, 0.45);
+    }
+    
+    .futuristic-btn.btn-secondary {
+        background: #6c757d;
+        box-shadow: 0 6px 12px rgba(0,0,0, 0.15);
+    }
+    
+    .futuristic-btn.btn-secondary:hover {
+        background: #5a6268;
+        box-shadow: 0 10px 20px rgba(0,0,0, 0.25);
+    }
+
+    .futuristic-table th,
+    .futuristic-table td {
+        color: inherit;
+        vertical-align: middle;
+        background-color: transparent !important;
+    }
+
+    .futuristic-table {
+        border: 1px solid var(--primary);
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 188, 212, 0.15);
+    }
+
+    .futuristic-table thead {
+        background-color: rgba(0, 188, 212, 0.1);
+    }
+
+    .futuristic-table tr {
+        transition: background-color 0.2s ease;
+    }
+
+    .futuristic-table tr:hover {
+        background-color: rgba(0, 188, 212, 0.05);
+    }
+    
+    .futuristic-list-item {
+        background-color: transparent;
+        border: 1px solid var(--primary);
+        color: inherit;
+        margin-bottom: 0.5rem;
+        border-radius: 14px;
+        padding: 0.75rem 1.25rem;
+        transition: all 0.2s ease;
+    }
+
+    .futuristic-list-item:hover {
+        background-color: rgba(0, 188, 212, 0.05);
+    }
+
+    .modal-content {
+        background-color: var(--card-bg-light);
+        color: var(--text-dark);
+        border: 1px solid var(--primary);
+        border-radius: 2rem;
+        backdrop-filter: var(--glass-blur);
+    }
+    body.dark-mode .modal-content {
+        background-color: var(--card-bg-dark);
+        color: var(--text-light);
+    }
+    .modal-header, .modal-footer {
+        border-bottom: 1px solid rgba(0, 188, 212, 0.2);
+        border-top: 1px solid rgba(0, 188, 212, 0.2);
+    }
+
+    .futuristic-accordion .accordion-item {
+        background-color: rgba(0, 188, 212, 0.1);
+        border: 1px solid rgba(0, 188, 212, 0.3);
+        border-radius: 14px !important;
+        margin-bottom: 0.75rem;
+    }
+    .futuristic-accordion .accordion-header {
+        border-radius: 14px;
+    }
+    .futuristic-accordion .accordion-button {
+        background-color: transparent;
+        font-weight: 500; 
+        font-size: 1.25rem; 
+        border-radius: 14px !important;
+        transition: background-color 0.3s ease;
+    }
+    .futuristic-accordion .accordion-button:hover {
+        background-color: rgba(0, 188, 212, 0.15);
+    }
+    .futuristic-accordion .accordion-button:not(.collapsed) {
+        box-shadow: none;
+        background-color: rgba(0, 188, 212, 0.2);
+    }
+    .futuristic-accordion .accordion-button:focus {
+        box-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
+        border: none;
+    }
+    .futuristic-accordion .accordion-body ul {
+        padding-left: 1.2rem;
+        margin-bottom: 0;
+    }
+    .futuristic-accordion .accordion-body ul li {
+        padding: 0.2rem 0;
+    }
+
+    .futuristic-accordion .accordion-button,
+    .futuristic-accordion .accordion-body {
+        color: var(--text-dark);
+    }
+    body.dark-mode .futuristic-accordion .accordion-button,
+    body.dark-mode .futuristic-accordion .accordion-body {
+        color: var(--text-light);
+    }
+
+    /* Override for accordion inside the static white card */
+    .card-static-white .futuristic-accordion .accordion-button,
+    .card-static-white .futuristic-accordion .accordion-body {
+        color: var(--text-dark) !important;
+    }
+
+    .futuristic-accordion .accordion-button::after {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+    body.light-mode .futuristic-accordion .accordion-button::after {
+        filter: none;
+    }
+</style>
+
 <div class="page-container">
     @await Html.PartialAsync("_Sidebar")
 
     <div class="page-content">
         <div class="container-fluid p-3">
             <div class="container mt-5">
-                <div class="row justify-content-center">
-                    <div class="col-md-10">
-                        <div class="card shadow p-4">
-                            <h3 class="text-center mb-4">Categorize Notes</h3>
+                <div class="row g-4">
+                    <div class="col-lg-7">
+                        <div class="futuristic-card">
+                            <h3 class="futuristic-heading">Categorize Notes</h3>
 
                             @if (TempData["Message"] != null)
                             {
@@ -31,14 +253,13 @@
                                 </div>
                             }
 
-                            <!-- Add Category -->
                             <form method="post">
                                 <div class="mb-3">
-                                    <label asp-for="NewCategoryName" class="form-label">New Category</label>
-                                    <input asp-for="NewCategoryName" class="form-control" />
+                                    <label asp-for="NewCategoryName" class="futuristic-label">New Category</label>
+                                    <input asp-for="NewCategoryName" class="futuristic-input" />
                                 </div>
                                 <div class="d-grid">
-                                    <button type="submit" asp-page-handler="AddCategory" class="btn btn-success">Add Category</button>
+                                    <button type="submit" asp-page-handler="AddCategory" class="futuristic-btn">Add Category</button>
                                 </div>
                             </form>
 
@@ -46,10 +267,10 @@
                             {
                                 <hr />
                                 <h5 class="mt-4">Your Categories</h5>
-                                <ul class="list-group">
+                                <ul class="list-unstyled mt-3">
                                     @foreach (var category in Model.Categories)
                                     {
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <li class="futuristic-list-item d-flex justify-content-between align-items-center">
                                             @category.Name
                                             <form method="post" asp-page-handler="DeleteCategory" asp-route-id="@category.Id" class="d-inline">
                                                 <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this category?')">Delete</button>
@@ -63,35 +284,37 @@
                             {
                                 <hr />
                                 <h5 class="mt-4">Assign Notes to Categories</h5>
-                                <form method="post" asp-page-handler="SaveCategorization">
-                                    <table class="table table-bordered">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>Note Title</th>
-                                                @foreach (var category in Model.Categories)
-                                                {
-                                                    <th class="text-center">@category.Name</th>
-                                                }
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var note in Model.Notes)
-                                            {
+                                <form id="categorizeForm" method="post" asp-page-handler="SaveCategorization">
+                                    <div class="table-responsive">
+                                        <table id="selectionTable" class="table futuristic-table table-bordered mt-3">
+                                            <thead>
                                                 <tr>
-                                                    <td>@note.Title</td>
+                                                    <th>Note Title</th>
                                                     @foreach (var category in Model.Categories)
                                                     {
-                                                        <td class="text-center">
-                                                            <input type="checkbox" name="Selections[@note.Id]" value="@category.Id"
-                                                                   @(Model.NoteCategories.ContainsKey(note.Id) && Model.NoteCategories[note.Id].Contains(category.Id) ? "checked" : "") />
-                                                        </td>
+                                                        <th class="text-center">@category.Name</th>
                                                     }
                                                 </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var note in Model.Notes)
+                                                {
+                                                    <tr>
+                                                        <td>@note.Title</td>
+                                                        @foreach (var category in Model.Categories)
+                                                        {
+                                                            <td class="text-center">
+                                                                <input type="checkbox" name="Selections[@note.Id]" value="@category.Id"
+                                                                       @(Model.NoteCategories.ContainsKey(note.Id) && Model.NoteCategories[note.Id].Contains(category.Id) ? "checked" : "") />
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <div class="d-grid mt-3">
-                                        <button type="submit" class="btn btn-lg btn-primary">Save Categorization</button>
+                                        <button type="button" id="openConfirmModalBtn" class="futuristic-btn">Save Categorization</button>
                                     </div>
                                 </form>
                             }
@@ -105,12 +328,137 @@
                             }
                         </div>
                     </div>
+
+                    <div class="col-lg-5">
+                        <div class="futuristic-card card-static-white">
+                            <h3 class="futuristic-heading">Categorized Notes</h3>
+                            @{
+                                var anyCategorized = Model.NoteCategories.Any(kvp => kvp.Value.Any());
+                            }
+
+                            @if (anyCategorized)
+                            {
+                                <div class="accordion futuristic-accordion" id="categorizedAccordion">
+                                    @foreach (var category in Model.Categories.OrderBy(c => c.Name))
+                                    {
+                                        var notesInCategory = Model.Notes
+                                            .Where(n => Model.NoteCategories.ContainsKey(n.Id) && Model.NoteCategories[n.Id].Contains(category.Id))
+                                            .ToList();
+
+                                        @if (notesInCategory.Any())
+                                        {
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="heading-@category.Id">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@category.Id" aria-expanded="false" aria-controls="collapse-@category.Id">
+                                                        @category.Name &nbsp;<span class="badge bg-primary rounded-pill">@notesInCategory.Count</span>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse-@category.Id" class="accordion-collapse collapse" aria-labelledby="heading-@category.Id" data-bs-parent="#categorizedAccordion">
+                                                    <div class="accordion-body">
+                                                        <ul>
+                                                            @foreach (var note in notesInCategory)
+                                                            {
+                                                                <li>@note.Title</li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-center text-muted mt-4">No notes have been categorized yet. Use the panel on the left to assign notes to categories.</p>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirm Selections</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please review your categorizations before saving. The following associations will be made:</p>
+                <div id="confirmationTableContainer"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="futuristic-btn btn-secondary" data-bs-dismiss="modal">Go Back</button>
+                <button type="button" id="confirmSaveBtn" class="futuristic-btn">Confirm & Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const openModalBtn = document.getElementById('openConfirmModalBtn');
+            if(openModalBtn) {
+                const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+                const categorizeForm = document.getElementById('categorizeForm');
+                const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                const confirmationTableContainer = document.getElementById('confirmationTableContainer');
+
+                openModalBtn.addEventListener('click', function () {
+                    const selections = {};
+                    const selectionTable = document.getElementById('selectionTable');
+                    const headers = Array.from(selectionTable.querySelectorAll('thead th')).map(th => th.textContent.trim());
+                    const checkedBoxes = categorizeForm.querySelectorAll('input[type="checkbox"]:checked');
+                    
+                    if(checkedBoxes.length === 0) {
+                        alert("No changes selected. Please check at least one box to save.");
+                        return;
+                    }
+
+                    checkedBoxes.forEach(box => {
+                        const row = box.closest('tr');
+                        const noteTitle = row.querySelector('td:first-child').textContent.trim();
+                        const cellIndex = box.closest('td').cellIndex;
+                        const categoryName = headers[cellIndex];
+
+                        if (!selections[categoryName]) {
+                            selections[categoryName] = [];
+                        }
+                        selections[categoryName].push(noteTitle);
+                    });
+
+                    let tableHtml = `<table class="table futuristic-table table-bordered mt-2">
+                                        <thead>
+                                            <tr><th>Subject (Category)</th><th>Documents (Notes)</th></tr>
+                                        </thead>
+                                        <tbody>`;
+                    for (const category in selections) {
+                        tableHtml += `<tr>
+                                        <td>${category}</td>
+                                        <td><ul>`;
+                        selections[category].forEach(note => {
+                            tableHtml += `<li>${note}</li>`;
+                        });
+                        tableHtml += `</ul></td>
+                                    </tr>`;
+                    }
+                    tableHtml += `</tbody></table>`;
+                    
+                    confirmationTableContainer.innerHTML = tableHtml;
+                    confirmationModal.show();
+                });
+
+                confirmSaveBtn.addEventListener('click', function () {
+                    categorizeForm.submit();
+                });
+            }
+        });
+    </script>
 }
