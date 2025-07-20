@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Suzy.Data;
 using Suzy.Models;
+using Suzy.Services;
 using System.Security.Claims;
 
 namespace Suzy.Controllers
@@ -15,18 +16,20 @@ namespace Suzy.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ChatAnalyticsService _analyticsService;
 
-        public TodoController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public TodoController(ApplicationDbContext context, UserManager<IdentityUser> userManager, ChatAnalyticsService analyticsService)
         {
             _context = context;
             _userManager = userManager;
+            _analyticsService = analyticsService;
         }
 
         [HttpGet("GetTodos")]
         public async Task<IActionResult> GetTodos(int? studySessionId = null)
         {
             var userId = _userManager.GetUserId(User);
-            
+
             var query = _context.TodoItems
                 .Where(t => t.UserId == userId);
 
@@ -52,7 +55,7 @@ namespace Suzy.Controllers
         public async Task<IActionResult> CreateTodo([FromBody] CreateTodoRequest request)
         {
             var userId = _userManager.GetUserId(User);
-            
+
             var todo = new TodoItem
             {
                 Task = request.Task,
@@ -71,7 +74,7 @@ namespace Suzy.Controllers
         public async Task<IActionResult> UpdateTodo(int id, [FromBody] UpdateTodoRequest request)
         {
             var userId = _userManager.GetUserId(User);
-            
+
             var todo = await _context.TodoItems
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
 
@@ -98,6 +101,20 @@ namespace Suzy.Controllers
 
             await _context.SaveChangesAsync();
 
+            // Automatically update daily analytics when todo status changes
+            if (request.IsCompleted.HasValue)
+            {
+                try
+                {
+                    await _analyticsService.UpdateDailyAnalyticsAsync(userId!);
+                }
+                catch (Exception ex)
+                {
+                    // Log the error but don't fail the request
+                    Console.WriteLine($"Error updating analytics: {ex.Message}");
+                }
+            }
+
             return Ok(todo);
         }
 
@@ -105,7 +122,7 @@ namespace Suzy.Controllers
         public async Task<IActionResult> DeleteTodo(int id)
         {
             var userId = _userManager.GetUserId(User);
-            
+
             var todo = await _context.TodoItems
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
 
