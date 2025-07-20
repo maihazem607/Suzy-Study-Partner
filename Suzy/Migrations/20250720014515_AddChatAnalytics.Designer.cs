@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Suzy.Data;
 
@@ -10,9 +11,11 @@ using Suzy.Data;
 namespace Suzy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250720014515_AddChatAnalytics")]
+    partial class AddChatAnalytics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
@@ -476,48 +479,6 @@ namespace Suzy.Migrations
                     b.ToTable("StudySessionParticipants");
                 });
 
-            modelBuilder.Entity("Suzy.Models.StudyTimerSession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DurationMinutes")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SessionType")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StudySessionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudySessionId");
-
-                    b.ToTable("StudyTimerSessions");
-                });
-
             modelBuilder.Entity("Suzy.Models.TodoItem", b =>
                 {
                     b.Property<int>("Id")
@@ -696,17 +657,6 @@ namespace Suzy.Migrations
                     b.Navigation("StudySession");
                 });
 
-            modelBuilder.Entity("Suzy.Models.StudyTimerSession", b =>
-                {
-                    b.HasOne("Suzy.Models.StudySession", "StudySession")
-                        .WithMany("TimerSessions")
-                        .HasForeignKey("StudySessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("StudySession");
-                });
-
             modelBuilder.Entity("Suzy.Models.TodoItem", b =>
                 {
                     b.HasOne("Suzy.Models.StudySession", null)
@@ -732,8 +682,6 @@ namespace Suzy.Migrations
             modelBuilder.Entity("Suzy.Models.StudySession", b =>
                 {
                     b.Navigation("Participants");
-
-                    b.Navigation("TimerSessions");
 
                     b.Navigation("TodoItems");
                 });

@@ -121,7 +121,7 @@ namespace Suzy.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToPage("/Index");
+                        return RedirectToPage("/Dashboard/dashboard");
                     }
                 }
 

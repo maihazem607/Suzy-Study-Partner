@@ -15,6 +15,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Identity/Account/Login"; // redirect here if not logged in
+    options.LogoutPath = "/Identity/Account/Logout";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Configure default redirect after login
+    options.SignIn.RequireConfirmedAccount = false;
 });
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
@@ -34,6 +42,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 builder.Services.AddRazorPages();
 builder.Services.AddControllers(); // Add controller support
 builder.Services.AddScoped<GeminiService>();
+builder.Services.AddScoped<ChatAnalyticsService>();
 builder.Services.AddHttpClient();
 builder.Services.AddAntiforgery();
 builder.Services.AddHttpClient<GeminiService>();

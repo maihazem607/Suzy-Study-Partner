@@ -15,8 +15,15 @@ namespace Suzy.Data
         public DbSet<TodoItem> TodoItems { get; set; } = null!;
         public DbSet<StudySession> StudySessions { get; set; } = null!;
         public DbSet<StudySessionParticipant> StudySessionParticipants { get; set; } = null!;
+        public DbSet<StudyTimerSession> StudyTimerSessions { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<NoteCategory> NoteCategories { get; set; } = null!;
+
+        // Chat Analytics models
+        public DbSet<ChatConversation> ChatConversations { get; set; } = null!;
+        public DbSet<ChatMessage> ChatMessages { get; set; } = null!;
+        public DbSet<StudyAnalytics> StudyAnalytics { get; set; } = null!;
+        public DbSet<WeeklySummary> WeeklySummaries { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

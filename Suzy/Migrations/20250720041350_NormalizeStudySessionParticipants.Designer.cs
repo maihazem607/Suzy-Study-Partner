@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Suzy.Data;
 
@@ -10,9 +11,11 @@ using Suzy.Data;
 namespace Suzy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250720041350_NormalizeStudySessionParticipants")]
+    partial class NormalizeStudySessionParticipants
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
@@ -342,6 +345,30 @@ namespace Suzy.Migrations
                     b.ToTable("NoteCategories");
                 });
 
+            modelBuilder.Entity("Suzy.Models.ParticipantStudyTime", b =>
+                {
+                    b.Property<int>("ParticipantId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("StudySessionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TotalStudyMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.HasIndex("StudySessionId");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("ParticipantStudyTime", (string)null);
+                });
+
             modelBuilder.Entity("Suzy.Models.StudyAnalytics", b =>
                 {
                     b.Property<int>("Id")
@@ -456,9 +483,6 @@ namespace Suzy.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("StudySessionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TotalStudyTimeMinutes")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
@@ -683,6 +707,25 @@ namespace Suzy.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Note");
+                });
+
+            modelBuilder.Entity("Suzy.Models.ParticipantStudyTime", b =>
+                {
+                    b.HasOne("Suzy.Models.StudySessionParticipant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Suzy.Models.StudySession", "StudySession")
+                        .WithMany()
+                        .HasForeignKey("StudySessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Participant");
+
+                    b.Navigation("StudySession");
                 });
 
             modelBuilder.Entity("Suzy.Models.StudySessionParticipant", b =>
