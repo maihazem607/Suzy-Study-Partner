@@ -19,6 +19,9 @@ namespace Suzy.Data
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<NoteCategory> NoteCategories { get; set; } = null!;
 
+        // Views for calculated data
+        public DbSet<ParticipantStudyTime> ParticipantStudyTimes { get; set; } = null!;
+
         // Chat Analytics models
         public DbSet<ChatConversation> ChatConversations { get; set; } = null!;
         public DbSet<ChatMessage> ChatMessages { get; set; } = null!;
@@ -41,6 +44,11 @@ namespace Suzy.Data
                 .HasOne(nc => nc.Category)
                 .WithMany(c => c.NoteCategories)
                 .HasForeignKey(nc => nc.CategoryId);
+
+            // Configure ParticipantStudyTime as a keyless entity (view)
+            builder.Entity<ParticipantStudyTime>()
+                .HasNoKey()
+                .ToView("ParticipantStudyTime");
         }
     }
 }

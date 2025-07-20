@@ -449,8 +449,11 @@ namespace Suzy.Controllers
 
             if (participant != null)
             {
-                participant.TotalStudyTimeMinutes += activeTimerSession.DurationMinutes;
+                // Update last activity time
                 participant.LastActivityAt = DateTime.UtcNow;
+
+                // Recalculate study time from timer sessions
+                participant.TotalStudyTimeMinutes = await CalculateParticipantStudyTimeAsync(activeTimerSession.StudySessionId, userId!);
             }
 
             await _context.SaveChangesAsync();
@@ -592,6 +595,85 @@ namespace Suzy.Controllers
             var random = new Random();
             return new string(Enumerable.Repeat(chars, 8)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        [HttpPost("RecalculateParticipantStudyTimes")]
+        public async Task<IActionResult> RecalculateParticipantStudyTimes()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+
+            // Get all participants for this user
+            var participants = await _context.StudySessionParticipants
+                .Where(p => p.UserId == userId)
+                .ToListAsync();
+
+            int updatedCount = 0;
+
+            foreach (var participant in participants)
+            {
+                // Calculate the actual study time from timer sessions
+                var studyTimerSessions = await _context.StudyTimerSessions
+                    .Where(t => t.StudySessionId == participant.StudySessionId &&
+                               t.UserId == userId &&
+                               t.SessionType == TimerSessionType.Study &&
+                               t.EndTime != null)
+                    .ToListAsync();
+
+                var correctStudyTime = studyTimerSessions.Sum(t => t.DurationMinutes);
+
+                // Update if different
+                if (participant.TotalStudyTimeMinutes != correctStudyTime)
+                {
+                    participant.TotalStudyTimeMinutes = correctStudyTime;
+                    updatedCount++;
+                }
+            }
+
+            if (updatedCount > 0)
+            {
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok(new
+            {
+                success = true,
+                message = $"Recalculated study times for {updatedCount} participant records",
+                updatedCount
+            });
+        }
+
+        /// <summary>
+        /// Calculate total study time for a participant dynamically from timer sessions
+        /// </summary>
+        private async Task<int> CalculateParticipantStudyTimeAsync(int studySessionId, string userId)
+        {
+            var studyTime = await _context.StudyTimerSessions
+                .Where(t => t.StudySessionId == studySessionId &&
+                           t.UserId == userId &&
+                           t.SessionType == TimerSessionType.Study)
+                .SumAsync(t => t.DurationMinutes);
+
+            return studyTime;
+        }
+
+        /// <summary>
+        /// Update the TotalStudyTimeMinutes property for participants (for compatibility)
+        /// This should be called after timer sessions are updated
+        /// </summary>
+        private async Task UpdateParticipantStudyTimesAsync(int studySessionId)
+        {
+            var participants = await _context.StudySessionParticipants
+                .Where(p => p.StudySessionId == studySessionId)
+                .ToListAsync();
+
+            foreach (var participant in participants)
+            {
+                participant.TotalStudyTimeMinutes = await CalculateParticipantStudyTimeAsync(studySessionId, participant.UserId);
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 

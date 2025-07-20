@@ -210,11 +210,15 @@ namespace Suzy.Services
             var utcToday = DateTime.UtcNow.Date;
             var utcTomorrow = utcToday.AddDays(1);
 
-            // Get timer sessions for today from the new StudyTimerSessions table
-            var todayTimerSessions = await _context.StudyTimerSessions
-                .Where(t => t.UserId == userId &&
-                           (t.StartTime.Date == today || t.StartTime.Date == utcToday))
+            // Get ALL timer sessions for the user (not just today) to show total study time
+            var allTimerSessions = await _context.StudyTimerSessions
+                .Where(t => t.UserId == userId)
                 .ToListAsync();
+
+            // Get timer sessions for today only for today's specific metrics
+            var todayTimerSessions = allTimerSessions
+                .Where(t => t.StartTime.Date == today || t.StartTime.Date == utcToday)
+                .ToList();
 
             // Get todos for today (check both local and UTC dates)
             var todayTodos = await _context.TodoItems

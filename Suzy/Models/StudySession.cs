@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Suzy.Models
 {
@@ -67,9 +68,14 @@ namespace Suzy.Models
 
         public bool IsHost { get; set; } = false;
 
-        public int TotalStudyTimeMinutes { get; set; } = 0;
-
         public DateTime? LastActivityAt { get; set; }
+
+        /// <summary>
+        /// Total study time in minutes - calculated dynamically from StudyTimerSessions
+        /// This property is not mapped to the database and will be populated via queries
+        /// </summary>
+        [NotMapped]
+        public int TotalStudyTimeMinutes { get; set; } = 0;
 
         // Navigation properties
         public StudySession StudySession { get; set; } = null!;
