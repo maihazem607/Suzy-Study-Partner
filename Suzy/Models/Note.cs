@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Suzy.Models
 {
@@ -7,16 +7,12 @@ namespace Suzy.Models
     {
         public int Id { get; set; }
 
-        [Required]
         public string Title { get; set; } = string.Empty;
-
-        [Required]
-        public string FileName { get; set; } = string.Empty;
-
-        [Required]
         public string FilePath { get; set; } = string.Empty;
-
-        [Required]
+        public string StoredFilePath { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
+        public string Content { get; set; } = ""; // ✅ Add this to store file contents
+
+        public ICollection<NoteCategory> NoteCategories { get; set; } = new List<NoteCategory>();
     }
 }

@@ -1,0 +1,116 @@
+@page
+@model Suzy.Pages.Categorize.CategorizeModel
+@{
+    ViewData["Title"] = "Categorize Notes";
+    Layout = "_Layout";
+}
+
+<div class="page-container">
+    @await Html.PartialAsync("_Sidebar")
+
+    <div class="page-content">
+        <div class="container-fluid p-3">
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <div class="card shadow p-4">
+                            <h3 class="text-center mb-4">Categorize Notes</h3>
+
+                            @if (TempData["Message"] != null)
+                            {
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    @TempData["Message"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            }
+                            @if (TempData["Error"] != null)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    @TempData["Error"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            }
+
+                            <!-- Add Category -->
+                            <form method="post">
+                                <div class="mb-3">
+                                    <label asp-for="NewCategoryName" class="form-label">New Category</label>
+                                    <input asp-for="NewCategoryName" class="form-control" />
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" asp-page-handler="AddCategory" class="btn btn-success">Add Category</button>
+                                </div>
+                            </form>
+
+                            @if (Model.Categories.Any())
+                            {
+                                <hr />
+                                <h5 class="mt-4">Your Categories</h5>
+                                <ul class="list-group">
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            @category.Name
+                                            <form method="post" asp-page-handler="DeleteCategory" asp-route-id="@category.Id" class="d-inline">
+                                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this category?')">Delete</button>
+                                            </form>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+
+                            @if (Model.Notes.Any() && Model.Categories.Any())
+                            {
+                                <hr />
+                                <h5 class="mt-4">Assign Notes to Categories</h5>
+                                <form method="post" asp-page-handler="SaveCategorization">
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Note Title</th>
+                                                @foreach (var category in Model.Categories)
+                                                {
+                                                    <th class="text-center">@category.Name</th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var note in Model.Notes)
+                                            {
+                                                <tr>
+                                                    <td>@note.Title</td>
+                                                    @foreach (var category in Model.Categories)
+                                                    {
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="Selections[@note.Id]" value="@category.Id"
+                                                                   @(Model.NoteCategories.ContainsKey(note.Id) && Model.NoteCategories[note.Id].Contains(category.Id) ? "checked" : "") />
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <div class="d-grid mt-3">
+                                        <button type="submit" class="btn btn-lg btn-primary">Save Categorization</button>
+                                    </div>
+                                </form>
+                            }
+                            else if (!Model.Categories.Any())
+                            {
+                                <p class="text-muted mt-4">Add categories to begin categorizing notes.</p>
+                            }
+                            else if (!Model.Notes.Any())
+                            {
+                                <p class="text-muted mt-4">No notes to categorize.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

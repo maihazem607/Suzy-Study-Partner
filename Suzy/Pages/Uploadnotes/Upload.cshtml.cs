@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Suzy.Pages.Uploadnotes
 {
@@ -60,19 +61,30 @@ namespace Suzy.Pages.Uploadnotes
                 var uploadsFolder = Path.Combine(_environment.WebRootPath ?? "wwwroot", "uploads");
 
                 Directory.CreateDirectory(uploadsFolder);
-
                 var filePath = Path.Combine(uploadsFolder, fileName);
 
+                // Save file to disk
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await Upload.CopyToAsync(stream);
                 }
 
+                // Read content from file
+                string content = "";
+                using (var reader = new StreamReader(Upload.OpenReadStream(), Encoding.UTF8))
+                {
+                    content = await reader.ReadToEndAsync();
+                }
+
+                var storedPath = $"/uploads/{fileName}";
+
                 var note = new Note
                 {
                     Title = Title,
-                    FilePath = $"/uploads/{fileName}",
-                    UserId = user.Id
+                    FilePath = storedPath,
+                    StoredFilePath = storedPath,
+                    UserId = user.Id,
+                    Content = content // ✅ save content in DB
                 };
 
                 _context.Notes.Add(note);
@@ -104,7 +116,6 @@ namespace Suzy.Pages.Uploadnotes
                 return RedirectToPage();
             }
 
-            // Delete file
             var fullPath = Path.Combine(_environment.WebRootPath ?? "wwwroot", note.FilePath.TrimStart('/'));
             if (System.IO.File.Exists(fullPath))
             {

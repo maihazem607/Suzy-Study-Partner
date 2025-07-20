@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Suzy.Data;
 
@@ -10,9 +11,11 @@ using Suzy.Data;
 namespace Suzy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250718150434_UpdateNoteSchema")]
+    partial class UpdateNoteSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
@@ -213,40 +216,17 @@ namespace Suzy.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Suzy.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
-                });
-
             modelBuilder.Entity("Suzy.Models.Note", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Content")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("StoredFilePath")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -261,155 +241,6 @@ namespace Suzy.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Notes");
-                });
-
-            modelBuilder.Entity("Suzy.Models.NoteCategory", b =>
-                {
-                    b.Property<int>("NoteId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("NoteId1")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("NoteId", "CategoryId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("NoteId1");
-
-                    b.ToTable("NoteCategories");
-                });
-
-            modelBuilder.Entity("Suzy.Models.StudySession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BreakDuration")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatorUserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("CurrentParticipants")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("EndedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("InviteCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxParticipants")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("StartedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StudyDuration")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TimerType")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StudySessions");
-                });
-
-            modelBuilder.Entity("Suzy.Models.StudySessionParticipant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsHost")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("LastActivityAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StudySessionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TotalStudyTimeMinutes")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudySessionId");
-
-                    b.ToTable("StudySessionParticipants");
-                });
-
-            modelBuilder.Entity("Suzy.Models.TodoItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("StudySessionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Task")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudySessionId");
-
-                    b.ToTable("TodoItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -461,64 +292,6 @@ namespace Suzy.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Suzy.Models.NoteCategory", b =>
-                {
-                    b.HasOne("Suzy.Models.Category", "Category")
-                        .WithMany("NoteCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Suzy.Models.Note", "Note")
-                        .WithMany()
-                        .HasForeignKey("NoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Suzy.Models.Note", null)
-                        .WithMany("NoteCategories")
-                        .HasForeignKey("NoteId1");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Note");
-                });
-
-            modelBuilder.Entity("Suzy.Models.StudySessionParticipant", b =>
-                {
-                    b.HasOne("Suzy.Models.StudySession", "StudySession")
-                        .WithMany("Participants")
-                        .HasForeignKey("StudySessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("StudySession");
-                });
-
-            modelBuilder.Entity("Suzy.Models.TodoItem", b =>
-                {
-                    b.HasOne("Suzy.Models.StudySession", null)
-                        .WithMany("TodoItems")
-                        .HasForeignKey("StudySessionId");
-                });
-
-            modelBuilder.Entity("Suzy.Models.Category", b =>
-                {
-                    b.Navigation("NoteCategories");
-                });
-
-            modelBuilder.Entity("Suzy.Models.Note", b =>
-                {
-                    b.Navigation("NoteCategories");
-                });
-
-            modelBuilder.Entity("Suzy.Models.StudySession", b =>
-                {
-                    b.Navigation("Participants");
-
-                    b.Navigation("TodoItems");
                 });
 #pragma warning restore 612, 618
         }
