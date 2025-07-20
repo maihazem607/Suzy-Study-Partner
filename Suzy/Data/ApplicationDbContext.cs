@@ -18,6 +18,7 @@ namespace Suzy.Data
         public DbSet<StudyTimerSession> StudyTimerSessions { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<NoteCategory> NoteCategories { get; set; } = null!;
+        public DbSet<PastQuestion> PastPapers { get; set; } // Correct DbSet for PastQuestion model
 
         // Chat Analytics models
         public DbSet<ChatConversation> ChatConversations { get; set; } = null!;

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pioneer Day Invitation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;700&display=swap">
+  <style>
+    body {
+      background-color: #f8f4e5;
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23b45309' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+    
+    .poster {
+      background: linear-gradient(to bottom, #fff8e1, #fff);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(180, 83, 9, 0.1);
+    }
+    
+    .border-pattern {
+      background-image: repeating-linear-gradient(45deg, #b45309 0, #b45309 1px, transparent 0, transparent 50%);
+      background-size: 10px 10px;
+    }
+    
+    .wagon-wheel {
+      animation: rotate 60s linear infinite;
+      transform-origin: center;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .glow {
+      text-shadow: 0 0 5px rgba(234, 179, 8, 0.5);
+    }
+    
+    .quote-marks::before {
+      content: '"';
+      position: absolute;
+      top: -20px;
+      left: -15px;
+      font-size: 60px;
+      font-family: 'Playfair Display', serif;
+      color: rgba(180, 83, 9, 0.2);
+    }
+    
+    .quote-marks::after {
+      content: '"';
+      position: absolute;
+      bottom: -50px;
+      right: -15px;
+      font-size: 60px;
+      font-family: 'Playfair Display', serif;
+      color: rgba(180, 83, 9, 0.2);
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen flex items-center justify-center">
+  <div class="poster max-w-3xl w-full mx-auto rounded-lg overflow-hidden relative">
+    <!-- Border pattern -->
+    <div class="border-pattern absolute inset-0 m-4 rounded-lg"></div>
+    
+    <!-- Main content -->
+    <div class="relative m-1 bg-gradient-to-b from-amber-50 to-white border-8 border-double border-yellow-700 rounded-lg">
+      <!-- Header -->
+      <div class="bg-yellow-700 py-8 px-6 text-center relative overflow-hidden">
+        <!-- Background pattern -->
+        <div class="absolute inset-0 opacity-10">
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+            <pattern id="wagon-wheel" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+              <circle cx="30" cy="30" r="15" fill="none" stroke="white" stroke-width="2"/>
+              <circle cx="30" cy="30" r="5" fill="none" stroke="white" stroke-width="1"/>
+              <line x1="30" y1="15" x2="30" y2="45" stroke="white" stroke-width="2"/>
+              <line x1="15" y1="30" x2="45" y2="30" stroke="white" stroke-width="2"/>
+              <line x1="19" y1="19" x2="41" y2="41" stroke="white" stroke-width="2"/>
+              <line x1="19" y1="41" x2="41" y2="19" stroke="white" stroke-width="2"/>
+            </pattern>
+            <rect width="100%" height="100%" fill="url(#wagon-wheel)"/>
+          </svg>
+        </div>
+        
+        <!-- Decorative ribbon -->
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-600 via-yellow-300 to-yellow-600"></div>
+        
+        <div class="relative z-10">
+          <div class="text-yellow-200 uppercase tracking-widest text-sm font-bold mb-1">You are cordially invited to</div>
+          <h1 class="text-5xl md:text-6xl font-bold text-white my-3 font-['Cinzel'] glow tracking-wide">Pioneer Day</h1>
+          <div class="h-px w-48 bg-yellow-300 mx-auto my-4"></div>
+          <h2 class="italic text-xl text-yellow-100 mb-2 font-['Lora']">
+            "Faith in Every Footstep, Honoring the Ancestors of the Past<br>and the Pioneers of Today!"
+          </h2>
+        </div>
+        
+        <!-- Decorative wagon wheel -->
+        <div class="absolute -right-12 -bottom-12 opacity-20">
+          <svg class="w-40 h-40 text-yellow-200 wagon-wheel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="50" cy="50" r="35"/>
+            <circle cx="50" cy="50" r="10"/>
+            <line x1="50" y1="15" x2="50" y2="85" stroke-linecap="round"/>
+            <line x1="15" y1="50" x2="85" y2="50" stroke-linecap="round"/>
+            <line x1="25" y1="25" x2="75" y2="75" stroke-linecap="round"/>
+            <line x1="25" y1="75" x2="75" y2="25" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      
+      <!-- Main content -->
+      <div class="p-8 md:p-12 text-center">
+        <!-- Scripture quote -->
+        <div class="max-w-2xl mx-auto mb-10 relative quote-marks">
+          <p class="text-lg md:text-xl italic text-yellow-800 font-['Lora']">
+            "And now, my sons, remember, remember that it is upon the rock of our Redeemer, who is Christ, the Son of God, that ye must build your foundation."
+          </p>
+          <p class="text-right mt-2 text-yellow-700 font-semibold">- Helaman 5:12</p>
+        </div>
+        
+        <p class="text-lg mb-10 max-w-2xl mx-auto">
+          Join us as we honor our Ancestors who showed courage and values of faith, family, and sacrifice, and the Early Saints of the Church in India who paved the way for us in Coimbatore.
+        </p>
+
+        <!-- Event details in a decorative box -->
+        <div class="max-w-xl mx-auto bg-amber-50 border-2 border-yellow-700 rounded-lg p-8 mb-10 relative">
+          <!-- Decorative corners -->
+          <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-yellow-700 -translate-x-1 -translate-y-1"></div>
+          <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-yellow-700 translate-x-1 -translate-y-1"></div>
+          <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-yellow-700 -translate-x-1 translate-y-1"></div>
+          <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-yellow-700 translate-x-1 translate-y-1"></div>
+          
+          <!-- Date and Time -->
+          <!-- Date and Time -->
+<div class="mb-6">
+  <div class="flex items-center justify-center mb-2">
+    <svg class="w-6 h-6 text-yellow-700 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+    <h3 class="text-xl font-semibold text-yellow-800 font-['Cinzel']">Date & Time</h3>
+  </div>
+  <p class="text-gray-700 text-xl">July 26th, 2025</p>
+  <p class="text-gray-700 text-lg italic">6:00 PM – 8:00 PM</p>
+</div>
+
+          
+          <!-- Location -->
+          <div>
+            <div class="flex items-center justify-center mb-2">
+              <svg class="w-6 h-6 text-yellow-700 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <h3 class="text-xl font-semibold text-yellow-800 font-['Cinzel']">Venue</h3>
+            </div>
+            <p class="text-gray-700 text-xl">The Church of Jesus Christ of Latter-day Saints</p>
+            <p class="text-gray-600">Coimbatore</p>
+          </div>
+        </div>
+        
+        <!-- Call to action -->
+        <div class="mt-8 mb-6">
+          <div class="bg-yellow-700 text-white font-bold py-3 px-10 rounded-lg inline-block text-xl shadow-lg border-2 border-yellow-600 font-['Cinzel']">
+            Join Us For This Special Celebration
+          </div>
+        </div>
+        
+        <p class="text-sm text-gray-600 italic mt-4">
+  Bring your family and friends as we celebrate our heritage together.<br>
+  Food will be provided.
+</p>
+
+
+      </div>
+      
+      <!-- Footer -->
+      <footer class="bg-yellow-700 py-5 px-4 text-center text-white relative">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-600 via-yellow-300 to-yellow-600"></div>
+        <p class="text-lg font-['Cinzel']">The Church of Jesus Christ of Latter-day Saints· Coimbatore · 2025</p>
+      </footer>
+    </div>
+  </div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'961813d9f4f985cc',t:'MTc1MjkwNTY1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
