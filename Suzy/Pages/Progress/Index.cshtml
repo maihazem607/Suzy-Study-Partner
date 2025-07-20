@@ -1,0 +1,79 @@
+@page
+@model Suzy.Pages.Progress.IndexModel
+@{
+    ViewData["Title"] = "My Progress";
+    Layout = "_Layout";
+}
+
+<style>
+    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid #00bcd4; margin-top: 2rem; background: rgba(255, 255, 255, 0.85); }
+    .futuristic-btn { background: linear-gradient(145deg, #00acc1, #008ba3); border: none; padding: 0.5rem 1rem; color: white !important; border-radius: 12px; text-decoration: none; display: inline-block; }
+    .score-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #e0f7fa;
+        color: #00796b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border: 4px solid #00bcd4;
+    }
+</style>
+
+<div class="page-container">
+    @await Html.PartialAsync("_Sidebar")
+
+    <div class="page-content p-4">
+        <div class="container-fluid">
+            <h2 class="mb-4">Mock Test History</h2>
+
+            @if (Model.TestHistory.Any())
+            {
+                <div class="row">
+                    @foreach (var result in Model.TestHistory)
+                    {
+                        <div class="col-lg-6 mb-4">
+                            <div class="futuristic-card d-flex flex-column h-100">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="score-circle me-4">
+                                        @result.Score/@result.TotalQuestions
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">@result.Subject</h5>
+                                        <small class="text-muted">@result.Timestamp.ToString("MMMM dd, yyyy 'at' hh:mm tt")</small>
+                                    </div>
+                                </div>
+                                
+                                @if (result.SourceDocuments.Any())
+                                {
+                                    <div class="mt-2">
+                                        <h6 class="text-muted small">Generated From:</h6>
+                                        <ul class="list-unstyled mb-0">
+                                            @foreach (var doc in result.SourceDocuments)
+                                            {
+                                                <li><small><i class="fas fa-file-alt me-2 text-muted"></i>@doc.SourceDocumentName</small></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                                
+                                <div class="mt-auto pt-3 text-end">
+                                    <a href="/MockTest/Result/@result.Id" class="futuristic-btn">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="futuristic-card text-center">
+                    <p class="mb-0">You haven't completed any mock tests yet. Go generate one to track your progress!</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

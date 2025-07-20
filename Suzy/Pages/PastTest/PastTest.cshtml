@@ -1,120 +1,125 @@
 @page
-@model Suzy.Pages.Mock.IndexModel
+@model Suzy.Pages.PastTest.PastTestModel
 @{
-    ViewData["Title"] = "Upload Past Questions";
+    ViewData["Title"] = "Upload Test Paper";
     Layout = "_Layout";
 }
+
+<style>
+    :root {
+        --primary: #00bcd4;
+        --danger: #f44336;
+        --text-light: #f1f1f1;
+        --text-dark: #1a1a1a;
+        --card-bg-light: rgba(255, 255, 255, 0.85);
+        --card-bg-dark: rgba(18, 18, 18, 0.85);
+        --glow-dark: 0 0 20px #00bcd4;
+        --glass-blur: blur(10px);
+    }
+    body.light-mode .futuristic-card { background-color: var(--card-bg-light); color: var(--text-dark); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); backdrop-filter: var(--glass-blur); }
+    body.dark-mode .futuristic-card { background-color: var(--card-bg-dark); color: var(--text-light); box-shadow: var(--glow-dark); backdrop-filter: var(--glass-blur); }
+    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid var(--primary); transition: all 0.4s ease-in-out; }
+    .futuristic-heading { text-align: center; font-size: 2rem; font-weight: 700; letter-spacing: 1.2px; color: inherit; margin-bottom: 1.8rem; }
+    .futuristic-label { font-weight: 600; font-size: 0.95rem; color: inherit; margin-bottom: 0.4rem; }
+    .futuristic-input, .futuristic-file { background-color: rgba(255, 255, 255, 0.03); border: 2px solid var(--primary); color: inherit; padding: 0.7rem 1rem; border-radius: 14px; width: 100%; transition: all 0.3s ease; box-shadow: inset 0 0 8px rgba(0, 188, 212, 0.15); }
+    .futuristic-input:focus, .futuristic-file:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 12px rgba(0, 188, 212, 0.6); }
+    .futuristic-btn { background: linear-gradient(145deg, #00acc1, #008ba3); border: none; padding: 0.85rem; color: white; font-weight: 600; letter-spacing: 0.6px; border-radius: 16px; box-shadow: 0 6px 12px rgba(0, 188, 212, 0.25); transition: all 0.3s ease-in-out; }
+    .futuristic-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 188, 212, 0.45); }
+    .futuristic-table th, .futuristic-table td { color: inherit; vertical-align: middle; background-color: transparent !important; }
+    .futuristic-table { border: 1px solid var(--primary); border-radius: 1rem; overflow: hidden; box-shadow: 0 0 10px rgba(0, 188, 212, 0.15); }
+    .futuristic-table tr:hover { background-color: rgba(0, 188, 212, 0.05); }
+    .btn-black-custom { background-color: #000 !important; color: #fff !important; border: 1px solid #000 !important; padding: 0.4rem 0.75rem; border-radius: 12px; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3); }
+    .btn-black-custom:hover { background-color: #222 !important; }
+</style>
 
 <div class="page-container">
     @await Html.PartialAsync("_Sidebar")
 
-    <div class="page-content p-4">
-        <h3>Upload Past Questions</h3>
+    <div class="page-content">
+        <div class="container-fluid p-3">
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="futuristic-card">
+                            <h3 class="futuristic-heading">Upload Test Paper</h3>
 
-        @if (TempData["Message"] != null)
-        {
-            <div class="alert alert-success">@TempData["Message"]</div>
-        }
+                            @if (TempData["Message"] != null)
+                            {
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    @TempData["Message"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            }
+                            @if (TempData["Error"] != null)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    @TempData["Error"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            }
 
-        <form method="post" enctype="multipart/form-data">
-            
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label asp-for="UploadTitle" class="futuristic-label">Title</label>
+                                    <input asp-for="UploadTitle" class="futuristic-input" />
+                                    <span asp-validation-for="UploadTitle" class="text-danger"></span>
+                                </div>
 
-            <div class="mb-3">
-                <label asp-for="SelectedCategoryId" class="form-label"></label>
-                <select id="category-select" asp-for="SelectedCategoryId" class="form-select" asp-items="Model.CategoryOptions">
-                    <option value="">-- Select Category --</option>
-                </select>
-                <span asp-validation-for="SelectedCategoryId" class="text-danger"></span>
+                                <div class="mb-3">
+                                    <label asp-for="UploadFile" class="futuristic-label">Select File</label>
+                                    <input asp-for="UploadFile" type="file" class="futuristic-file" />
+                                    <span asp-validation-for="UploadFile" class="text-danger"></span>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="futuristic-btn">Upload</button>
+                                </div>
+                            </form>
+
+                            @if (Model.UploadedPapers.Any())
+                            {
+                                <hr />
+                                <h5 class="mt-4">Your Uploaded Test Papers</h5>
+                                <div class="table-responsive">
+                                    <table class="table futuristic-table table-bordered mt-2">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var paper in Model.UploadedPapers)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <span class="btn btn-sm btn-black-custom">@paper.Title</span>
+                                                    </td>
+                                                    <td>
+                                                        <a href="@paper.FilePath" class="btn btn-sm btn-black-custom me-2" target="_blank">
+                                                            <i class="fas fa-eye me-1"></i> View
+                                                        </a>
+                                                        <form method="post" asp-page-handler="Delete" asp-route-id="@paper.Id" class="d-inline"
+                                                              onsubmit="return confirm('Are you sure you want to delete this test paper?');">
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                <i class="fas fa-trash me-1"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label asp-for="SelectedNoteId" class="form-label"></label>
-                <select id="note-select" asp-for="SelectedNoteId" class="form-select" asp-items="Model.NoteOptions">
-                    <option value="">-- Select a category first --</option>
-                </select>
-                <span asp-validation-for="SelectedNoteId" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="UploadTitle" class="form-label"></label>
-                <input asp-for="UploadTitle" class="form-control" />
-                <span asp-validation-for="UploadTitle" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="UploadFile" class="form-label">Upload PDF</label>
-                <input asp-for="UploadFile" class="form-control" type="file" />
-                <span asp-validation-for="UploadFile" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Upload</button>
-        </form>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        $(document).ready(function () {
-            // Get references to the dropdowns
-            const categorySelect = $('#category-select');
-            const noteSelect = $('#note-select');
-
-            // Add an event listener to the category dropdown
-            categorySelect.on('change', function () {
-                const categoryId = $(this).val();
-
-                // Clear the notes dropdown
-                noteSelect.empty();
-                noteSelect.append('<option value="">Loading...</option>');
-
-                if (!categoryId) {
-                    noteSelect.empty();
-                    noteSelect.append('<option value="">-- Select a category first --</option>');
-                    return;
-                }
-
-                // Fetch the notes for the selected category using the new PageModel handler
-                fetch(`?handler=Notes&categoryId=${categoryId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        noteSelect.empty();
-                        if (data.length > 0) {
-                            noteSelect.append('<option value="">-- Select Note --</option>');
-                            $.each(data, function (i, item) {
-                                noteSelect.append($('<option>', {
-                                    value: item.value,
-                                    text: item.text
-                                }));
-                            });
-                        } else {
-                            noteSelect.append('<option value="">-- No notes found for this category --</option>');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching notes:', error);
-                        noteSelect.empty();
-                        noteSelect.append('<option value="">-- Error loading notes --</option>');
-                    });
-            });
-
-            // If a category is already selected on page load (e.g., due to a validation error),
-            // trigger the change event to load the corresponding notes and re-select the note if possible.
-            if(categorySelect.val()){
-                // We need to store the originally selected note to re-select it after the fetch completes.
-                const originallySelectedNote = "@Model.SelectedNoteId";
-                categorySelect.trigger('change');
-                
-                // Since fetch is asynchronous, we need to wait for it to finish.
-                // A robust way is to use a custom event or check periodically.
-                // For simplicity, a small timeout works for most cases.
-                setTimeout(function() {
-                    if (originallySelectedNote) {
-                        noteSelect.val(originallySelectedNote);
-                    }
-                }, 500); // 500ms delay to allow fetch to complete
-            }
-        });
-    </script>
 }

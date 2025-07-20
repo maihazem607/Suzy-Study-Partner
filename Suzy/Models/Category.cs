@@ -14,5 +14,6 @@ namespace Suzy.Models
         public string UserId { get; set; }
 
         public ICollection<NoteCategory> NoteCategories { get; set; } = new List<NoteCategory>();
+        public ICollection<PastTestPaperCategory> PastTestPaperCategories { get; set; }
     }
 }

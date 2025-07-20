@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Suzy.Data;
 
@@ -10,9 +11,11 @@ using Suzy.Data;
 namespace Suzy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250720165817_ApplyFinalModelChanges")]
+    partial class ApplyFinalModelChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
@@ -291,95 +294,6 @@ namespace Suzy.Migrations
                     b.ToTable("ChatMessages");
                 });
 
-            modelBuilder.Entity("Suzy.Models.MockTestQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CorrectAnswer")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MockTestResultId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("OptionsJson")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("QuestionText")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserAnswer")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MockTestResultId");
-
-                    b.ToTable("MockTestQuestions");
-                });
-
-            modelBuilder.Entity("Suzy.Models.MockTestResult", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TotalQuestions")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("MockTestResults");
-                });
-
-            modelBuilder.Entity("Suzy.Models.MockTestSourceDocument", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MockTestResultId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SourceDocumentName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SourceDocumentType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MockTestResultId");
-
-                    b.ToTable("MockTestSourceDocuments");
-                });
-
             modelBuilder.Entity("Suzy.Models.Note", b =>
                 {
                     b.Property<int>("Id")
@@ -449,21 +363,6 @@ namespace Suzy.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PastTestPapers");
-                });
-
-            modelBuilder.Entity("Suzy.Models.PastTestPaperCategory", b =>
-                {
-                    b.Property<int>("PastTestPaperId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("PastTestPaperId", "CategoryId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("PastTestPaperCategories");
                 });
 
             modelBuilder.Entity("Suzy.Models.StudyAnalytics", b =>
@@ -786,39 +685,6 @@ namespace Suzy.Migrations
                     b.Navigation("Conversation");
                 });
 
-            modelBuilder.Entity("Suzy.Models.MockTestQuestion", b =>
-                {
-                    b.HasOne("Suzy.Models.MockTestResult", "MockTestResult")
-                        .WithMany("Questions")
-                        .HasForeignKey("MockTestResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MockTestResult");
-                });
-
-            modelBuilder.Entity("Suzy.Models.MockTestResult", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Suzy.Models.MockTestSourceDocument", b =>
-                {
-                    b.HasOne("Suzy.Models.MockTestResult", "MockTestResult")
-                        .WithMany("SourceDocuments")
-                        .HasForeignKey("MockTestResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MockTestResult");
-                });
-
             modelBuilder.Entity("Suzy.Models.NoteCategory", b =>
                 {
                     b.HasOne("Suzy.Models.Category", "Category")
@@ -847,25 +713,6 @@ namespace Suzy.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Suzy.Models.PastTestPaperCategory", b =>
-                {
-                    b.HasOne("Suzy.Models.Category", "Category")
-                        .WithMany("PastTestPaperCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Suzy.Models.PastTestPaper", "PastTestPaper")
-                        .WithMany("PastTestPaperCategories")
-                        .HasForeignKey("PastTestPaperId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("PastTestPaper");
                 });
 
             modelBuilder.Entity("Suzy.Models.StudySessionParticipant", b =>
@@ -900,8 +747,6 @@ namespace Suzy.Migrations
             modelBuilder.Entity("Suzy.Models.Category", b =>
                 {
                     b.Navigation("NoteCategories");
-
-                    b.Navigation("PastTestPaperCategories");
                 });
 
             modelBuilder.Entity("Suzy.Models.ChatConversation", b =>
@@ -909,21 +754,9 @@ namespace Suzy.Migrations
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("Suzy.Models.MockTestResult", b =>
-                {
-                    b.Navigation("Questions");
-
-                    b.Navigation("SourceDocuments");
-                });
-
             modelBuilder.Entity("Suzy.Models.Note", b =>
                 {
                     b.Navigation("NoteCategories");
-                });
-
-            modelBuilder.Entity("Suzy.Models.PastTestPaper", b =>
-                {
-                    b.Navigation("PastTestPaperCategories");
                 });
 
             modelBuilder.Entity("Suzy.Models.StudySession", b =>

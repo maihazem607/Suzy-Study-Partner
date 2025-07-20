@@ -2,19 +2,24 @@ using Google.Apis.Auth.OAuth2;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.IO;
+using System.Threading.Tasks;
+using System;
+using System.Net.Http;
 
 namespace Suzy.Services
 {
     public class GeminiService
     {
         private readonly HttpClient _httpClient = new();
-        private readonly string _model = "models/gemini-1.5-flash";
-        private readonly string _serviceAccountPath = "suzy-466413-536698e4fca7.json"; // Change path if needed
+        private readonly string _model = "models/gemini-1.5-flash"; 
+        // Ensure this JSON file is in your main project folder (e.g., Suzy/)
+        private readonly string _serviceAccountPath = "suzy-466413-536698e4fca7.json";
 
         public async Task<string> GenerateContentAsync(string prompt)
         {
             GoogleCredential credential;
-            using (var stream = new FileStream(_serviceAccountPath, FileMode.Open, FileAccess.Read))
+            await using (var stream = new FileStream(_serviceAccountPath, FileMode.Open, FileAccess.Read))
             {
                 credential = GoogleCredential.FromStream(stream)
                     .CreateScoped(
@@ -61,7 +66,7 @@ namespace Suzy.Services
             return responseContent;
         }
 
-        // ✅ Retry wrapper to handle 503 "model is overloaded" errors
+        // This retry wrapper is great for handling temporary API overload errors
         public async Task<string> GenerateContentWithRetryAsync(string prompt, int retries = 3)
         {
             for (int attempt = 1; attempt <= retries; attempt++)
@@ -75,7 +80,7 @@ namespace Suzy.Services
                     if (attempt == retries || !ex.Message.Contains("503"))
                         throw;
 
-                    await Task.Delay(1000 * attempt); // wait 1s, then 2s, then 3s...
+                    await Task.Delay(1000 * attempt); // wait 1s, then 2s...
                 }
             }
 
