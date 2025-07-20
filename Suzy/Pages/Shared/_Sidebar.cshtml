@@ -37,9 +37,12 @@
            <i class="fas fa-sitemap me-2"></i>
            <span>Categorize Past Tests</span>
        </a>
-       <a class="nav-link" href="#"><i class="fas fa-edit me-2"></i><span>Mock Exams</span></a>
+       <a class="nav-link" href="/MockTest/index"><i class="fas fa-edit me-2"></i><span>Mock Exams</span></a>
         
-        <a class="nav-link" href="#"><i class="fas fa-chart-line me-2"></i><span>Progress</span></a>
+         <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("Progress") == true ? "active" : "")" 
+          asp-page="/Progress/Index">
+           <i class="fas fa-chart-line me-2"></i><span>Progress</span>
+       </a>
         
         <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("SessionManager") == true ? "active" : "")"
            href="/Sessions/SessionManager"><i class="fas fa-users me-2"></i><span>Study Sessions</span></a>
