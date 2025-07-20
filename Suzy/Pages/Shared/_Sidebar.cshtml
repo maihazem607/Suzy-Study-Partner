@@ -29,6 +29,8 @@
         <a class="nav-link" href="#"><i class="fas fa-chart-line me-2"></i><span>Progress</span></a>
         <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("SessionManager") == true ? "active" : "")"
             href="/Sessions/SessionManager"><i class="fas fa-users me-2"></i><span>Study Sessions</span></a>
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("ChatWithSuzy") == true ? "active" : "")"
+            href="/ChatWithSuzy"><i class="fas fa-robot me-2"></i><span>Chat with Suzy</span></a>
         <a class="nav-link" href="#"><i class="fas fa-bell me-2"></i><span>Reminders</span></a>
         <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i><span>To-Do List</span></a>
         <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i><span>Settings</span></a>

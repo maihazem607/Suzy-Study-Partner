@@ -42,6 +42,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 builder.Services.AddRazorPages();
 builder.Services.AddControllers(); // Add controller support
 builder.Services.AddScoped<GeminiService>();
+builder.Services.AddScoped<ChatAnalyticsService>();
 builder.Services.AddHttpClient();
 builder.Services.AddAntiforgery();
 builder.Services.AddHttpClient<GeminiService>();

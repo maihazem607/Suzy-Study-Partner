@@ -255,8 +255,47 @@
                         }
                     }
 
-                    function startTimer() {
+                    async function startTimer() {
                         if (!isRunning) {
+                            // Call backend to start timer session
+                            if (sessionId && !isBreakMode) {
+                                try {
+                                    const response = await fetch(`/api/StudySession/StartSession/${sessionId}`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        }
+                                    });
+                                    if (response.ok) {
+                                        const result = await response.json();
+                                        window.currentTimerSessionId = result.timerSessionId;
+                                        console.log('Timer session started:', result.timerSessionId);
+                                    } else {
+                                        console.error('Failed to start timer session');
+                                    }
+                                } catch (error) {
+                                    console.error('Error starting timer session:', error);
+                                }
+                            } else if (sessionId && isBreakMode) {
+                                try {
+                                    const response = await fetch(`/api/StudySession/StartBreak/${sessionId}`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        }
+                                    });
+                                    if (response.ok) {
+                                        const result = await response.json();
+                                        window.currentTimerSessionId = result.timerSessionId;
+                                        console.log('Break timer started:', result.timerSessionId);
+                                    } else {
+                                        console.error('Failed to start break timer');
+                                    }
+                                } catch (error) {
+                                    console.error('Error starting break timer:', error);
+                                }
+                            }
+
                             isRunning = true;
                             document.getElementById('startBtn').classList.add('active');
                             timerInterval = setInterval(() => {
@@ -269,13 +308,17 @@
                                     isRunning = false;
                                     document.getElementById('startBtn').classList.remove('active');
 
+                                    // End the current timer session
+                                    if (window.currentTimerSessionId) {
+                                        endTimerSession();
+                                    }
+
                                     if (isBreakMode) {
                                         alert('Break time is over! Ready to study?');
                                         isBreakMode = false;
                                         timeLeft = originalStudyTime;
                                     } else {
                                         alert('Study session complete! Time for a break.');
-                                        // Show break button
                                     }
                                     updateDisplay();
                                     updateTimerMode();
@@ -284,22 +327,75 @@
                         }
                     }
 
-                    function pauseTimer() {
+                    async function pauseTimer() {
                         if (isRunning) {
                             clearInterval(timerInterval);
                             isRunning = false;
                             document.getElementById('startBtn').classList.remove('active');
+
+                            // End the current timer session when pausing
+                            if (window.currentTimerSessionId) {
+                                endTimerSession();
+                            }
                         }
                     }
 
-                    function resetTimer() {
+                    async function resetTimer() {
                         clearInterval(timerInterval);
+
+                        // End current timer session if one is running
+                        if (isRunning && window.currentTimerSessionId) {
+                            endTimerSession();
+                        }
+
                         isRunning = false;
                         isBreakMode = false; // Reset break mode when resetting timer
                         document.getElementById('startBtn').classList.remove('active');
                         timeLeft = originalStudyTime;
                         updateDisplay();
                         updateTimerMode();
+                    }
+
+                    async function endTimerSession() {
+                        if (window.currentTimerSessionId) {
+                            try {
+                                const response = await fetch(`/api/StudySession/EndSession/${sessionId}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    }
+                                });
+                                if (response.ok) {
+                                    const result = await response.json();
+                                    console.log('Timer session ended:', result);
+                                    window.currentTimerSessionId = null;
+                                } else {
+                                    console.error('Failed to end timer session');
+                                }
+                            } catch (error) {
+                                console.error('Error ending timer session:', error);
+                            }
+                        }
+                    }
+
+                    async function recordSessionEndTime() {
+                        if (sessionId) {
+                            try {
+                                const response = await fetch(`/api/StudySession/EndSession/${sessionId}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    }
+                                });
+                                if (response.ok) {
+                                    console.log('Session end time recorded');
+                                } else {
+                                    console.error('Failed to record session end time');
+                                }
+                            } catch (error) {
+                                console.error('Error recording session end time:', error);
+                            }
+                        }
                     }
 
                     function startBreak() {
@@ -341,11 +437,11 @@
 
                         if (todos.length === 0) {
                             todoList.innerHTML = `
-                                            <div class="text-center text-muted py-3">
-                                                <i class="fas fa-tasks fa-2x mb-2"></i>
-                                                <p>No tasks yet. Add your first task to get started!</p>
-                                            </div>
-                                        `;
+                                                    <div class="text-center text-muted py-3">
+                                                        <i class="fas fa-tasks fa-2x mb-2"></i>
+                                                        <p>No tasks yet. Add your first task to get started!</p>
+                                                    </div>
+                                                `;
                             return;
                         }
 
@@ -355,15 +451,15 @@
                             const todoItem = document.createElement('div');
                             todoItem.className = 'todo-item';
                             todoItem.innerHTML = `
-                                            <input type="checkbox" ${todo.isCompleted ? 'checked' : ''} 
-                                                   onchange="toggleTodo(${todo.id})">
-                                            <span class="${todo.isCompleted ? 'todo-completed' : ''}" 
-                                                  ondblclick="editTodo(${todo.id})">${todo.task}</span>
-                                            <button class="btn btn-sm btn-outline-danger ms-2" 
-                                                    onclick="deleteTodo(${todo.id})" style="font-size: 0.7rem;">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        `;
+                                                    <input type="checkbox" ${todo.isCompleted ? 'checked' : ''} 
+                                                           onchange="toggleTodo(${todo.id})">
+                                                    <span class="${todo.isCompleted ? 'todo-completed' : ''}" 
+                                                          ondblclick="editTodo(${todo.id})">${todo.task}</span>
+                                                    <button class="btn btn-sm btn-outline-danger ms-2" 
+                                                            onclick="deleteTodo(${todo.id})" style="font-size: 0.7rem;">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                `;
                             todoList.appendChild(todoItem);
                         });
                     }
@@ -556,28 +652,28 @@
 
                         if (sessionData.participants && sessionData.participants.length > 0) {
                             participantsList.innerHTML = sessionData.participants.map(participant => `
-                                            <div class="participant-item">
-                                                <div class="participant-avatar-small">
-                                                    <i class="fas fa-user"></i>
-                                                </div>
-                                                <div class="participant-info">
-                                                    <p class="participant-name">
-                                                        ${participant.name}
-                                                        ${participant.isHost ? '<span class="host-badge ms-1">Host</span>' : ''}
-                                                    </p>
-                                                    <p class="participant-status">
-                                                        Joined ${new Date(participant.joinedAt).toLocaleTimeString()}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        `).join('');
+                                                    <div class="participant-item">
+                                                        <div class="participant-avatar-small">
+                                                            <i class="fas fa-user"></i>
+                                                        </div>
+                                                        <div class="participant-info">
+                                                            <p class="participant-name">
+                                                                ${participant.name}
+                                                                ${participant.isHost ? '<span class="host-badge ms-1">Host</span>' : ''}
+                                                            </p>
+                                                            <p class="participant-status">
+                                                                Joined ${new Date(participant.joinedAt).toLocaleTimeString()}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                `).join('');
                         } else {
                             participantsList.innerHTML = `
-                                            <div class="text-center text-muted">
-                                                <i class="fas fa-user-clock fa-2x mb-2"></i>
-                                                <p>Waiting for participants...</p>
-                                            </div>
-                                        `;
+                                                    <div class="text-center text-muted">
+                                                        <i class="fas fa-user-clock fa-2x mb-2"></i>
+                                                        <p>Waiting for participants...</p>
+                                                    </div>
+                                                `;
                         }
                     }
 
@@ -615,6 +711,11 @@
 
                     function leaveSession() {
                         if (confirm('Are you sure you want to leave this study session?')) {
+                            // End any active timer session before leaving
+                            if (window.currentTimerSessionId) {
+                                endTimerSession();
+                            }
+
                             // Call API to leave session
                             fetch(`/api/StudySession/LeaveSession/${sessionId}`, {
                                 method: 'POST',
