@@ -65,6 +65,8 @@ namespace Suzy.Models
 
         public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
 
+        public DateTime? LeftAt { get; set; }
+
         public bool IsHost { get; set; } = false;
 
         public int TotalStudyTimeMinutes { get; set; } = 0;

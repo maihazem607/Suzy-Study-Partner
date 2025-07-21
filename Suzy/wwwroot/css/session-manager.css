@@ -219,3 +219,47 @@
   color: var(--break-border);
   border-bottom-color: var(--break-border);
 }
+
+/* Session Actions */
+.session-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.session-actions button {
+  padding: 5px 8px;
+  border: 1px solid;
+  border-radius: 4px;
+  background: transparent;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+}
+
+.session-actions .btn-outline-danger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.session-actions .btn-outline-danger:hover {
+  background: var(--color-danger);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.session-clickable {
+  cursor: pointer;
+}
+
+/* Update session-card to handle the new structure */
+.session-card {
+  cursor: default; /* Remove cursor from parent */
+}
+
+.session-card .session-clickable {
+  cursor: pointer;
+}
+
+.session-card .session-clickable:hover {
+  opacity: 0.9;
+}

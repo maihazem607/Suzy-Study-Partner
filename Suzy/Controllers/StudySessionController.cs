@@ -174,34 +174,51 @@ namespace Suzy.Controllers
                 return Ok(new { success = false, message = "Session not found" });
             }
 
-            if (session.CurrentParticipants >= session.MaxParticipants)
+            // Get current active participant count
+            var activeParticipantCount = await _context.StudySessionParticipants
+                .CountAsync(p => p.StudySessionId == session.Id && p.LeftAt == null);
+
+            if (activeParticipantCount >= session.MaxParticipants)
             {
                 return Ok(new { success = false, message = "Session is full" });
             }
 
-            // Check if user is already in the session
+            // Check if user is already an active participant
             var existingParticipant = await _context.StudySessionParticipants
                 .FirstOrDefaultAsync(p => p.StudySessionId == session.Id && p.UserId == userId);
 
             if (existingParticipant != null)
             {
-                return Ok(new { success = true, sessionId = session.Id, message = "Already in session" });
+                if (existingParticipant.LeftAt == null)
+                {
+                    // User is already an active participant
+                    return Ok(new { success = true, sessionId = session.Id, message = "Already in session" });
+                }
+                else
+                {
+                    // User previously left, rejoin by clearing LeftAt
+                    existingParticipant.LeftAt = null;
+                    existingParticipant.JoinedAt = DateTime.UtcNow; // Update join time for rejoining
+                }
+            }
+            else
+            {
+                // Add new participant
+                var isHost = session.CreatorUserId == userId;
+                var participant = new StudySessionParticipant
+                {
+                    StudySessionId = session.Id,
+                    UserId = userId!,
+                    IsHost = isHost
+                };
+
+                _context.StudySessionParticipants.Add(participant);
             }
 
-            // Add user to session
-            // If the user is the creator, they should be marked as host
-            var isHost = session.CreatorUserId == userId;
-            var participant = new StudySessionParticipant
-            {
-                StudySessionId = session.Id,
-                UserId = userId!,
-                IsHost = isHost
-            };
+            // Update participant count with current active participants
+            session.CurrentParticipants = await _context.StudySessionParticipants
+                .CountAsync(p => p.StudySessionId == session.Id && p.LeftAt == null);
 
-            _context.StudySessionParticipants.Add(participant);
-
-            // Update participant count
-            session.CurrentParticipants++;
             await _context.SaveChangesAsync();
 
             return Ok(new { success = true, sessionId = session.Id });
@@ -221,8 +238,11 @@ namespace Suzy.Controllers
                 return NotFound();
             }
 
-            // Check if user is participant
-            var isParticipant = session.Participants.Any(p => p.UserId == userId);
+            // Get only active participants (where LeftAt is null)
+            var activeParticipants = session.Participants.Where(p => p.LeftAt == null).ToList();
+
+            // Check if user is an active participant
+            var isParticipant = activeParticipants.Any(p => p.UserId == userId);
             if (!isParticipant && !session.IsPublic)
             {
                 return Forbid();
@@ -239,9 +259,9 @@ namespace Suzy.Controllers
                 session.CurrentParticipants,
                 session.MaxParticipants,
                 session.IsPublic,
-                IsHost = session.Participants.Any(p => p.UserId == userId && p.IsHost),
+                IsHost = activeParticipants.Any(p => p.UserId == userId && p.IsHost),
                 IsParticipant = isParticipant,
-                Participants = session.Participants.Select(p => new
+                Participants = activeParticipants.Select(p => new
                 {
                     p.UserId,
                     p.IsHost,
@@ -267,40 +287,41 @@ namespace Suzy.Controllers
             }
 
             var participant = await _context.StudySessionParticipants
-                .FirstOrDefaultAsync(p => p.StudySessionId == id && p.UserId == userId);
+                .FirstOrDefaultAsync(p => p.StudySessionId == id && p.UserId == userId && p.LeftAt == null);
 
             if (participant == null)
             {
                 return Ok(new { success = false, message = "You are not in this session" });
             }
 
+            // Record the leave time
+            participant.LeftAt = DateTime.UtcNow;
+
             // Check if user is the host
             if (participant.IsHost)
             {
                 // If host is leaving, either transfer ownership or end session
-                var otherParticipants = await _context.StudySessionParticipants
-                    .Where(p => p.StudySessionId == id && p.UserId != userId)
+                var otherActiveParticipants = await _context.StudySessionParticipants
+                    .Where(p => p.StudySessionId == id && p.UserId != userId && p.LeftAt == null)
                     .ToListAsync();
 
-                if (otherParticipants.Any())
+                if (otherActiveParticipants.Any())
                 {
-                    // Transfer ownership to first participant
-                    var newHost = otherParticipants.First();
+                    // Transfer ownership to first active participant
+                    var newHost = otherActiveParticipants.First();
                     newHost.IsHost = true;
                 }
                 else
                 {
-                    // No other participants, mark session as inactive
+                    // No other active participants, mark session as inactive
                     session.IsActive = false;
                     session.EndedAt = DateTime.UtcNow;
                 }
             }
 
-            // Remove participant
-            _context.StudySessionParticipants.Remove(participant);
-
-            // Update participant count
-            session.CurrentParticipants = Math.Max(0, session.CurrentParticipants - 1);
+            // Update participant count (count only active participants)
+            session.CurrentParticipants = await _context.StudySessionParticipants
+                .CountAsync(p => p.StudySessionId == id && p.LeftAt == null);
 
             await _context.SaveChangesAsync();
 

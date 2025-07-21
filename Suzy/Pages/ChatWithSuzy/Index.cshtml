@@ -28,45 +28,45 @@
             <!-- Top Analytics Cards -->
             <div class="row mb-4" id="analyticsCards">
                 <div class="col-md-4">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
+                    <div class="analytics-card analytics-card-primary">
+                        <div class="analytics-card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h6 class="card-title">📊 Today's Study Time</h6>
-                                    <h3 class="mb-0" id="todayStudyTime">--</h3>
+                                    <h6 class="analytics-card-title">📊 Today's Study Time</h6>
+                                    <h3 class="mb-0 analytics-card-value" id="todayStudyTime">--</h3>
                                 </div>
                                 <div class="align-self-center">
-                                    <i class="fas fa-clock fa-2x"></i>
+                                    <i class="fas fa-clock analytics-card-icon"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
+                    <div class="analytics-card analytics-card-success">
+                        <div class="analytics-card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h6 class="card-title">🔁 Today's Break Time</h6>
-                                    <h3 class="mb-0" id="todayBreakTime">--</h3>
+                                    <h6 class="analytics-card-title">🔁 Today's Break Time</h6>
+                                    <h3 class="mb-0 analytics-card-value" id="todayBreakTime">--</h3>
                                 </div>
                                 <div class="align-self-center">
-                                    <i class="fas fa-pause fa-2x"></i>
+                                    <i class="fas fa-pause analytics-card-icon"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-info text-white">
-                        <div class="card-body">
+                    <div class="analytics-card analytics-card-info">
+                        <div class="analytics-card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h6 class="card-title">📈 Avg Study Time/Week</h6>
-                                    <h3 class="mb-0" id="weeklyAverage">--</h3>
+                                    <h6 class="analytics-card-title">📈 Avg Study Time/Day (Past 7 Days)</h6>
+                                    <h3 class="mb-0 analytics-card-value" id="weeklyAverage">--</h3>
                                 </div>
                                 <div class="align-self-center">
-                                    <i class="fas fa-chart-line fa-2x"></i>
+                                    <i class="fas fa-chart-line analytics-card-icon"></i>
                                 </div>
                             </div>
                         </div>
@@ -78,27 +78,29 @@
             <div class="row">
                 <div class="col-lg-8 col-xl-9">
                     <!-- Chat Messages Container -->
-                    <div class="card" style="min-height: 500px;">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">
+                    <div class="chat-card">
+                        <div class="chat-card-header">
+                            <h5 class="mb-0 chat-card-title">
                                 <i class="fas fa-comments"></i> Conversation with Suzy
                             </h5>
                         </div>
-                        <div class="card-body d-flex flex-column" style="height: 500px;">
+                        <div class="chat-card-body">
                             <!-- Messages Area -->
-                            <div class="flex-grow-1 overflow-auto mb-3" id="messagesContainer">
-                                <div class="text-center text-muted py-5" id="welcomeMessage">
-                                    <i class="fas fa-robot fa-3x mb-3"></i>
-                                    <h5>Hi! I'm Suzy, your AI study assistant! 🤖</h5>
-                                    <p>Choose a conversation topic from the panel on the right to get started.</p>
+                            <div class="messages-container" id="messagesContainer">
+                                <div class="welcome-message" id="welcomeMessage">
+                                    <i class="fas fa-robot welcome-icon"></i>
+                                    <h5 class="welcome-title">Hi! I'm Suzy, your AI study assistant! 🤖</h5>
+                                    <p class="welcome-text">Choose a conversation topic from the panel on the right to
+                                       
+                                        get started.</p>
                                 </div>
                             </div>
 
                             <!-- Message Input (hidden until conversation starts) -->
-                            <div class="input-group" id="messageInputContainer" style="display: none;">
-                                <input type="text" class="form-control" id="messageInput"
+                            <div class="message-input-container" id="messageInputContainer" style="display: none;">
+                                <input type="text" class="message-input" id="messageInput"
                                     placeholder="Type your message...">
-                                <button class="btn btn-primary" type="button" id="sendMessageBtn">
+                                <button class="message-send-btn" type="button" id="sendMessageBtn">
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </div>
@@ -108,12 +110,12 @@
 
                 <!-- Chat Paths Panel -->
                 <div class="col-lg-4 col-xl-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h6 class="mb-0">💬 Conversation Topics</h6>
+                    <div class="chat-topics-card">
+                        <div class="chat-topics-header">
+                            <h6 class="mb-0 chat-topics-title">💬 Conversation Topics</h6>
                         </div>
-                        <div class="card-body p-0">
-                            <div class="list-group list-group-flush" id="chatPathsList">
+                        <div class="chat-topics-body">
+                            <div class="chat-topics-list" id="chatPathsList">
                                 <!-- Chat paths will be loaded here -->
                             </div>
                         </div>
@@ -158,7 +160,7 @@
                         $('#todayBreakTime').text('0m');
                     });
 
-                // Load weekly summary
+                // Load average daily study time for past 7 days
                 $.ajax({
                     url: '/api/ChatAnalytics/analytics/weekly',
                     type: 'GET',
@@ -187,24 +189,24 @@
                         container.empty();
 
                         paths.forEach(function (path) {
-                            const pathElement = $(`
-                                        <a href="#" class="list-group-item list-group-item-action chat-path-item" data-path-type="${path.type}">
-                                            <div class="d-flex w-100 justify-content-between align-items-start">
-                                                <div>
-                                                    <h6 class="mb-1">${path.icon} ${path.title}</h6>
-                                                    <p class="mb-1 small text-muted">${path.description}</p>
-                                                    <div class="small">
-                                                        ${path.questions.map(q => `<span class="badge bg-light text-dark me-1">"${q}"</span>`).join('')}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    `);
+                               const pathElemen t = $(`
+                                                    <a href="#" class="chat-path-item" data-path-type="${path.type}">
+                                                        <div class="chat-path-content">
+                                                            <div class="chat-path-main">
+                                                                <h6 class="chat-path-title">${path.icon} ${path.title}</h6>
+                                                                <p class="chat-path-description">${path.description}</p>
+                                                                <div class="chat-path-questions">
+                                                                    ${path.questions.map(q => `<span class="question-badge">"${q}"</span>`).join('')}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                            `);
                             container.append(pathElement);
                         });
                     })
                     .fail(function () {
-                        $('#chatPathsList').html('<div class="p-3 text-muted">Failed to load conversation topics</div>');
+                        $('#chatPathsList').html('<div class="chat-topics-error">Failed to load conversation topics</div>');
                     });
             }
 
@@ -281,38 +283,36 @@
             }
 
             function addMessage(content, isUser) {
-                const messageClass = isUser ? 'bg-primary text-white ms-auto' : 'bg-light';
-                const alignment = isUser ? 'justify-content-end' : 'justify-content-start';
+                const messageClass = isUser ? 'user-message' : 'bot-message';
+                const alignment = isUser ? 'user-message-container' : 'bot-message-container';
                 const username = isUser ? 'You' : 'Suzy 🤖';
 
-                const messageHtml = $(`
-                            <div class="d-flex ${alignment} mb-3">
-                                <div class="card ${messageClass}" style="max-width: 70%;">
-                                    <div class="card-body py-2 px-3">
-                                        <div class="small mb-1"><strong>${username}</strong></div>
-                                        <div>${content}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
+                  const messageHtm  l = $(`
+                                        <div class="message-wrapper ${alignment}">
+                                            <div class="message-bubble ${messageClass}">
+                                                <div class="message-header">${username}</div>
+                                                <div class="message-content">${content}</div>
+                                            </div>
+                                        </div>
+                                `);
 
                 $('#messagesContainer').append(messageHtml);
                 scrollToBottom();
             }
 
             function addTypingIndicator() {
-                const typingHtml = $(`
-                            <div class="d-flex justify-content-start mb-3" id="typingIndicator">
-                                <div class="card bg-light" style="max-width: 70%;">
-                                    <div class="card-body py-2 px-3">
-                                        <div class="small mb-1"><strong>Suzy 🤖</strong></div>
-                                        <div class="typing-dots">
-                                            <span>.</span><span>.</span><span>.</span>
+                  const typingHtml   = $(`
+                                        <div class="message-wrapper bot-message-container" id="typingIndicator">
+                                            <div class="message-bubble bot-message">
+                                                <div class="message-header">Suzy 🤖</div>
+                                                <div class="message-content">
+                                                    <div class="typing-dots">
+                                                        <span>.</span><span>.</span><span>.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
+                                `);
 
                 $('#messagesContainer').append(typingHtml);
                 scrollToBottom();
@@ -338,14 +338,310 @@
         </script>
 
         <style>
+            /* === Analytics Cards === */
+            .analytics-card {
+                background-color: var(--card);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                padding: 1.5rem;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                margin-bottom: 1rem;
+            }
+
+            .analytics-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            }
+
+            .analytics-card-primary {
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
+                color: var(--primary-foreground);
+                border: none;
+            }
+
+            .analytics-card-success {
+                background: linear-gradient(135deg, var(--sage-green), hsl(85, 25%, 45%));
+                color: var(--primary-foreground);
+                border: none;
+            }
+
+            .analytics-card-info {
+                background: linear-gradient(135deg, var(--soft-orange), hsl(20, 85%, 50%));
+                color: var(--primary-foreground);
+                border: none;
+            }
+
+            .analytics-card-body {
+                padding: 0;
+            }
+
+            .analytics-card-title {
+                font-size: 0.875rem;
+                font-weight: 500;
+                margin-bottom: 0.5rem;
+                opacity: 0.95;
+            }
+
+            .analytics-card-value {
+                font-size: 2rem;
+                font-weight: 700;
+                margin: 0;
+            }
+
+            .analytics-card-icon {
+                font-size: 2rem;
+                opacity: 0.8;
+            }
+
+            /* === Chat Card Styles === */
+            .chat-card {
+                background-color: var(--card);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                min-height: 500px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .chat-card-header {
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
+                color: var(--primary-foreground);
+                padding: 1rem 1.5rem;
+                border-top-left-radius: var(--radius);
+                border-top-right-radius: var(--radius);
+                border-bottom: 1px solid var(--border);
+            }
+
+            .chat-card-title {
+                font-size: 1.125rem;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            .chat-card-body {
+                display: flex;
+                flex-direction: column;
+                height: 500px;
+                padding: 0;
+            }
+
+            .messages-container {
+                flex-grow: 1;
+                overflow-y: auto;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                scroll-behavior: smooth;
+            }
+
+            .welcome-message {
+                text-align: center;
+                color: var(--muted-foreground);
+                padding: 3rem 1rem;
+            }
+
+            .welcome-icon {
+                font-size: 3rem;
+                color: var(--accent);
+                margin-bottom: 1rem;
+            }
+
+            .welcome-title {
+                color: var(--foreground);
+                margin-bottom: 0.75rem;
+            }
+
+            .welcome-text {
+                margin: 0;
+            }
+
+            /* === Message Styles === */
+            .message-wrapper {
+                margin-bottom: 1rem;
+                display: flex;
+            }
+
+            .user-message-container {
+                justify-content: flex-end;
+            }
+
+            .bot-message-container {
+                justify-content: flex-start;
+            }
+
+            .message-bubble {
+                max-width: 70%;
+                border-radius: var(--radius);
+                padding: 0.75rem 1rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .user-message {
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
+                color: var(--primary-foreground);
+            }
+
+            .bot-message {
+                background-color: var(--card);
+                color: var(--card-foreground);
+                border: 1px solid var(--border);
+            }
+
+            .message-header {
+                font-size: 0.75rem;
+                font-weight: 600;
+                margin-bottom: 0.25rem;
+                opacity: 0.9;
+            }
+
+            .message-content {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            /* === Message Input === */
+            .message-input-container {
+                display: flex;
+                padding: 1rem;
+                border-top: 1px solid var(--border);
+                background-color: var(--card);
+                border-bottom-left-radius: var(--radius);
+                border-bottom-right-radius: var(--radius);
+            }
+
+            .message-input {
+                flex: 1;
+                padding: 0.75rem 1rem;
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                background-color: var(--card);
+                color: var(--card-foreground);
+                font-size: 1rem;
+                margin-right: 0.75rem;
+                transition: all 0.2s ease;
+            }
+
+            .message-input:focus {
+                outline: none;
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px rgba(255, 115, 69, 0.1);
+            }
+
+            .message-input::placeholder {
+                color: var(--muted-foreground);
+            }
+
+            .message-send-btn {
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
+                color: var(--primary-foreground);
+                border: none;
+                border-radius: var(--radius);
+                padding: 0.75rem 1rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-size: 1rem;
+            }
+
+            .message-send-btn:hover {
+                background: linear-gradient(135deg, hsl(25, 45%, 30%), hsl(25, 45%, 35%));
+                transform: translateY(-1px);
+            }
+
+            /* === Chat Topics Card === */
+            .chat-topics-card {
+                background-color: var(--card);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .chat-topics-header {
+                background: linear-gradient(135deg, var(--sage-green), hsl(85, 25%, 45%));
+                color: var(--primary-foreground);
+                padding: 1rem;
+                border-top-left-radius: var(--radius);
+                border-top-right-radius: var(--radius);
+                border-bottom: 1px solid var(--border);
+            }
+
+            .chat-topics-title {
+                font-size: 1rem;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            .chat-topics-body {
+                padding: 0;
+            }
+
+            .chat-topics-list {
+                /* No additional styling needed */
+            }
+
             .chat-path-item {
-                border-bottom: 1px solid #dee2e6;
+                display: block;
+                padding: 1rem;
+                text-decoration: none;
+                color: var(--card-foreground);
+                border-bottom: 1px solid var(--border);
+                transition: all 0.2s ease;
             }
 
             .chat-path-item:hover {
-                background-color: #f8f9fa;
+                background-color: var(--muted);
+                color: var(--card-foreground);
+                text-decoration: none;
+                transform: translateX(4px);
             }
 
+            .chat-path-item:last-child {
+                border-bottom: none;
+            }
+
+            .chat-path-content {
+                width: 100%;
+            }
+
+            .chat-path-main {
+                /* No additional styling needed */
+            }
+
+            .chat-path-title {
+                font-size: 0.9rem;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                color: var(--foreground);
+            }
+
+            .chat-path-description {
+                font-size: 0.8rem;
+                color: var(--muted-foreground);
+                margin-bottom: 0.75rem;
+                line-height: 1.3;
+            }
+
+            .chat-path-questions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+
+            .question-badge {
+                background-color: var(--muted);
+                color: var(--muted-foreground);
+                padding: 0.25rem 0.5rem;
+                border-radius: calc(var(--radius) * 0.5);
+                font-size: 0.7rem;
+                font-weight: 500;
+            }
+
+            .chat-topics-error {
+                padding: 1rem;
+                text-align: center;
+                color: var(--muted-foreground);
+                font-style: italic;
+            }
+
+            /* === Typing Animation === */
             .typing-dots {
                 display: inline-block;
             }
@@ -363,10 +659,14 @@
                 animation-delay: 0.4s;
             }
 
-            @@keyframes typing {
+           
 
+            @@keyfr
+         a      mes 
+      t         yping {
                 0%,
-                60%,
+                6
+0%,
                 100% {
                     opacity: 0.4;
                 }
@@ -376,52 +676,33 @@
                 }
             }
 
-            #messagesContainer {
-                scroll-behavior: smooth;
-            }
-
-            /* Chat-specific adjustments for sidebar layout */
-            .chat-path-item {
-                transition: all 0.2s ease;
-            }
-
-            .chat-path-item:hover {
-                transform: translateX(2px);
-            }
-
-            .card {
-                border: 1px solid var(--color-border);
-                background-color: var(--color-light);
-                color: var(--text-color);
-            }
-
-            .card-header {
-                border-bottom: 1px solid var(--color-border);
-            }
-
-            .bg-primary {
-                background-color: var(--color-primary) !important;
-            }
-
-            .bg-success {
-                background-color: var(--color-success) !important;
-            }
-
-            .bg-info {
-                background-color: var(--color-info) !important;
-            }
-
+            /* === Page Layout === */
             .text-color {
-                color: var(--text-color) !important;
+                color: var(--foreground) !important;
             }
 
             .text-muted {
-                color: var(--color-text-muted) !important;
+                co
+ l          or: var(--muted-foreground) !important;
+            }
+
+            /* === Responsive Design === */
+            @@media (max-width: 768px) {
+                .analytics-card-value {
+                    font-size: 1.5rem;
+                }
+
+                .analytics-card-icon {
+                    font-size: 1.5rem;
+                }
+
+                .message-bubble {
+                    max-width: 85%;
+                }
+
+                .chat-card-body {
+                    height: 400px;
+                }
             }
         </style>
-}
-
-
-
-
-    
+}            

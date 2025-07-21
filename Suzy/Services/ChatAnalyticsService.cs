@@ -51,18 +51,19 @@ namespace Suzy.Services
         public async Task<WeeklySummary> GetWeeklySummaryAsync(string userId)
         {
             var utcToday = DateTime.UtcNow.Date;
-            var weekStart = utcToday.AddDays(-(int)utcToday.DayOfWeek);
+            // Look at the past 7 days instead of calendar week
+            var sevenDaysAgo = utcToday.AddDays(-6); // Today + 6 previous days = 7 days total
             var summary = await _context.WeeklySummaries
-                .FirstOrDefaultAsync(w => w.UserId == userId && w.WeekStartDate.Date == weekStart);
+                .FirstOrDefaultAsync(w => w.UserId == userId && w.WeekStartDate.Date == sevenDaysAgo);
 
             // Check if there are newer timer sessions or todos since last generation
             var lastTimerSession = await _context.StudyTimerSessions
-                .Where(t => t.UserId == userId && t.StartTime >= weekStart)
+                .Where(t => t.UserId == userId && t.StartTime >= sevenDaysAgo)
                 .OrderByDescending(t => t.StartTime)
                 .FirstOrDefaultAsync();
 
             var lastTodo = await _context.TodoItems
-                .Where(t => t.UserId == userId && t.CreatedAt >= weekStart)
+                .Where(t => t.UserId == userId && t.CreatedAt >= sevenDaysAgo)
                 .OrderByDescending(t => t.CreatedAt)
                 .FirstOrDefaultAsync();
 
@@ -357,22 +358,24 @@ namespace Suzy.Services
         private async Task<WeeklySummary> GenerateWeeklySummaryAsync(string userId)
         {
             var utcToday = DateTime.UtcNow.Date;
-            var weekStart = utcToday.AddDays(-(int)utcToday.DayOfWeek);
-            var weekEnd = weekStart.AddDays(7);
+            // Look at the past 7 days instead of calendar week
+            var sevenDaysAgo = utcToday.AddDays(-6); // Today + 6 previous days = 7 days total
+            var endDate = utcToday.AddDays(1); // Include today
 
-            // Try to get existing analytics for the week
+            // Try to get existing analytics for the past 7 days
             var weeklyAnalytics = await _context.StudyAnalytics
-                .Where(a => a.UserId == userId && a.Date >= weekStart && a.Date < weekEnd)
+                .Where(a => a.UserId == userId && a.Date >= sevenDaysAgo && a.Date < endDate)
                 .ToListAsync();
 
             // If no analytics exist, calculate directly from timer sessions
             var totalStudyMinutes = 0;
             var totalBreakMinutes = 0;
+            var daysWithStudyData = new HashSet<DateTime>();
 
             if (!weeklyAnalytics.Any())
             {
                 var weekTimerSessions = await _context.StudyTimerSessions
-                    .Where(t => t.UserId == userId && t.StartTime >= weekStart && t.StartTime < weekEnd)
+                    .Where(t => t.UserId == userId && t.StartTime >= sevenDaysAgo && t.StartTime < endDate)
                     .ToListAsync();
 
                 foreach (var timerSession in weekTimerSessions)
@@ -384,6 +387,7 @@ namespace Suzy.Services
                     if (timerSession.SessionType == TimerSessionType.Study)
                     {
                         totalStudyMinutes += Math.Max(0, duration);
+                        daysWithStudyData.Add(timerSession.StartTime.Date);
                     }
                     else if (timerSession.SessionType == TimerSessionType.Break)
                     {
@@ -395,19 +399,29 @@ namespace Suzy.Services
             {
                 totalStudyMinutes = weeklyAnalytics.Sum(a => a.TotalStudyMinutes);
                 totalBreakMinutes = weeklyAnalytics.Sum(a => a.TotalBreakMinutes);
+                // Count days that have study data from analytics
+                daysWithStudyData = weeklyAnalytics
+                    .Where(a => a.TotalStudyMinutes > 0)
+                    .Select(a => a.Date.Date)
+                    .ToHashSet();
             }
 
             var weeklyTodos = await _context.TodoItems
-                .Where(t => t.UserId == userId && t.CreatedAt >= weekStart && t.CreatedAt < weekEnd)
+                .Where(t => t.UserId == userId && t.CreatedAt >= sevenDaysAgo && t.CreatedAt < endDate)
                 .ToListAsync();
+
+            // Calculate average based on days with actual study data, or use 7 days if no study data
+            var averageStudyTimePerDay = daysWithStudyData.Count > 0
+                ? totalStudyMinutes / (double)daysWithStudyData.Count
+                : totalStudyMinutes / 7.0;
 
             var summary = new WeeklySummary
             {
                 UserId = userId,
-                WeekStartDate = weekStart,
+                WeekStartDate = sevenDaysAgo, // Changed to represent start of 7-day period
                 TotalStudyMinutes = totalStudyMinutes,
                 TotalBreakMinutes = totalBreakMinutes,
-                AverageStudyTimePerDay = totalStudyMinutes / 7.0, // Average over 7 days
+                AverageStudyTimePerDay = averageStudyTimePerDay,
                 CompletedTodos = weeklyTodos.Count(t => t.IsCompleted),
                 TotalTodos = weeklyTodos.Count,
                 FlashcardsReviewed = weeklyAnalytics.Sum(a => a.FlashcardsReviewed),
