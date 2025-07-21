@@ -18,10 +18,7 @@
             <!-- Page Header -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <h1 class="h3 mb-0 text-color">
-                        <i class="fas fa-robot text-primary me-2"></i>Chat with Suzy
-                    </h1>
-                    <p class="text-muted mb-0">Get personalized insights about your study habits and progress</p>
+                    <h2 class="page-header-title mb-2">Get personalized insights about your study habits and progress</h2>
                 </div>
             </div>
 
@@ -76,23 +73,46 @@
 
             <!-- Chat Area -->
             <div class="row">
-                <div class="col-lg-8 col-xl-9">
+                <div class="col-12">
                     <!-- Chat Messages Container -->
                     <div class="chat-card">
                         <div class="chat-card-header">
                             <h5 class="mb-0 chat-card-title">
-                                <i class="fas fa-comments"></i> Conversation with Suzy
+                                <i class="fas fa-comments"></i> Chat with Suzy
                             </h5>
                         </div>
                         <div class="chat-card-body">
                             <!-- Messages Area -->
                             <div class="messages-container" id="messagesContainer">
                                 <div class="welcome-message" id="welcomeMessage">
-                                    <i class="fas fa-robot welcome-icon"></i>
-                                    <h5 class="welcome-title">Hi! I'm Suzy, your AI study assistant! 🤖</h5>
-                                    <p class="welcome-text">Choose a conversation topic from the panel on the right to
-                                       
-                                        get started.</p>
+                                    <div class="suzy-profile">
+                                        <img src="/lib/assets/SuzyChatIcon.png" alt="Suzy" class="suzy-avatar">
+                                    </div>
+                                    <h5 class="welcome-title">Hi! I'm Suzy, your AI study assistant!</h5>
+                                    <p class="welcome-text">What can I help you with today?</p>
+                                    
+                                    <div class="conversation-topics" id="conversationTopics">
+                                        <div class="topic-button" data-path-type="study-time">
+                                            <div class="topic-icon">📊</div>
+                                            <div class="topic-text">Analyze my study time</div>
+                                        </div>
+                                        <div class="topic-button" data-path-type="focus">
+                                            <div class="topic-icon">🎯</div>
+                                            <div class="topic-text">Was I focused this week?</div>
+                                        </div>
+                                        <div class="topic-button" data-path-type="todo">
+                                            <div class="topic-icon">✅</div>
+                                            <div class="topic-text">Did I complete my tasks?</div>
+                                        </div>
+                                        <div class="topic-button" data-path-type="weekly">
+                                            <div class="topic-icon">📈</div>
+                                            <div class="topic-text">Give me a weekly summary</div>
+                                        </div>
+                                        <div class="topic-button" data-path-type="mock-exam">
+                                            <div class="topic-icon">📝</div>
+                                            <div class="topic-text">How did I do in my last mock exam?</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -107,40 +127,265 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Chat Paths Panel -->
-                <div class="col-lg-4 col-xl-3">
-                    <div class="chat-topics-card">
-                        <div class="chat-topics-header">
-                            <h6 class="mb-0 chat-topics-title">💬 Conversation Topics</h6>
-                        </div>
-                        <div class="chat-topics-body">
-                            <div class="chat-topics-list" id="chatPathsList">
-                                <!-- Chat paths will be loaded here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
 @section Scripts {
+        <!-- Ensure jQuery is loaded -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        
         <script>
             let currentConversationId = null;
             let currentPath = null;
 
             $(document).ready(function () {
+                console.log('Chat page loaded');
+                console.log('jQuery loaded:', typeof $ !== 'undefined');
+                
                 loadAnalytics();
-                loadChatPaths();
 
-                $('#sendMessageBtn').click(sendMessage);
+                $('#sendMessageBtn').click(function() {
+                    sendMessage();
+                });
                 $('#messageInput').keypress(function (e) {
                     if (e.which === 13) {
                         sendMessage();
                     }
                 });
+
+                // Handle topic button clicks - single clean handler
+                $(document).on('click', '.topic-button', function (e) {
+                    e.preventDefault();
+                    console.log('Topic button clicked');
+                    const pathType = $(this).attr('data-path-type');
+                    if (pathType) {
+                        startConversation(pathType);
+                    }
+                });
+
+                // Handle conversation option clicks
+                $(document).on('click', '.conversation-option', function (e) {
+                    e.preventDefault();
+                    console.log('Conversation option clicked');
+                    const message = $(this).text().trim();
+                    handleUserResponse(message);
+                });
+
+                // Handle restart button clicks
+                $(document).on('click', '.restart-button', function (e) {
+                    e.preventDefault();
+                    console.log('Restart button clicked');
+                    restartChat();
+                });
             });
+
+            function startConversation(pathType) {
+                console.log('Starting conversation for path:', pathType);
+                currentPath = pathType;
+                
+                // Clear messages and show input
+                $('#messagesContainer').empty();
+                $('#messageInputContainer').show();
+
+                // Add user's initial message based on topic
+                const topicMessages = {
+                    'study-time': 'Hi Suzy! I would love to get a comprehensive analysis of my study time patterns. Could you please examine my recent study sessions, break down my daily and weekly study habits, identify any trends or patterns you notice, and provide detailed insights on how I can optimize my study schedule? I\'m particularly interested in understanding my peak productivity hours, consistency patterns, and areas where I might be able to improve my time management.',
+                    'focus': 'Hello Suzy! I\'m concerned about my focus and concentration levels during study sessions. Could you please provide a detailed analysis of my focus patterns this week? I\'d like to understand how well I\'ve been maintaining concentration, what factors might be affecting my focus, how my break-to-study ratios look, and get comprehensive recommendations on improving my concentration and avoiding distractions during study sessions.',
+                    'todo': 'Hello Suzy! I want to evaluate my productivity and task management. Could you please analyze my task completion patterns, examine which types of tasks I complete most efficiently, identify any productivity bottlenecks or recurring challenges, and provide comprehensive strategies for improving my task management and overall productivity? I\'d also like suggestions for better prioritization and time allocation.',
+                    'weekly': 'Hi Suzy! I\'d like a comprehensive weekly summary of my study progress and performance. Could you please analyze all aspects of my study activities from this past week, including time spent studying, topics covered, productivity patterns, achievements and challenges, and provide detailed insights on my overall progress? I\'m looking for both celebrations of what went well and actionable recommendations for improvement.',
+                    'mock-exam': 'Hello Suzy! I recently took a mock exam and would appreciate a detailed performance analysis. Could you examine my results, identify my strongest and weakest subject areas, analyze my time management during the exam, pinpoint specific topics that need more attention, and provide a comprehensive study plan to address my weak areas? I\'m particularly interested in strategic recommendations for improving my exam performance and confidence.'
+                };
+                
+                const initialMessage = topicMessages[pathType];
+                console.log('Initial message:', initialMessage);
+                addMessage(initialMessage, true);
+
+                // Start conversation with API
+                startConversationAPI(pathType, initialMessage);
+            }
+
+            function startConversationAPI(pathType, message) {
+                // Ensure any existing typing indicator is removed first
+                removeTypingIndicator();
+                addTypingIndicator();
+
+                // Map frontend path types to backend enum values
+                const pathTypeMapping = {
+                    'study-time': 1, // StudyTimeAnalysis
+                    'focus': 2,      // FocusAndPauses
+                    'todo': 4,       // TodoProductivity
+                    'weekly': 5,     // WeeklySummary
+                    'mock-exam': 6   // MockExamReview
+                };
+
+                // First start the conversation
+                $.ajax({
+                    url: '/api/ChatAnalytics/conversation/start',
+                    type: 'POST',
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val(),
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify({
+                        PathType: pathTypeMapping[pathType]
+                    })
+                })
+                .done(function (response) {
+                    currentConversationId = response.id;
+                    // Now send the initial message
+                    sendMessageToAPI(message);
+                })
+                .fail(function (xhr, status, error) {
+                    removeTypingIndicator();
+                    console.error('API Error starting conversation:', error);
+                    addMessage("I'm sorry, I'm having trouble starting our conversation right now. Please try again in a moment.", false);
+                    addRestartButton();
+                });
+            }
+
+            function sendToAPI(message) {
+                if (!currentConversationId) {
+                    console.error('No conversation ID available');
+                    return;
+                }
+                sendMessageToAPI(message);
+            }
+
+            function sendMessageToAPI(message) {
+                if (!currentConversationId) {
+                    console.error('No conversation ID available');
+                    return;
+                }
+
+                // Ensure any existing typing indicator is removed first
+                removeTypingIndicator();
+                addTypingIndicator();
+
+                // Send message to existing conversation
+                $.ajax({
+                    url: `/api/ChatAnalytics/conversation/${currentConversationId}/message`,
+                    type: 'POST',
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val(),
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify({
+                        Message: message
+                    })
+                })
+                .done(function (response) {
+                    removeTypingIndicator();
+                    addMessage(response.response, false);
+                    
+                    // For now, always add restart button since we don't have suggestion system yet
+                    addRestartButton();
+                })
+                .fail(function (xhr, status, error) {
+                    removeTypingIndicator();
+                    console.error('API Error sending message:', error);
+                    addMessage("I'm sorry, I'm having trouble processing your message right now. Please try again in a moment.", false);
+                    addRestartButton();
+                });
+            }
+
+            function handleUserResponse(message) {
+                addMessage(message, true);
+                sendToAPI(message);
+            }
+
+            function sendMessage() {
+                const messageInput = $('#messageInput');
+                const message = messageInput.val().trim();
+                
+                if (message) {
+                    addMessage(message, true);
+                    messageInput.val('');
+                    
+                    // Send to API
+                    sendToAPI(message);
+                }
+            }
+
+            function addConversationOptions(options) {
+                const optionsHtml = options.map(option => 
+                    `<button class="conversation-option">${option}</button>`
+                ).join('');
+                
+                const optionsContainer = $(`
+                    <div class="message-wrapper bot-message-container">
+                        <div class="suzy-profile">
+                            <img src="/lib/assets/SuzyChatIcon.png" alt="Suzy" class="suzy-avatar-small">
+                        </div>
+                        <div class="conversation-options">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `);
+                
+                $('#messagesContainer').append(optionsContainer);
+                scrollToBottom();
+            }
+
+            function addRestartButton() {
+                const restartHtml = $(`
+                    <div class="message-wrapper bot-message-container">
+                        <div class="suzy-profile">
+                            <img src="/lib/assets/SuzyChatIcon.png" alt="Suzy" class="suzy-avatar-small">
+                        </div>
+                        <div class="conversation-options">
+                            <button class="restart-button">🔄 Start New Conversation</button>
+                        </div>
+                    </div>
+                `);
+                
+                $('#messagesContainer').append(restartHtml);
+                scrollToBottom();
+            }
+
+            function restartChat() {
+                $('#messagesContainer').empty();
+                $('#messageInputContainer').hide();
+                
+                // Show the welcome message with topics again
+                const welcomeHtml = $(`
+                    <div class="welcome-message" id="welcomeMessage">
+                        <div class="suzy-profile">
+                            <img src="/lib/assets/SuzyChatIcon.png" alt="Suzy" class="suzy-avatar">
+                        </div>
+                        <h5 class="welcome-title">Hi! I'm Suzy, your AI study assistant!</h5>
+                        <p class="welcome-text">What can I help you with today?</p>
+                        
+                        <div class="conversation-topics" id="conversationTopics">
+                            <div class="topic-button" data-path-type="study-time">
+                                <div class="topic-icon">📊</div>
+                                <div class="topic-text">Analyze my study time</div>
+                            </div>
+                            <div class="topic-button" data-path-type="focus">
+                                <div class="topic-icon">🎯</div>
+                                <div class="topic-text">Was I focused this week?</div>
+                            </div>
+                            <div class="topic-button" data-path-type="todo">
+                                <div class="topic-icon">✅</div>
+                                <div class="topic-text">Did I complete my tasks?</div>
+                            </div>
+                            <div class="topic-button" data-path-type="weekly">
+                                <div class="topic-icon">📈</div>
+                                <div class="topic-text">Give me a weekly summary</div>
+                            </div>
+                            <div class="topic-button" data-path-type="mock-exam">
+                                <div class="topic-icon">📝</div>
+                                <div class="topic-text">How did I do in my last mock exam?</div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+                
+                $('#messagesContainer').append(welcomeHtml);
+                
+                currentPath = null;
+                currentConversationId = null;
+            }
 
             function loadAnalytics() {
                 // Load today's analytics
@@ -176,150 +421,63 @@
                     });
             }
 
-            function loadChatPaths() {
-                $.ajax({
-                    url: '/api/ChatAnalytics/paths',
-                    type: 'GET',
-                    headers: {
-                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                    }
-                })
-                    .done(function (paths) {
-                        const container = $('#chatPathsList');
-                        container.empty();
-
-                        paths.forEach(function (path) {
-                               const pathElement = $(`
-                                                    <a href="#" class="chat-path-item" data-path-type="${path.type}">
-                                                        <div class="chat-path-content">
-                                                            <div class="chat-path-main">
-                                                                <h6 class="chat-path-title">${path.icon} ${path.title}</h6>
-                                                                <p class="chat-path-description">${path.description}</p>
-                                                                <div class="chat-path-questions">
-                                                                    ${path.questions.map(q => `<span class="question-badge">"${q}"</span>`).join('')}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                            `);
-                            container.append(pathElement);
-                        });
-                    })
-                    .fail(function () {
-                        $('#chatPathsList').html('<div class="chat-topics-error">Failed to load conversation topics</div>');
-                    });
-            }
-
-            $(document).on('click', '.chat-path-item', function (e) {
-                e.preventDefault();
-                const pathType = $(this).data('path-type');
-                startConversation(pathType);
-            });
-
-            function startConversation(pathType) {
-                $.ajax({
-                    url: '/api/ChatAnalytics/conversation/start',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ pathType: pathType }),
-                    headers: {
-                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                    }
-                })
-                    .done(function (data) {
-                        currentConversationId = data.id;
-
-                        // Clear messages and show input
-                        $('#messagesContainer').empty();
-                        $('#messageInputContainer').show();
-                        $('#welcomeMessage').hide();
-
-                        // Add Suzy's greeting
-                        addMessage("Hi! I'm ready to help you with this topic. Go ahead and ask your first question! 😊", false);
-
-                        // Focus on input
-                        $('#messageInput').focus();
-                    })
-                    .fail(function () {
-                        alert('Failed to start conversation. Please try again.');
-                    });
-            }
-
-            function sendMessage() {
-                const message = $('#messageInput').val().trim();
-                if (!message || !currentConversationId) return;
-
-                // Add user message
-                addMessage(message, true);
-                $('#messageInput').val('');
-
-                // Show typing indicator
-                addTypingIndicator();
-
-                // Send to server
-                $.ajax({
-                    url: `/api/ChatAnalytics/conversation/${currentConversationId}/message`,
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        message: message
-                    }),
-                    headers: {
-                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                    }
-                })
-                    .done(function (data) {
-                        removeTypingIndicator();
-                        if (data.response) {
-                            addMessage(data.response, false);
-                        } else {
-                            addMessage("Sorry, I encountered an error. Please try again! 😔", false);
-                        }
-                    })
-                    .fail(function () {
-                        removeTypingIndicator();
-                        addMessage("Sorry, I couldn't process your message right now. Please try again! 😔", false);
-                    });
-            }
-
             function addMessage(content, isUser) {
                 const messageClass = isUser ? 'user-message' : 'bot-message';
                 const alignment = isUser ? 'user-message-container' : 'bot-message-container';
-                const username = isUser ? 'You' : 'Suzy 🤖';
+                const username = isUser ? 'You' : 'Suzy';
 
-                  const messageHtml = $(`
-                                        <div class="message-wrapper ${alignment}">
-                                            <div class="message-bubble ${messageClass}">
-                                                <div class="message-header">${username}</div>
-                                                <div class="message-content">${content}</div>
-                                            </div>
-                                        </div>
-                                `);
+                let messageHtml;
+                if (isUser) {
+                    messageHtml = $(`
+                        <div class="message-wrapper ${alignment}">
+                            <div class="message-bubble ${messageClass}">
+                                <div class="message-header">${username}</div>
+                                <div class="message-content">${content}</div>
+                            </div>
+                        </div>
+                    `);
+                } else {
+                    messageHtml = $(`
+                        <div class="message-wrapper ${alignment}">
+                            <div class="suzy-profile">
+                                <img src="/lib/assets/SuzyChatIcon.png" alt="Suzy" class="suzy-avatar-small">
+                            </div>
+                            <div class="message-bubble ${messageClass}">
+                                <div class="message-header">${username}</div>
+                                <div class="message-content">${content}</div>
+                            </div>
+                        </div>
+                    `);
+                }
 
                 $('#messagesContainer').append(messageHtml);
                 scrollToBottom();
             }
 
             function addTypingIndicator() {
-                  const typingHtml = $(`
-                                        <div class="message-wrapper bot-message-container" id="typingIndicator">
-                                            <div class="message-bubble bot-message">
-                                                <div class="message-header">Suzy 🤖</div>
-                                                <div class="message-content">
-                                                    <div class="typing-dots">
-                                                        <span>.</span><span>.</span><span>.</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                `);
+                const typingHtml = $(`
+                    <div class="message-wrapper bot-message-container" id="typingIndicator">
+                        <div class="suzy-profile">
+                            <img src="/lib/assets/SuzyChatIcon.png" alt="Suzy" class="suzy-avatar-small">
+                        </div>
+                        <div class="message-bubble bot-message">
+                            <div class="message-header">Suzy</div>
+                            <div class="message-content">
+                                <div class="typing-dots">
+                                    <span>.</span><span>.</span><span>.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `);
 
                 $('#messagesContainer').append(typingHtml);
                 scrollToBottom();
             }
 
             function removeTypingIndicator() {
-                $('#typingIndicator').remove();
+                // Remove all typing indicators (in case there are multiple)
+                $('#typingIndicator, .typing-indicator').remove();
             }
 
             function scrollToBottom() {
@@ -361,13 +519,13 @@
             }
 
             .analytics-card-success {
-                background: linear-gradient(135deg, var(--sage-green), hsl(85, 25%, 45%));
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
                 color: var(--primary-foreground);
                 border: none;
             }
 
             .analytics-card-info {
-                background: linear-gradient(135deg, var(--soft-orange), hsl(20, 85%, 50%));
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
                 color: var(--primary-foreground);
                 border: none;
             }
@@ -399,7 +557,7 @@
                 background-color: var(--card);
                 border: 1px solid var(--border);
                 border-radius: var(--radius);
-                min-height: 500px;
+                min-height: 700px;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             }
 
@@ -421,7 +579,7 @@
             .chat-card-body {
                 display: flex;
                 flex-direction: column;
-                height: 500px;
+                height: 700px;
                 padding: 0;
             }
 
@@ -436,13 +594,54 @@
             .welcome-message {
                 text-align: center;
                 color: var(--muted-foreground);
-                padding: 3rem 1rem;
+                padding: 2rem 1rem;
             }
 
-            .welcome-icon {
-                font-size: 3rem;
-                color: var(--accent);
+            .suzy-profile {
+                display: flex;
+                align-items: flex-start;
+                margin-right: 0.75rem;
+                flex-shrink: 0;
+            }
+
+            .suzy-avatar {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                border: 3px solid var(--warm-brown);
                 margin-bottom: 1rem;
+            }
+
+            .suzy-avatar-emoji {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                border: 3px solid var(--warm-brown);
+                margin-bottom: 1rem;
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.5rem;
+            }
+
+            .suzy-avatar-small {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                border: 2px solid var(--warm-brown);
+            }
+
+            .suzy-avatar-emoji-small {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                border: 2px solid var(--warm-brown);
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1rem;
             }
 
             .welcome-title {
@@ -451,13 +650,63 @@
             }
 
             .welcome-text {
-                margin: 0;
+                margin-bottom: 2rem;
+            }
+
+            /* === Conversation Topics === */
+            .conversation-topics {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1rem;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .topic-button {
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
+                color: var(--primary-foreground);
+                border: none;
+                border-radius: var(--radius);
+                padding: 1rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                text-align: left;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                user-select: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+            }
+
+            .topic-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+                background: linear-gradient(135deg, hsl(25, 45%, 35%), hsl(25, 45%, 30%));
+            }
+
+            .topic-button:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .topic-icon {
+                font-size: 1.5rem;
+                margin-right: 0.75rem;
+                flex-shrink: 0;
+            }
+
+            .topic-text {
+                font-weight: 500;
+                font-size: 0.95rem;
             }
 
             /* === Message Styles === */
             .message-wrapper {
                 margin-bottom: 1rem;
                 display: flex;
+                align-items: flex-start;
             }
 
             .user-message-container {
@@ -469,15 +718,18 @@
             }
 
             .message-bubble {
-                max-width: 70%;
+                max-width: 80%;
                 border-radius: var(--radius);
                 padding: 0.75rem 1rem;
                 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                word-wrap: break-word;
+                overflow-wrap: break-word;
             }
 
             .user-message {
                 background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
                 color: var(--primary-foreground);
+                margin-left: auto;
             }
 
             .bot-message {
@@ -495,7 +747,46 @@
 
             .message-content {
                 font-size: 0.9rem;
-                line-height: 1.4;
+                line-height: 1.5;
+                white-space: pre-line;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                max-width: 100%;
+            }
+
+            /* === Conversation Options === */
+            .conversation-options {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-top: 0.5rem;
+            }
+
+            .conversation-option, .restart-button {
+                background: linear-gradient(135deg, var(--soft-orange), hsl(20, 85%, 50%));
+                color: var(--primary-foreground);
+                border: none;
+                border-radius: var(--radius);
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-weight: 500;
+            }
+
+            .conversation-option:hover, .restart-button:hover {
+                background: linear-gradient(135deg, hsl(20, 85%, 45%), hsl(20, 85%, 40%));
+                transform: translateY(-1px);
+            }
+
+            .restart-button {
+                background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 40%));
+                font-size: 0.9rem;
+                padding: 0.75rem 1.5rem;
+            }
+
+            .restart-button:hover {
+                background: linear-gradient(135deg, hsl(25, 45%, 35%), hsl(25, 45%, 30%));
             }
 
             /* === Message Input === */
@@ -522,8 +813,8 @@
 
             .message-input:focus {
                 outline: none;
-                border-color: var(--accent);
-                box-shadow: 0 0 0 3px rgba(255, 115, 69, 0.1);
+                border-color: var(--warm-brown);
+                box-shadow: 0 0 0 3px rgba(205, 133, 63, 0.1);
             }
 
             .message-input::placeholder {
@@ -546,101 +837,6 @@
                 transform: translateY(-1px);
             }
 
-            /* === Chat Topics Card === */
-            .chat-topics-card {
-                background-color: var(--card);
-                border: 1px solid var(--border);
-                border-radius: var(--radius);
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            }
-
-            .chat-topics-header {
-                background: linear-gradient(135deg, var(--sage-green), hsl(85, 25%, 45%));
-                color: var(--primary-foreground);
-                padding: 1rem;
-                border-top-left-radius: var(--radius);
-                border-top-right-radius: var(--radius);
-                border-bottom: 1px solid var(--border);
-            }
-
-            .chat-topics-title {
-                font-size: 1rem;
-                font-weight: 600;
-                margin: 0;
-            }
-
-            .chat-topics-body {
-                padding: 0;
-            }
-
-            .chat-topics-list {
-                /* No additional styling needed */
-            }
-
-            .chat-path-item {
-                display: block;
-                padding: 1rem;
-                text-decoration: none;
-                color: var(--card-foreground);
-                border-bottom: 1px solid var(--border);
-                transition: all 0.2s ease;
-            }
-
-            .chat-path-item:hover {
-                background-color: var(--muted);
-                color: var(--card-foreground);
-                text-decoration: none;
-                transform: translateX(4px);
-            }
-
-            .chat-path-item:last-child {
-                border-bottom: none;
-            }
-
-            .chat-path-content {
-                width: 100%;
-            }
-
-            .chat-path-main {
-                /* No additional styling needed */
-            }
-
-            .chat-path-title {
-                font-size: 0.9rem;
-                font-weight: 600;
-                margin-bottom: 0.5rem;
-                color: var(--foreground);
-            }
-
-            .chat-path-description {
-                font-size: 0.8rem;
-                color: var(--muted-foreground);
-                margin-bottom: 0.75rem;
-                line-height: 1.3;
-            }
-
-            .chat-path-questions {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.25rem;
-            }
-
-            .question-badge {
-                background-color: var(--muted);
-                color: var(--muted-foreground);
-                padding: 0.25rem 0.5rem;
-                border-radius: calc(var(--radius) * 0.5);
-                font-size: 0.7rem;
-                font-weight: 500;
-            }
-
-            .chat-topics-error {
-                padding: 1rem;
-                text-align: center;
-                color: var(--muted-foreground);
-                font-style: italic;
-            }
-
             /* === Typing Animation === */
             .typing-dots {
                 display: inline-block;
@@ -659,31 +855,30 @@
                 animation-delay: 0.4s;
             }
 
-           
-
-            @@keyfr
-         a      mes 
-      t         yping {
-                0%,
-                6
-0%,
-                100% {
+            @@keyframes typing {
+                0%, 60%, 100% {
                     opacity: 0.4;
                 }
-
                 30% {
                     opacity: 1;
                 }
             }
 
             /* === Page Layout === */
+            .page-header-title {
+                color: var(--foreground);
+                font-weight: 600;
+                font-size: 1.75rem;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
             .text-color {
                 color: var(--foreground) !important;
             }
 
             .text-muted {
-                co
- l          or: var(--muted-foreground) !important;
+                color: var(--muted-foreground) !important;
             }
 
             /* === Responsive Design === */
@@ -697,11 +892,23 @@
                 }
 
                 .message-bubble {
-                    max-width: 85%;
+                    max-width: 95%;
                 }
 
                 .chat-card-body {
-                    height: 400px;
+                    height: 600px;
+                }
+
+                .conversation-topics {
+                    grid-template-columns: 1fr;
+                }
+
+                .topic-button {
+                    padding: 0.75rem;
+                }
+
+                .topic-text {
+                    font-size: 0.9rem;
                 }
             }
         </style>
