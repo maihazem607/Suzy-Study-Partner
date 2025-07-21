@@ -6,16 +6,88 @@
 }
 
 <style>
-    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid #00bcd4; margin-top: 2rem; background: rgba(255, 255, 255, 0.85); }
-    .futuristic-select, .futuristic-multiselect { width: 100%; padding: 0.7rem; border-radius: 14px; border: 2px solid #00bcd4; }
-    .futuristic-btn { background: linear-gradient(145deg, #00acc1, #008ba3); border: none; padding: 0.85rem; color: white; border-radius: 16px; width: 100%; }
-    .question-block { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; }
-    .correct-answer { background-color: #d4edda; border-color: #c3e6cb; border-radius: 5px; }
-    .wrong-answer { background-color: #f8d7da; border-color: #f5c6cb; border-radius: 5px; }
-    
-    .modal-content { background-color: rgba(255, 255, 255, 0.85); border: 1px solid #00bcd4; border-radius: 2rem; backdrop-filter: blur(10px); }
-    body.dark-mode .modal-content { background-color: rgba(18, 18, 18, 0.85); color: #f1f1f1; }
-    .modal-header, .modal-footer { border-bottom: 1px solid rgba(0, 188, 212, 0.2); border-top: 1px solid rgba(0, 188, 212, 0.2); }
+    .futuristic-card {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        border: 1px solid var(--warm-brown);
+        border-radius: 2rem;
+        padding: 2rem;
+        margin-top: 2rem;
+        box-shadow: 0 8px 24px rgba(92, 69, 47, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(92, 69, 47, 0.15);
+    }
+
+    .futuristic-select,
+    .futuristic-multiselect {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        width: 100%;
+        padding: 0.7rem;
+        border-radius: var(--radius);
+        border: 2px solid var(--warm-brown);
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-select:focus,
+    .futuristic-multiselect:focus {
+        outline: none;
+        border-color: var(--warm-brown);
+        box-shadow: 0 0 0 3px rgba(92, 69, 47, 0.1);
+    }
+
+    .futuristic-btn {
+        background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 30%));
+        border: none;
+        padding: 0.85rem;
+        color: var(--primary-foreground);
+        border-radius: var(--radius);
+        width: 100%;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-btn:hover {
+        background: linear-gradient(135deg, hsl(25, 45%, 25%), hsl(25, 45%, 20%));
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(92, 69, 47, 0.3);
+    }
+
+    .question-block {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .correct-answer {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        border-radius: var(--radius);
+    }
+
+    .wrong-answer {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        border-radius: var(--radius);
+    }
+
+    .modal-content {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        border: 1px solid var(--warm-brown);
+        border-radius: 2rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .modal-header,
+    .modal-footer {
+        border-bottom: 1px solid rgba(92, 69, 47, 0.2);
+        border-top: 1px solid rgba(92, 69, 47, 0.2);
+    }
 </style>
 
 <div class="page-container">
@@ -42,13 +114,21 @@
 
                             <div class="p-2 my-1 @bgClass">
                                 @option
-                                @if(isCorrect) { <i class="fas fa-check-circle text-success ms-2"></i> }
-                                @if(isUserChoice && !isCorrect) { <i class="fas fa-times-circle text-danger ms-2"></i> }
+                                @if (isCorrect)
+                                {
+                                    <i class="fas fa-check-circle text-success ms-2"></i>
+                                }
+                                @if (isUserChoice && !isCorrect)
+                                {
+                                    <i class="fas fa-times-circle text-danger ms-2"></i>
+                                }
                             </div>
                         }
                     </div>
                 }
-                <a href="/MockTest/Index" class="futuristic-btn" style="text-decoration:none; display:block; text-align:center; max-width: 200px; margin: 2rem auto 0;">Create New Test</a>
+                <a href="/MockTest/Index" class="futuristic-btn"
+                    style="text-decoration:none; display:block; text-align:center; max-width: 200px; margin: 2rem auto 0;">Create
+                    New Test</a>
             }
             else
             {
@@ -56,19 +136,23 @@
                 <form id="generateForm" method="post" asp-page-handler="GenerateTest">
                     <div class="mb-3">
                         <label asp-for="SubjectId" class="form-label">1. Select Subject</label>
-                        <select id="subject-select" asp-for="SubjectId" class="futuristic-select" asp-items="Model.SubjectOptions">
+                        <select id="subject-select" asp-for="SubjectId" class="futuristic-select"
+                            asp-items="Model.SubjectOptions">
                             <option value="">-- Select a Subject --</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="SelectedContent" class="form-label">2. Select Content (Hold Ctrl/Cmd to select multiple)</label>
-                        <select id="content-select" asp-for="SelectedContent" class="futuristic-multiselect" multiple size="8">
+                        <label asp-for="SelectedContent" class="form-label">2. Select Content (Hold Ctrl/Cmd to select
+                            multiple)</label>
+                        <select id="content-select" asp-for="SelectedContent" class="futuristic-multiselect" multiple
+                            size="8">
                             <option value="" disabled>-- Select a subject first --</option>
                         </select>
                     </div>
                     <button type="button" id="generateTestBtn" class="futuristic-btn">
                         <span id="btn-text">Generate Test</span>
-                        <span id="btn-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <span id="btn-spinner" class="spinner-border spinner-border-sm d-none" role="status"
+                            aria-hidden="true"></span>
                     </button>
                 </form>
             }
@@ -123,7 +207,7 @@
             generateBtn.on('click', function () {
                 const btnSpinner = $('#btn-spinner');
                 const btnText = $('#btn-text');
-                
+
                 btnText.addClass('d-none');
                 btnSpinner.removeClass('d-none');
                 generateBtn.prop('disabled', true);
@@ -132,45 +216,42 @@
 
                 fetch('?handler=GenerateTest', {
                     method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name="__RequestVerificationToken"]').val()
-                    }
+                    body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        let quizHtml = '<form method="post" action="/MockTest/Index?handler=SubmitTest">';
-                        quizHtml += $('input[name="__RequestVerificationToken"]').prop('outerHTML');
-                        
-                        data.questions.forEach((q, i) => {
-                            quizHtml += `<div class="question-block">
-                                            <p><strong>${i + 1}. ${q.questionText}</strong></p>`;
-                            q.options.forEach((opt, j) => {
-                                quizHtml += `<div class="form-check">
-                                                <input class="form-check-input" type="radio" name="answers[${i}]" value="${opt}" id="q${i}-opt${j}" required />
-                                                <label class="form-check-label" for="q${i}-opt${j}">${opt}</label>
-                                            </div>`;
-                            });
-                            quizHtml += `</div>`;
-                        });
-                        quizHtml += '<button type="submit" class="futuristic-btn">Submit Test</button></form>';
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            let quizHtml = '<form method="post" action="/MockTest/Index?handler=SubmitTest">';
+                            quizHtml += $('input[name="__RequestVerificationToken"]').prop('outerHTML');
 
-                        quizModalBody.html(quizHtml);
-                        quizModal.show();
-                    } else {
-                        alert('Error: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An unexpected error occurred. Please try again.');
-                })
-                .finally(() => {
-                    btnText.removeClass('d-none');
-                    btnSpinner.addClass('d-none');
-                    generateBtn.prop('disabled', false);
-                });
+                            data.questions.forEach((q, i) => {
+                                quizHtml += `<div class="question-block">
+                                                        <p><strong>${i + 1}. ${q.questionText}</strong></p>`;
+                                q.options.forEach((opt, j) => {
+                                    quizHtml += `<div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="answers[${i}]" value="${opt}" id="q${i}-opt${j}" required />
+                                                            <label class="form-check-label" for="q${i}-opt${j}">${opt}</label>
+                                                        </div>`;
+                                });
+                                quizHtml += `</div>`;
+                            });
+                            quizHtml += '<button type="submit" class="futuristic-btn">Submit Test</button></form>';
+
+                            quizModalBody.html(quizHtml);
+                            quizModal.show();
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An unexpected error occurred. Please try again.');
+                    })
+                    .finally(() => {
+                        btnText.removeClass('d-none');
+                        btnSpinner.addClass('d-none');
+                        generateBtn.prop('disabled', false);
+                    });
             });
         });
     </script>
