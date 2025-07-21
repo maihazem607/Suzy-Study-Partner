@@ -2,13 +2,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Suzy.Data;
 using Suzy.Services;
-using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore; 
+using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Add services to the container. ---
 
 // Connection String (safer retrieval)
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 // Add EF Core + Identity Services
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -30,12 +32,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Kestrel: Configure for HTTPS and HTTP
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenLocalhost(5000, listenOptions => listenOptions.UseHttps());
-    serverOptions.ListenAnyIP(5001);
-});
+// ✅ Kestrel: Allow access from other devices on HTTP (port 5000)
+builder.WebHost.UseUrls("http://0.0.0.0:5000");
 
 // Register app-specific services
 builder.Services.AddRazorPages();
@@ -43,16 +41,15 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddAntiforgery();
 
-// Register your custom services here (no duplicates needed)
+// Register custom services
 builder.Services.AddScoped<GeminiService>();
 builder.Services.AddScoped<ChatAnalyticsService>();
 
-
 var app = builder.Build();
 
-// --- Configure the HTTP request pipeline. ---
+// --- Configure the HTTP request pipeline ---
 
-// Ensure DB migrations are applied on startup
+// Apply pending EF migrations on startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -65,10 +62,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Redirect HTTPS requests to HTTP (only relevant if HTTPS enabled, here it’s skipped)
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
 
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 

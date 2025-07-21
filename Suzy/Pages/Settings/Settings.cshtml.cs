@@ -81,7 +81,8 @@ namespace Suzy.Pages.Settings
             Username = user.UserName;
             Input = new InputModel { Email = user.Email };
 
-            var apiKeyPath = Path.Combine(_env.ContentRootPath, "gemini-key.json");
+            // Check for the standardized API key file name
+            var apiKeyPath = Path.Combine(_env.ContentRootPath, "suzy-gemini-key.json");
             IsApiKeyFilePresent = System.IO.File.Exists(apiKeyPath);
 
             return Page();
@@ -101,7 +102,8 @@ namespace Suzy.Pages.Settings
                 return RedirectToPage();
             }
 
-            var targetFileName = "gemini-key.json";
+            // MODIFIED: Standardized the target filename for the API key.
+            var targetFileName = "suzy-gemini-key.json";
             var filePath = Path.Combine(_env.ContentRootPath, targetFileName);
 
             try
@@ -119,108 +121,109 @@ namespace Suzy.Pages.Settings
 
             return RedirectToPage();
         }
-
-        public async Task<IActionResult> OnPostUpdateProfileAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound();
-
-            if (!ModelState.IsValid)
-            {
-                await OnGetAsync(); // Reload necessary properties
-                return Page();
-            }
-
-            if (Input.Email != user.Email)
-            {
-                user.Email = Input.Email;
-                user.UserName = Input.Email;
-                var updateResult = await _userManager.UpdateAsync(user);
-                if (!updateResult.Succeeded)
-                {
-                    StatusMessage = "Error: Unexpected error when trying to set email.";
-                    return RedirectToPage();
-                }
-            }
-
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
-        }
-
-        public async Task<IActionResult> OnPostChangePasswordAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound();
-
-            if (string.IsNullOrEmpty(Input.OldPassword) || string.IsNullOrEmpty(Input.NewPassword))
-            {
-                ModelState.AddModelError(string.Empty, "Password fields cannot be empty.");
-                await OnGetAsync();
-                return Page();
-            }
-
-            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
-            if (!changePasswordResult.Succeeded)
-            {
-                foreach (var error in changePasswordResult.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-                await OnGetAsync();
-                return Page();
-            }
-
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your password has been changed.";
-            return RedirectToPage();
-        }
-
-        public async Task<IActionResult> OnPostExportDataAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var data = new
-            {
-                notes = await _context.Notes.Where(n => n.UserId == user.Id).ToListAsync(),
-                categories = await _context.Categories.Where(c => c.UserId == user.Id).ToListAsync(),
-                pastTestPapers = await _context.PastTestPapers.Where(p => p.UserId == user.Id).ToListAsync(),
-                mockTestResults = await _context.MockTestResults
-                    .Where(r => r.UserId == user.Id)
-                    .Include(r => r.Questions)
-                    .Include(r => r.SourceDocuments)
-                    .ToListAsync()
-            };
-
-            var options = new JsonSerializerOptions { WriteIndented = true, ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve };
-            var json = JsonSerializer.Serialize(data, options);
-            return File(Encoding.UTF8.GetBytes(json), "application/json", $"suzy_export_{DateTime.Now:yyyyMMdd}.json");
-        }
-
-        public async Task<IActionResult> OnPostDeleteAccountAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound();
-            
-            _context.Notes.RemoveRange(_context.Notes.Where(n => n.UserId == user.Id));
-            _context.Categories.RemoveRange(_context.Categories.Where(c => c.UserId == user.Id));
-            _context.PastTestPapers.RemoveRange(_context.PastTestPapers.Where(p => p.UserId == user.Id));
-            _context.MockTestResults.RemoveRange(_context.MockTestResults.Where(r => r.UserId == user.Id));
-            await _context.SaveChangesAsync();
-            
-            var result = await _userManager.DeleteAsync(user);
-            if (!result.Succeeded)
-            {
-                throw new InvalidOperationException($"Unexpected error deleting user.");
-            }
-
-            await _signInManager.SignOutAsync();
-            return Redirect("~/");
-        }
         
-        public async Task<IActionResult> OnPostLogoutAsync()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToPage("/Index"); 
-        }
+        // ... The rest of your methods (OnPostUpdateProfileAsync, etc.) remain unchanged ...
+        public async Task<IActionResult> OnPostUpdateProfileAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+
+            if (!ModelState.IsValid)
+            {
+                await OnGetAsync(); // Reload necessary properties
+                return Page();
+            }
+
+            if (Input.Email != user.Email)
+            {
+                user.Email = Input.Email;
+                user.UserName = Input.Email;
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded)
+                {
+                    StatusMessage = "Error: Unexpected error when trying to set email.";
+                    return RedirectToPage();
+                }
+            }
+
+            await _signInManager.RefreshSignInAsync(user);
+            StatusMessage = "Your profile has been updated";
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostChangePasswordAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+
+            if (string.IsNullOrEmpty(Input.OldPassword) || string.IsNullOrEmpty(Input.NewPassword))
+            {
+                ModelState.AddModelError(string.Empty, "Password fields cannot be empty.");
+                await OnGetAsync();
+                return Page();
+            }
+
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
+            if (!changePasswordResult.Succeeded)
+            {
+                foreach (var error in changePasswordResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                await OnGetAsync();
+                return Page();
+            }
+
+            await _signInManager.RefreshSignInAsync(user);
+            StatusMessage = "Your password has been changed.";
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostExportDataAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var data = new
+            {
+                notes = await _context.Notes.Where(n => n.UserId == user.Id).ToListAsync(),
+                categories = await _context.Categories.Where(c => c.UserId == user.Id).ToListAsync(),
+                pastTestPapers = await _context.PastTestPapers.Where(p => p.UserId == user.Id).ToListAsync(),
+                mockTestResults = await _context.MockTestResults
+                    .Where(r => r.UserId == user.Id)
+                    .Include(r => r.Questions)
+                    .Include(r => r.SourceDocuments)
+                    .ToListAsync()
+            };
+
+            var options = new JsonSerializerOptions { WriteIndented = true, ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve };
+            var json = JsonSerializer.Serialize(data, options);
+            return File(Encoding.UTF8.GetBytes(json), "application/json", $"suzy_export_{DateTime.Now:yyyyMMdd}.json");
+        }
+
+        public async Task<IActionResult> OnPostDeleteAccountAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+            
+            _context.Notes.RemoveRange(_context.Notes.Where(n => n.UserId == user.Id));
+            _context.Categories.RemoveRange(_context.Categories.Where(c => c.UserId == user.Id));
+            _context.PastTestPapers.RemoveRange(_context.PastTestPapers.Where(p => p.UserId == user.Id));
+            _context.MockTestResults.RemoveRange(_context.MockTestResults.Where(r => r.UserId == user.Id));
+            await _context.SaveChangesAsync();
+            
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException($"Unexpected error deleting user.");
+            }
+
+            await _signInManager.SignOutAsync();
+            return Redirect("~/");
+        }
+        
+        public async Task<IActionResult> OnPostLogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToPage("/Index"); 
+        }
     }
 }
