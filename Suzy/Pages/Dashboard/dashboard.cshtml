@@ -1,23 +1,119 @@
 @page
 @model Suzy.Pages.Dashboard.DashboardModel
 @{
-   ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Dashboard";
     ViewData["PageTitle"] = "Welcome, Student";
     ViewData["SearchPlaceholder"] = "Search notes, flashcards...";
     ViewData["ShowThemeToggle"] = "true";
     Layout = "_Layout";
 }
 
+<style>
+    /* Dashboard Cards using Login Page Color Scheme */
+    .futuristic-card {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        border: 1px solid var(--border);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .theme-dark .futuristic-card {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        box-shadow: 0 8px 24px rgba(251, 246, 234, 0.1);
+    }
+
+    .futuristic-card {
+        border-radius: 1.5rem;
+        padding: 2rem;
+        border: 1px solid var(--border);
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .futuristic-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--warm-brown), var(--soft-orange));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+    }
+
+    .futuristic-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+        border-color: var(--warm-brown);
+    }
+
+    .futuristic-card:hover::before {
+        opacity: 0.05;
+    }
+
+    .theme-dark .futuristic-card:hover {
+        box-shadow: 0 16px 32px rgba(251, 246, 234, 0.15);
+        border-color: var(--warm-brown);
+    }
+
+    .theme-dark .futuristic-card:hover::before {
+        opacity: 0.1;
+    }
+
+    .futuristic-card i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--warm-brown);
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-card:hover i {
+        color: var(--soft-orange);
+        transform: scale(1.1);
+    }
+
+    .futuristic-card h6 {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--foreground);
+        margin-bottom: 0.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .futuristic-card:hover h6 {
+        color: var(--warm-brown);
+    }
+
+    .futuristic-card p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: var(--muted-foreground);
+        opacity: 0.9;
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-card:hover p {
+        color: var(--foreground);
+        opacity: 1;
+    }
+</style>
+
 <div class="page-container">
-@await Html.PartialAsync("_Sidebar")
+    @await Html.PartialAsync("_Sidebar")
 
     <div class="page-content">
         <div class="container-fluid p-3">
-            <!-- Dashboard Cards -->
             <div class="row g-4">
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
-                        <div class="dashboard-card">
+                    <a href="/Uploadnotes/Upload" class="text-decoration-none">
+                        <div class="futuristic-card">
                             <i class="fas fa-upload"></i>
                             <h6>Upload Notes</h6>
                             <p>Organize your materials.</p>
@@ -25,17 +121,35 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
-                        <div class="dashboard-card">
+                    <a href="/Categorize/Categorize" class="text-decoration-none">
+                        <div class="futuristic-card">
                             <i class="fas fa-tags"></i>
-                            <h6>Tag by Subject</h6>
+                            <h6>Categorize Notes</h6>
                             <p>Find content easily.</p>
                         </div>
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
+                    <a href="/PastTest/PastTest" class="text-decoration-none">
+                        <div class="futuristic-card">
+                            <i class="fas fa-file-alt"></i>
+                            <h6>Upload Past Test</h6>
+                            <p>Organize and store past exam papers.</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <a href="/PastCategorize/Index" class="text-decoration-none">
+                        <div class="futuristic-card">
+                            <i class="fas fa-sitemap"></i>
+                            <h6>Categorize Past Tests</h6>
+                            <p>Assign subjects to your test papers.</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-4">
                     <a href="/Flashcards/Flashindex" class="text-decoration-none">
-                        <div class="dashboard-card">
+                        <div class="futuristic-card">
                             <i class="fas fa-clone"></i>
                             <h6>Flashcards</h6>
                             <p>Generate, organize, shuffle and master concepts.</p>
@@ -43,8 +157,8 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
-                        <div class="dashboard-card">
+                    <a href="/MockTest/Index" class="text-decoration-none">
+                        <div class="futuristic-card">
                             <i class="fas fa-edit"></i>
                             <h6>Mock Exams</h6>
                             <p>Custom settings, practice, and review history.</p>
@@ -52,8 +166,8 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="/Sessions/StudySessions" class="text-decoration-none">
-                        <div class="dashboard-card">
+                    <a href="/Sessions/SessionManager" class="text-decoration-none">
+                        <div class="futuristic-card">
                             <i class="fas fa-users"></i>
                             <h6>Study Sessions</h6>
                             <p>Public/private sessions, timer, mood tracker.</p>
@@ -61,43 +175,33 @@
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
-                        <div class="dashboard-card">
-                            <i class="fas fa-brain"></i>
-                            <h6>AI Study Tips</h6>
-                            <p>Get tips & analyze your study patterns (coming soon).</p>
+                    <a href="/ChatWithSuzy" class="text-decoration-none">
+                        <div class="futuristic-card">
+                            <i class="fas fa-robot"></i>
+                            <h6>Chat with Suzy</h6>
+                            <p>Your personal AI study assistant.</p>
                         </div>
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
-                        <div class="dashboard-card">
-                            <i class="fas fa-tasks"></i>
-                            <h6>To-Do+Scheduler</h6>
-                            <p>Plan with AI and manage tasks easily.</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
-                        <div class="dashboard-card">
-                            <i class="fas fa-music"></i>
-                            <h6>Study Music</h6>
-                            <p>Enhance focus with background tunes.</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="#" class="text-decoration-none">
-                        <div class="dashboard-card">
+                    <a href="/Progress/Index" class="text-decoration-none">
+                        <div class="futuristic-card">
                             <i class="fas fa-chart-line"></i>
-                            <h6>Progress+Leaderboard</h6>
+                            <h6>Progress</h6>
                             <p>Track goals, hours studied, and compare scores.</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-4 d-flex">
+                    <a href="/Settings/Settings" class="text-decoration-none w-100">
+                        <div class="futuristic-card">
+                            <i class="fas fa-cogs"></i>
+                            <h6>Settings</h6>
+                            <p>Customize your application experience.</p>
                         </div>
                     </a>
                 </div>
             </div>
         </div>
     </div>
-
-
+</div>

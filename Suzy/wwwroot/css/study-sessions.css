@@ -9,6 +9,24 @@
   border-radius: 8px;
 }
 
+.participants-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.participants-section::-webkit-scrollbar-track {
+  background: var(--color-scroller);
+  border-radius: 3px;
+}
+
+.participants-section::-webkit-scrollbar-thumb {
+  background: var(--color-text-muted);
+  border-radius: 3px;
+}
+
+.participants-section::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scroller-hover);
+}
+
 .participant-avatar {
   width: 50px;
   height: 50px;
@@ -114,12 +132,12 @@
 
 .timer-controls .btn:hover {
   background: var(--color-scroller-hover);
-  border-color: var(--color-primary);
+  border-color: var(--warm-brown);
 }
 
 .timer-controls .btn.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  background: var(--warm-brown);
+  border-color: var(--warm-brown);
   color: white;
 }
 
@@ -151,7 +169,7 @@
 
 .todo-item:hover {
   background: var(--color-scroller-hover);
-  border-color: var(--color-primary);
+  border-color: var(--warm-brown);
 }
 
 .todo-item input[type="checkbox"] {
@@ -199,7 +217,7 @@
   margin-bottom: 10px;
 }
 
-.participant-name {
+.participant-avatar-name {
   font-size: 0.8rem;
   margin-top: 5px;
   text-align: center;
@@ -399,9 +417,9 @@
 
 .todo-area .form-control:focus {
   background: var(--color-light);
-  border-color: var(--color-primary);
+  border-color: var(--warm-brown);
   color: var(--text-color);
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(139, 69, 19, 0.25);
 }
 
 .todo-area .form-control::placeholder {
@@ -409,14 +427,14 @@
 }
 
 .todo-area .btn-success {
-  background: var(--color-success);
-  border-color: var(--color-success);
+  background: var(--warm-brown);
+  border-color: var(--warm-brown);
   color: white;
 }
 
 .todo-area .btn-success:hover {
-  background: var(--color-success);
-  border-color: var(--color-success);
+  background: var(--soft-orange);
+  border-color: var(--soft-orange);
   opacity: 0.9;
 }
 
@@ -433,19 +451,80 @@
 }
 
 .todo-area .btn-sm {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  background: var(--warm-brown);
+  border-color: var(--warm-brown);
   color: white;
   font-size: 0.8rem;
   padding: 4px 8px;
 }
 
 .todo-area .btn-sm:hover {
-  background: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
+  background: var(--soft-orange);
+  border-color: var(--soft-orange);
 }
 
 .todo-area h6 {
   color: var(--text-color);
   margin-bottom: 15px;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin: 4px 0;
+  background: var(--color-scroller);
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.participant-item:hover {
+  background: var(--color-border);
+}
+
+.participant-avatar-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.participant-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.participant-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.participant-status {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.host-badge {
+  background: var(--warm-brown);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.timer-mode {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-left: 5px;
 }

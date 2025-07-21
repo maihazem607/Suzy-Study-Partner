@@ -232,6 +232,154 @@ namespace Suzy.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Suzy.Models.ChatConversation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CurrentStep")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PathType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChatConversations");
+                });
+
+            modelBuilder.Entity("Suzy.Models.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ConversationId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DataContext")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsFromUser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversationId");
+
+                    b.ToTable("ChatMessages");
+                });
+
+            modelBuilder.Entity("Suzy.Models.MockTestQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CorrectAnswer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MockTestResultId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OptionsJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserAnswer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MockTestResultId");
+
+                    b.ToTable("MockTestQuestions");
+                });
+
+            modelBuilder.Entity("Suzy.Models.MockTestResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TotalQuestions")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MockTestResults");
+                });
+
+            modelBuilder.Entity("Suzy.Models.MockTestSourceDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MockTestResultId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SourceDocumentName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceDocumentType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MockTestResultId");
+
+                    b.ToTable("MockTestSourceDocuments");
+                });
+
             modelBuilder.Entity("Suzy.Models.Note", b =>
                 {
                     b.Property<int>("Id")
@@ -271,16 +419,93 @@ namespace Suzy.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("NoteId1")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("NoteId", "CategoryId");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("NoteId1");
-
                     b.ToTable("NoteCategories");
+                });
+
+            modelBuilder.Entity("Suzy.Models.PastTestPaper", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PastTestPapers");
+                });
+
+            modelBuilder.Entity("Suzy.Models.PastTestPaperCategory", b =>
+                {
+                    b.Property<int>("PastTestPaperId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PastTestPaperId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("PastTestPaperCategories");
+                });
+
+            modelBuilder.Entity("Suzy.Models.StudyAnalytics", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CompletedTodos")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FlashcardsReviewed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FocusInterruptions")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double?>("MockExamScore")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("TotalBreakMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TotalStudyMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TotalTodos")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StudyAnalytics");
                 });
 
             modelBuilder.Entity("Suzy.Models.StudySession", b =>
@@ -354,6 +579,9 @@ namespace Suzy.Migrations
                     b.Property<DateTime?>("LastActivityAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("LeftAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("StudySessionId")
                         .HasColumnType("INTEGER");
 
@@ -373,6 +601,48 @@ namespace Suzy.Migrations
                     b.HasIndex("StudySessionId");
 
                     b.ToTable("StudySessionParticipants");
+                });
+
+            modelBuilder.Entity("Suzy.Models.StudyTimerSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DurationMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SessionType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StudySessionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudySessionId");
+
+                    b.ToTable("StudyTimerSessions");
                 });
 
             modelBuilder.Entity("Suzy.Models.TodoItem", b =>
@@ -410,6 +680,51 @@ namespace Suzy.Migrations
                     b.HasIndex("StudySessionId");
 
                     b.ToTable("TodoItems");
+                });
+
+            modelBuilder.Entity("Suzy.Models.WeeklySummary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double?>("AverageMockExamScore")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("AverageStudyTimePerDay")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("CompletedTodos")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FlashcardsReviewed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("GeneratedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("ProductivityScore")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("TotalBreakMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TotalStudyMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TotalTodos")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("WeekStartDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WeeklySummaries");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -463,6 +778,50 @@ namespace Suzy.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Suzy.Models.ChatMessage", b =>
+                {
+                    b.HasOne("Suzy.Models.ChatConversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
+                });
+
+            modelBuilder.Entity("Suzy.Models.MockTestQuestion", b =>
+                {
+                    b.HasOne("Suzy.Models.MockTestResult", "MockTestResult")
+                        .WithMany("Questions")
+                        .HasForeignKey("MockTestResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MockTestResult");
+                });
+
+            modelBuilder.Entity("Suzy.Models.MockTestResult", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Suzy.Models.MockTestSourceDocument", b =>
+                {
+                    b.HasOne("Suzy.Models.MockTestResult", "MockTestResult")
+                        .WithMany("SourceDocuments")
+                        .HasForeignKey("MockTestResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MockTestResult");
+                });
+
             modelBuilder.Entity("Suzy.Models.NoteCategory", b =>
                 {
                     b.HasOne("Suzy.Models.Category", "Category")
@@ -472,24 +831,61 @@ namespace Suzy.Migrations
                         .IsRequired();
 
                     b.HasOne("Suzy.Models.Note", "Note")
-                        .WithMany()
+                        .WithMany("NoteCategories")
                         .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Suzy.Models.Note", null)
-                        .WithMany("NoteCategories")
-                        .HasForeignKey("NoteId1");
 
                     b.Navigation("Category");
 
                     b.Navigation("Note");
                 });
 
+            modelBuilder.Entity("Suzy.Models.PastTestPaper", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Suzy.Models.PastTestPaperCategory", b =>
+                {
+                    b.HasOne("Suzy.Models.Category", "Category")
+                        .WithMany("PastTestPaperCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Suzy.Models.PastTestPaper", "PastTestPaper")
+                        .WithMany("PastTestPaperCategories")
+                        .HasForeignKey("PastTestPaperId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("PastTestPaper");
+                });
+
             modelBuilder.Entity("Suzy.Models.StudySessionParticipant", b =>
                 {
                     b.HasOne("Suzy.Models.StudySession", "StudySession")
                         .WithMany("Participants")
+                        .HasForeignKey("StudySessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StudySession");
+                });
+
+            modelBuilder.Entity("Suzy.Models.StudyTimerSession", b =>
+                {
+                    b.HasOne("Suzy.Models.StudySession", "StudySession")
+                        .WithMany("TimerSessions")
                         .HasForeignKey("StudySessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -507,6 +903,20 @@ namespace Suzy.Migrations
             modelBuilder.Entity("Suzy.Models.Category", b =>
                 {
                     b.Navigation("NoteCategories");
+
+                    b.Navigation("PastTestPaperCategories");
+                });
+
+            modelBuilder.Entity("Suzy.Models.ChatConversation", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Suzy.Models.MockTestResult", b =>
+                {
+                    b.Navigation("Questions");
+
+                    b.Navigation("SourceDocuments");
                 });
 
             modelBuilder.Entity("Suzy.Models.Note", b =>
@@ -514,9 +924,16 @@ namespace Suzy.Migrations
                     b.Navigation("NoteCategories");
                 });
 
+            modelBuilder.Entity("Suzy.Models.PastTestPaper", b =>
+                {
+                    b.Navigation("PastTestPaperCategories");
+                });
+
             modelBuilder.Entity("Suzy.Models.StudySession", b =>
                 {
                     b.Navigation("Participants");
+
+                    b.Navigation("TimerSessions");
 
                     b.Navigation("TodoItems");
                 });

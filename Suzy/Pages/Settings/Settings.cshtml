@@ -1,0 +1,206 @@
+@page
+@model Suzy.Pages.Settings.SettingsModel
+@{
+    ViewData["Title"] = "Settings";
+    Layout = "_Layout";
+}
+
+<style>
+    .futuristic-card {
+        border-radius: 2rem;
+        padding: 2rem;
+        border: 1px solid var(--warm-brown);
+        margin-top: 2rem;
+        background: rgba(255, 255, 255, 0.85);
+    }
+
+    .futuristic-input {
+        width: 100%;
+        padding: 0.7rem;
+        border-radius: 14px;
+        border: 2px solid var(--warm-brown);
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-input:focus {
+        outline: none;
+        border-color: var(--warm-brown);
+        box-shadow: 0 0 12px rgba(139, 69, 19, 0.6);
+    }
+
+    .futuristic-btn {
+        background: linear-gradient(145deg, var(--warm-brown), var(--deep-brown));
+        border: none;
+        padding: 0.85rem;
+        color: white !important;
+        border-radius: 16px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-btn:hover {
+        background: linear-gradient(145deg, var(--soft-orange), var(--warm-brown));
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(139, 69, 19, 0.45);
+    }
+
+    .danger-zone {
+        border-color: #f44336;
+    }
+
+    .btn-outline-info {
+        color: var(--warm-brown) !important;
+        border-color: var(--warm-brown) !important;
+    }
+
+    .btn-outline-info:hover {
+        background-color: var(--warm-brown) !important;
+        border-color: var(--warm-brown) !important;
+        color: white !important;
+    }
+</style>
+
+<div class="page-container">
+    @await Html.PartialAsync("_Sidebar")
+
+    <div class="page-content p-4">
+        <div class="container-fluid">
+            <h2>Settings</h2>
+
+            @if (!string.IsNullOrEmpty(Model.StatusMessage))
+            {
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    @Model.StatusMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="futuristic-card">
+                        <h5>Profile Information</h5>
+                        <form id="profile-form" method="post" asp-page-handler="UpdateProfile">
+                            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                            <div class="mb-3">
+                                <label class="form-label">Username (cannot be changed)</label>
+                                <input class="futuristic-input" value="@Model.Username" disabled />
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Input.Email" class="form-label"></label>
+                                <input asp-for="Input.Email" class="futuristic-input" />
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            <button id="update-profile-button" type="submit" class="futuristic-btn">Update
+                                Profile</button>
+                        </form>
+                    </div>
+
+                    <div class="futuristic-card">
+                        <h5>Change Password</h5>
+                        <form id="change-password-form" method="post" asp-page-handler="ChangePassword">
+                            <div class="mb-3">
+                                <label asp-for="Input.OldPassword" class="form-label"></label>
+                                <input asp-for="Input.OldPassword" class="futuristic-input" type="password" />
+                                <span asp-validation-for="Input.OldPassword" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Input.NewPassword" class="form-label"></label>
+                                <input asp-for="Input.NewPassword" class="futuristic-input" type="password" />
+                                <span asp-validation-for="Input.NewPassword" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+                                <input asp-for="Input.ConfirmPassword" class="futuristic-input" type="password" />
+                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="futuristic-btn">Change Password</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="futuristic-card">
+                        <h5>API Configuration</h5>
+                        @if (Model.IsApiKeyFilePresent)
+                        {
+                            <div class="alert alert-success">Status: Key file found.</div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">Status: Key file not found.</div>
+                        }
+
+                        <form method="post" asp-page-handler="UpdateApiKey" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label asp-for="ApiKeyFile" class="form-label">Upload New Key File</label>
+                                <input asp-for="ApiKeyFile" type="file" class="futuristic-input" accept=".json" />
+                                <span asp-validation-for="ApiKeyFile" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="futuristic-btn w-100">Update Key</button>
+                        </form>
+                        <hr />
+                        <p>
+                            <a class="btn btn-sm btn-outline-info w-100" data-bs-toggle="collapse" href="#instructions"
+                                role="button">
+                                How to get a JSON Key?
+                            </a>
+                        </p>
+                        <div class="collapse" id="instructions">
+                            <div class="card card-body">
+                                <ol class="small text-start">
+                                    <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google
+                                            Cloud Console</a>.</li>
+                                    <li>Select your project from the top dropdown.</li>
+                                    <li>In the navigation menu (<i class="fas fa-bars"></i>), go to <strong>IAM & Admin
+                                            > Service Accounts</strong>.</li>
+                                    <li>Find the service account named <strong>suzy-net@@...</strong> and click on it.
+                                    </li>
+                                    <li>Go to the <strong>KEYS</strong> tab.</li>
+                                    <li>Click <strong>ADD KEY</strong>, then <strong>Create new key</strong>.</li>
+                                    <li>Choose <strong>JSON</strong> as the key type and click <strong>CREATE</strong>.
+                                    </li>
+                                    <li>Your browser will download the key file.</li>
+                                    <li>Upload that downloaded file here.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="futuristic-card">
+                        <h5>Appearance & Data</h5>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <span>Theme</span>
+                            <div class="theme-switch-wrapper">
+                                <label class="theme-switch" for="theme-toggle">
+                                    <input type="checkbox" id="theme-toggle" />
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <form method="post" asp-page-handler="ExportData" class="mb-3">
+                            <button type="submit" class="futuristic-btn w-100">Export My Data</button>
+                        </form>
+                        <form id="logout-form" method="post" asp-page-handler="Logout">
+                            <button type="submit" class="futuristic-btn w-100" style="background: #6c757d;">Log
+                                Out</button>
+                        </form>
+                    </div>
+
+                    <div class="futuristic-card danger-zone">
+                        <h5 class="text-danger">Danger Zone</h5>
+                        <p><small>This action is irreversible. All your notes, tests, and data will be permanently
+                                deleted.</small></p>
+                        <form id="delete-account-form" method="post" asp-page-handler="DeleteAccount"
+                            onsubmit="return confirm('Are you absolutely sure you want to delete your account? This cannot be undone.');">
+                            <button type="submit" class="btn btn-danger w-100">Delete My Account</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+   

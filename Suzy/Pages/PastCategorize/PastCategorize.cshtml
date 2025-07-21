@@ -1,0 +1,173 @@
+@page
+@model Suzy.Pages.PastCategorize.IndexModel
+@{
+    ViewData["Title"] = "Categorize Past Tests";
+    Layout = "_Layout";
+}
+
+<style>
+    :root { --primary: var(--warm-brown); --primary-accent: var(--soft-orange); --danger: #f44336; --text-light: #f1f1f1; --text-dark: var(--deep-brown); --card-bg-light: rgba(255, 255, 255, 0.85); --card-bg-dark: rgba(18, 18, 18, 0.85); --glow-dark: 0 0 20px var(--warm-brown); --glass-blur: blur(10px); }
+    body.light-mode .futuristic-card { background-color: var(--card-bg-light); color: var(--text-dark); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); backdrop-filter: var(--glass-blur); }
+    body.dark-mode .futuristic-card { background-color: var(--card-bg-dark); color: var(--text-light); box-shadow: var(--glow-dark); backdrop-filter: var(--glass-blur); }
+    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid var(--primary); transition: all 0.4s ease-in-out; height: 100%; }
+    .futuristic-card.card-static-white { background-color: #ffffff; color: var(--text-dark); backdrop-filter: none; }
+    body.dark-mode .futuristic-card.card-static-white { background-color: #ffffff; color: var(--text-dark); }
+    .futuristic-heading { text-align: center; font-size: 2rem; font-weight: 700; letter-spacing: 1.2px; color: inherit; margin-bottom: 1.8rem; }
+    .futuristic-label { font-weight: 600; font-size: 0.95rem; color: inherit; margin-bottom: 0.4rem; }
+    .futuristic-input { background-color: rgba(255, 255, 255, 0.03); border: 2px solid var(--primary); color: inherit; padding: 0.7rem 1rem; border-radius: 14px; width: 100%; transition: all 0.3s ease; box-shadow: inset 0 0 8px rgba(139, 69, 19, 0.15); }
+    .futuristic-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 12px rgba(139, 69, 19, 0.6); }
+    .futuristic-btn { background: linear-gradient(145deg, var(--warm-brown), var(--deep-brown)); border: none; padding: 0.85rem; color: white; font-weight: 600; letter-spacing: 0.6px; border-radius: 16px; box-shadow: 0 6px 12px rgba(139, 69, 19, 0.25); transition: all 0.3s ease-in-out; }
+    .futuristic-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(139, 69, 19, 0.45); background: linear-gradient(145deg, var(--soft-orange), var(--warm-brown)); }
+    .futuristic-table th, .futuristic-table td { color: inherit; vertical-align: middle; background-color: transparent !important; }
+    .futuristic-table { border: 1px solid var(--primary); border-radius: 1rem; overflow: hidden; box-shadow: 0 0 10px rgba(139, 69, 19, 0.15); }
+    .futuristic-table thead { background-color: rgba(139, 69, 19, 0.1); }
+    .futuristic-table tr:hover { background-color: rgba(139, 69, 19, 0.05); }
+    .futuristic-list-item { background-color: transparent; border: 1px solid var(--primary); color: inherit; margin-bottom: 0.5rem; border-radius: 14px; padding: 0.75rem 1.25rem; }
+    .futuristic-accordion .accordion-item { background-color: rgba(139, 69, 19, 0.1); border: 1px solid rgba(139, 69, 19, 0.3); border-radius: 14px !important; margin-bottom: 0.75rem; }
+    .futuristic-accordion .accordion-button { background-color: transparent; font-weight: 500; font-size: 1.25rem; border-radius: 14px !important; }
+    .futuristic-accordion .accordion-button:not(.collapsed) { box-shadow: none; background-color: rgba(139, 69, 19, 0.2); }
+    .futuristic-accordion .accordion-body ul { padding-left: 1.2rem; margin-bottom: 0; }
+    .card-static-white .futuristic-accordion .accordion-button, .card-static-white .futuristic-accordion .accordion-body { color: var(--text-dark) !important; }
+    .bg-primary { background-color: var(--warm-brown) !important; }
+</style>
+
+<div class="page-container">
+    @await Html.PartialAsync("_Sidebar")
+
+    <div class="page-content">
+        <div class="container-fluid p-3">
+            <div class="container mt-5">
+                <div class="row g-4">
+                    <div class="col-lg-7">
+                        <div class="futuristic-card">
+                            <h3 class="futuristic-heading">Categorize Test Papers</h3>
+
+                            @if (TempData["Message"] != null)
+                            {
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    @TempData["Message"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            }
+                            @if (TempData["Error"] != null)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    @TempData["Error"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            }
+
+                            <form method="post" asp-page-handler="AddCategory">
+                                <div class="mb-3">
+                                    <label asp-for="NewCategoryName" class="futuristic-label">New Subject/Category</label>
+                                    <input asp-for="NewCategoryName" class="futuristic-input" />
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="futuristic-btn">Add Category</button>
+                                </div>
+                            </form>
+
+                            @if (Model.Categories.Any())
+                            {
+                                <hr />
+                                <h5 class="mt-4">Your Categories</h5>
+                                <ul class="list-unstyled mt-3">
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <li class="futuristic-list-item d-flex justify-content-between align-items-center">
+                                            @category.Name
+                                            <form method="post" asp-page-handler="DeleteCategory" asp-route-id="@category.Id" class="d-inline">
+                                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this category?')">Delete</button>
+                                            </form>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+
+                            @if (Model.TestPapers.Any() && Model.Categories.Any())
+                            {
+                                <hr />
+                                <h5 class="mt-4">Assign Papers to Categories</h5>
+                                <form method="post" asp-page-handler="SaveCategorization">
+                                    <div class="table-responsive">
+                                        <table class="table futuristic-table table-bordered mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th>Paper Title</th>
+                                                    @foreach (var category in Model.Categories)
+                                                    {
+                                                        <th class="text-center">@category.Name</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var paper in Model.TestPapers)
+                                                {
+                                                    <tr>
+                                                        <td>@paper.Title</td>
+                                                        @foreach (var category in Model.Categories)
+                                                        {
+                                                            <td class="text-center">
+                                                                <input type="checkbox" name="Selections[@paper.Id]" value="@category.Id"
+                                                                       @(Model.PaperCategories.ContainsKey(paper.Id) && Model.PaperCategories[paper.Id].Contains(category.Id) ? "checked" : "") />
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="d-grid mt-3">
+                                        <button type="submit" class="futuristic-btn">Save Categorization</button>
+                                    </div>
+                                </form>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="futuristic-card card-static-white">
+                            <h3 class="futuristic-heading">Categorized Papers</h3>
+                            @if (Model.PaperCategories.Any(kvp => kvp.Value.Any()))
+                            {
+                                <div class="accordion futuristic-accordion" id="categorizedAccordion">
+                                    @foreach (var category in Model.Categories.OrderBy(c => c.Name))
+                                    {
+                                        var papersInCategory = Model.TestPapers
+                                            .Where(p => Model.PaperCategories.ContainsKey(p.Id) && Model.PaperCategories[p.Id].Contains(category.Id))
+                                            .ToList();
+
+                                        @if (papersInCategory.Any())
+                                        {
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@category.Id">
+                                                        @category.Name &nbsp;<span class="badge bg-primary rounded-pill">@papersInCategory.Count</span>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse-@category.Id" class="accordion-collapse collapse" data-bs-parent="#categorizedAccordion">
+                                                    <div class="accordion-body">
+                                                        <ul>
+                                                            @foreach (var paper in papersInCategory)
+                                                            {
+                                                                <li>@paper.Title</li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-center text-muted mt-4">No papers have been categorized yet.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

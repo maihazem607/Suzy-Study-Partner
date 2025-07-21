@@ -1,37 +1,59 @@
-<!-- Sidebar Navigation -->
 <div class="sidebar d-flex flex-column p-0" id="sidebar">
-    <!-- Sidebar Toggle Button -->
     <div class="sidebar-toggle" id="sidebarToggle">
         <i class="fas fa-bars"></i>
     </div>
     <div class="text-left py-4 sidebar-brand" style="padding-left: 20px; padding-top: 3rem;">
-    <a href="/">
-        <h3>
-            <img src="~/lib/assets/SuzyIcon.ico" alt="Suzy"
-                 style="width: 50px; height: 54px; margin-right: 12px; vertical-align: left;">
-            <span style="position: relative; top: 7px; margin-left: 3px;">Suzy</span>
-        </h3>
-    </a>
-</div>
+        <a href="/">
+            <h3>
+                <img src="~/lib/assets/SuzyIcon.ico" alt="Suzy"
+                    style="width: 50px; height: 54px; margin-right: 12px; vertical-align: left;">
+                <span style="position: relative; top: 7px; margin-left: 3px;">Suzy</span>
+            </h3>
+        </a>
+    </div>
     <nav class="nav flex-column">
         <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Dashboard/dashboard" ? "active" : "")"
             href="/Dashboard/dashboard"><i class="fas fa-home me-2"></i><span>Dashboard</span></a>
-        <a class="nav-link" href="/Uploadnotes/Upload"><i class="fas fa-upload me-2"></i><span>Upload
-                Notes</span></a>
-       <a class="nav-link" asp-page="/Categorize/Categorize">
-    <i class="fas fa-folder-plus me-2"></i>
-    <span>Categorize Notes</span>
-</a>
+
+        <a class="nav-link" href="/Uploadnotes/Upload"><i class="fas fa-upload me-2"></i><span>Upload Notes</span></a>
+
+        <a class="nav-link" asp-page="/Categorize/Categorize">
+            <i class="fas fa-folder-plus me-2"></i>
+            <span>Categorize Notes</span>
+        </a>
 
         <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("Flashcards") == true ? "active" : "")"
             href="/Flashcards/Flashindex"><i class="fas fa-clone me-2"></i><span>Flashcards</span></a>
-        <a class="nav-link" href="#"><i class="fas fa-edit me-2"></i><span>Mock Exams</span></a>
-        <a class="nav-link" href="#"><i class="fas fa-chart-line me-2"></i><span>Progress</span></a>
+
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("/Mock/Index") == true ? "active" : "")"
+            asp-page="/PastTest/PastTest">
+            <i class="fas fa-file-alt me-2"></i>
+            <span>Upload Past Test</span>
+        </a>
+
+
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("PastCategorize") == true ? "active" : "")"
+            asp-page="/PastCategorize/PastCategorize">
+            <i class="fas fa-sitemap me-2"></i>
+            <span>Categorize Past Tests</span>
+        </a>
+        <a class="nav-link" href="/MockTest/index"><i class="fas fa-edit me-2"></i><span>Mock Exams</span></a>
+
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("Progress") == true ? "active" : "")"
+            asp-page="/Progress/Index">
+            <i class="fas fa-chart-line me-2"></i><span>Progress</span>
+        </a>
+
         <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("SessionManager") == true ? "active" : "")"
             href="/Sessions/SessionManager"><i class="fas fa-users me-2"></i><span>Study Sessions</span></a>
-        <a class="nav-link" href="#"><i class="fas fa-bell me-2"></i><span>Reminders</span></a>
-        <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i><span>To-Do List</span></a>
-        <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i><span>Settings</span></a>
+
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("ChatWithSuzy") == true ? "active" : "")"
+            href="/ChatWithSuzy"><i class="fas fa-robot me-2"></i><span>Chat with Suzy</span></a>
+
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.Contains("Settings") == true ? "active" : "")" 
+          asp-page="/Settings/Settings">
+           <i class="fas fa-cogs me-2"></i><span>Settings</span>
+       </a>
     </nav>
 </div>
 
@@ -45,8 +67,8 @@
 
     .sidebar {
         height: 100vh;
-        background-color: var(--color-light);
-        border-right: 1px solid var(--color-border);
+        background-color: var(--card);
+        border-right: 1px solid var(--border);
         transition: width 0.3s ease;
         position: fixed;
         left: 0;
@@ -54,6 +76,12 @@
         width: 16.666667%;
         z-index: 1020;
         overflow: hidden;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+    }
+
+    .theme-dark .sidebar {
+        box-shadow: 2px 0 8px rgba(251, 246, 234, 0.1);
     }
 
     .sidebar.collapsed {
@@ -63,7 +91,6 @@
     .sidebar-toggle {
         position: absolute;
         top: 15px;
-        /* Position at the top level with the navbar */
         right: 15px;
         background: transparent;
         border: none;
@@ -75,12 +102,19 @@
     }
 
     .sidebar-toggle:hover {
-        background: rgba(0, 0, 0, 0.1);
-        color: var(--text-color);
+        background: var(--warm-brown);
+        color: var(--primary-foreground);
+        transform: scale(1.05);
     }
 
     .sidebar-toggle i {
         font-size: 1.1rem;
+        color: var(--warm-brown);
+        transition: color 0.2s ease;
+    }
+
+    .sidebar-toggle:hover i {
+        color: var(--primary-foreground);
     }
 
     .main-content,
@@ -89,7 +123,6 @@
         width: 83.333333%;
         transition: margin-left 0.3s ease, width 0.3s ease;
         padding-top: 0;
-        /* No extra padding since body handles navbar spacing */
     }
 
     .main-content.expanded,
@@ -100,6 +133,16 @@
 
     .sidebar-brand {
         transition: opacity 0.3s ease;
+    }
+
+    .sidebar-brand a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .sidebar-brand a:hover {
+        text-decoration: none;
+        color: inherit;
     }
 
     .sidebar.collapsed .sidebar-brand {
@@ -115,15 +158,35 @@
     }
 
     .sidebar .nav-link {
-        color: var(--text-color);
+        color: var(--foreground);
         padding: 12px 20px;
         font-weight: 500;
         font-size: 0.9rem;
-        border-bottom: 1px solid var(--color-border);
-        transition: background-color 0.2s ease, color 0.2s ease;
-        #fbf6ea-space: nowrap;
+        border-bottom: 1px solid var(--border);
+        transition: all 0.3s ease;
+        white-space: nowrap;
         display: flex;
         align-items: center;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+    }
+
+    .sidebar .nav-link::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 0;
+        background: transparent;
+        transition: width 0.3s ease;
+        z-index: 0;
+    }
+
+    .sidebar .nav-link>* {
+        position: relative;
+        z-index: 1;
     }
 
     .sidebar .nav-link i {
@@ -132,6 +195,14 @@
         margin-right: 10px;
         flex-shrink: 0;
         font-size: 1.2rem;
+        color: var(--warm-brown);
+        transition: all 0.3s ease;
+    }
+
+    .sidebar .nav-link:hover i,
+    .sidebar .nav-link.active i {
+        color: var(--warm-brown);
+        transform: scale(1.1);
     }
 
     .sidebar.collapsed .nav-link {
@@ -150,8 +221,23 @@
 
     .sidebar .nav-link:hover,
     .sidebar .nav-link.active {
-        background-color: rgba(0, 0, 0, 0.08);
-        color: var(--text-color);
+        background-color: transparent;
+        color: var(--foreground);
+        text-decoration: none;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .sidebar .nav-link:hover::before,
+    .sidebar .nav-link.active::before {
+        width: 0;
+    }
+
+    .sidebar .nav-link:hover span,
+    .sidebar .nav-link.active span {
+        color: var(--foreground);
+        font-weight: 500;
+        text-decoration: none;
     }
 
     .page-container {
