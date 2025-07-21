@@ -162,58 +162,69 @@ namespace Suzy.Services
 
         public async Task<string> ProcessUserMessageAsync(int conversationId, string userMessage)
         {
-            var conversation = await _context.ChatConversations
-                .Include(c => c.Messages)
-                .FirstOrDefaultAsync(c => c.Id == conversationId);
-
-            if (conversation == null)
-                throw new ArgumentException("Conversation not found");
-
-            // Add user message
-            var userChatMessage = new ChatMessage
+            try
             {
-                ConversationId = conversationId,
-                Content = userMessage,
-                IsFromUser = true
-            };
+                var conversation = await _context.ChatConversations
+                    .Include(c => c.Messages)
+                    .FirstOrDefaultAsync(c => c.Id == conversationId);
 
-            _context.ChatMessages.Add(userChatMessage);
+                if (conversation == null)
+                    throw new ArgumentException("Conversation not found");
 
-            // Get user data context
-            var dataContext = await GetUserDataContextAsync(conversation.UserId, conversation.PathType);
+                // Add user message
+                var userChatMessage = new ChatMessage
+                {
+                    ConversationId = conversationId,
+                    Content = userMessage,
+                    IsFromUser = true
+                };
 
-            // Generate Suzy's response
-            var prompt = BuildPromptForPath(conversation.PathType, conversation.CurrentStep, userMessage, dataContext);
-            var geminiResponse = await _geminiService.GenerateContentWithRetryAsync(prompt);
+                _context.ChatMessages.Add(userChatMessage);
 
-            // Parse and clean the response
-            var suzyResponse = ExtractTextFromGeminiResponse(geminiResponse);
+                // Get user data context
+                var dataContext = await GetUserDataContextAsync(conversation.UserId, conversation.PathType);
 
-            // Add Suzy's message
-            var suzyMessage = new ChatMessage
-            {
-                ConversationId = conversationId,
-                Content = suzyResponse,
-                IsFromUser = false,
-                DataContext = JsonSerializer.Serialize(dataContext)
-            };
+                // Generate Suzy's response
+                var prompt = BuildPromptForPath(conversation.PathType, conversation.CurrentStep, userMessage, dataContext);
+                var geminiResponse = await _geminiService.GenerateContentWithRetryAsync(prompt);
 
-            _context.ChatMessages.Add(suzyMessage);
+                // Parse and clean the response
+                var suzyResponse = ExtractTextFromGeminiResponse(geminiResponse);
 
-            // Update conversation step
-            conversation.CurrentStep++;
+                // Add Suzy's message
+                var suzyMessage = new ChatMessage
+                {
+                    ConversationId = conversationId,
+                    Content = suzyResponse,
+                    IsFromUser = false,
+                    DataContext = JsonSerializer.Serialize(dataContext)
+                };
 
-            // Check if conversation is completed (based on path length)
-            var chatPath = GetChatPath(conversation.PathType);
-            if (conversation.CurrentStep > chatPath.Questions.Count)
-            {
-                conversation.IsCompleted = true;
-                conversation.CompletedAt = DateTime.UtcNow;
+                _context.ChatMessages.Add(suzyMessage);
+
+                // Update conversation step
+                conversation.CurrentStep++;
+
+                // Check if conversation is completed (based on path length)
+                var chatPath = GetChatPath(conversation.PathType);
+                if (conversation.CurrentStep > chatPath.Questions.Count)
+                {
+                    conversation.IsCompleted = true;
+                    conversation.CompletedAt = DateTime.UtcNow;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return suzyResponse;
             }
+            catch (Exception ex)
+            {
+                // Log the error (in a real app, you'd use proper logging)
+                Console.WriteLine($"Error in ProcessUserMessageAsync: {ex.Message}");
 
-            await _context.SaveChangesAsync();
-
-            return suzyResponse;
+                // Return a friendly error message
+                return "I'm sorry, I'm having trouble processing your message right now. This might be because I'm still learning about your mock exam data. Please try again in a moment, or try asking about a different topic! 😊";
+            }
         }
 
         public List<ChatPath> GetAvailableChatPaths()
@@ -478,8 +489,8 @@ namespace Suzy.Services
                 ChatPathType.WeeklySummary => await GetWeeklySummaryAsync(userId),
                 ChatPathType.MockExamReview => new
                 {
-                    // This would be implemented when mock exam system is added
-                    Message = "Mock exam data not yet implemented"
+                    RecentMockTests = await GetRecentMockTestsAsync(userId),
+                    OverallStats = await GetMockTestOverallStatsAsync(userId)
                 },
                 _ => new { Message = "No data available" }
             };
@@ -494,11 +505,12 @@ namespace Suzy.Services
 You are Suzy, a friendly and motivating AI study assistant. 
 
 RESPONSE RULES:
-- Keep responses under 100 words
+- Keep responses detailed and structured with multiple paragraphs
 - Use a friendly, encouraging tone
-- Include relevant emojis (✅ 📊 🕐 🔁 ❗)
-- Provide 1 core insight per response
-- End with an actionable suggestion when appropriate
+- Include relevant emojis (✅ 📊 🕐 🔁 ❗ 📈 📉 💪 🎯)
+- Provide comprehensive analysis with specific data points
+- End with actionable suggestions when appropriate
+- For mock exam analysis, be thorough and analytical
 
 CONVERSATION CONTEXT:
 - Chat Path: {chatPath.Title}
@@ -580,10 +592,29 @@ Based on the user's data and message, provide a helpful response that follows th
         {
             return step switch
             {
-                1 => "Review their mock exam performance (note: mock exam data not yet implemented).",
-                2 => "Identify areas for improvement based on exam results.",
-                3 => "Offer to create a targeted quiz for weak areas.",
-                _ => "Provide encouragement and wrap up the conversation."
+                1 => @"Analyze their mock exam performance comprehensively. Focus on:
+                     - Overall performance trends and scores
+                     - Subject-wise strengths and weaknesses  
+                     - Comparison with their historical performance
+                     - Identification of consistent problem areas
+                     - Time management and accuracy patterns
+                     Provide specific insights with percentages and concrete examples from their recent tests.",
+
+                2 => @"Based on their mock exam analysis, provide targeted improvement strategies:
+                     - Specific study recommendations for weak subject areas
+                     - Techniques to improve accuracy in problem areas
+                     - Study schedule suggestions focusing on identified gaps
+                     - Practice strategies for consistent weak question types
+                     - Goal setting for next mock exams",
+
+                3 => @"Create a comprehensive study plan and offer to generate targeted practice:
+                     - Weekly study schedule addressing weak areas
+                     - Specific topics to focus on based on their mistakes
+                     - Offer to create custom quiz questions for their problem areas
+                     - Set measurable goals for improvement
+                     - Suggest timeline for next mock exam",
+
+                _ => "Provide encouragement, summarize key insights, and motivate them for continued improvement."
             };
         }
 
@@ -601,12 +632,6 @@ Based on the user's data and message, provide a helpful response that follows th
                     {
                         var text = parts[0].GetProperty("text").GetString();
 
-                        // Truncate if too long (safety measure)
-                        if (text != null && text.Length > 300)
-                        {
-                            text = text.Substring(0, 297) + "...";
-                        }
-
                         return text ?? "Sorry, I couldn't generate a response.";
                     }
                 }
@@ -617,6 +642,112 @@ Based on the user's data and message, provide a helpful response that follows th
             }
 
             return "Sorry, I couldn't generate a response right now. Please try again! 😊";
+        }
+
+        private async Task<object> GetRecentMockTestsAsync(string userId)
+        {
+            try
+            {
+                var recentTests = await _context.MockTestResults
+                    .Where(m => m.UserId == userId)
+                    .OrderByDescending(m => m.Timestamp)
+                    .Take(5)
+                    .ToListAsync();
+
+                var result = new List<object>();
+
+                foreach (var test in recentTests)
+                {
+                    var questions = await _context.MockTestQuestions
+                        .Where(q => q.MockTestResultId == test.Id)
+                        .ToListAsync();
+
+                    result.Add(new
+                    {
+                        test.Id,
+                        test.Subject,
+                        test.Timestamp,
+                        test.Score,
+                        test.TotalQuestions,
+                        ScorePercentage = test.TotalQuestions > 0 ? (double)test.Score / test.TotalQuestions * 100 : 0,
+                        CorrectAnswers = questions.Count(q => q.IsCorrect),
+                        IncorrectAnswers = questions.Count(q => !q.IsCorrect),
+                        WeakAreas = questions
+                            .Where(q => !q.IsCorrect)
+                            .Select(q => q.QuestionText.Length > 100 ? q.QuestionText.Substring(0, 100) + "..." : q.QuestionText)
+                            .Take(3)
+                            .ToList(),
+                        StrongAreas = questions
+                            .Where(q => q.IsCorrect)
+                            .Select(q => q.QuestionText.Length > 100 ? q.QuestionText.Substring(0, 100) + "..." : q.QuestionText)
+                            .Take(3)
+                            .ToList()
+                    });
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                return new List<object>(); // Return empty list if there's an error
+            }
+        }
+
+        private async Task<object> GetMockTestOverallStatsAsync(string userId)
+        {
+            try
+            {
+                var allTests = await _context.MockTestResults
+                    .Where(m => m.UserId == userId)
+                    .ToListAsync();
+
+                if (!allTests.Any())
+                {
+                    return new
+                    {
+                        TotalTestsTaken = 0,
+                        AverageScore = 0.0,
+                        BestScore = 0.0,
+                        HasData = false,
+                        Message = "No mock test data available yet. Take your first mock exam to get started!"
+                    };
+                }
+
+                var testsWithQuestions = allTests.Where(t => t.TotalQuestions > 0).ToList();
+                var scores = testsWithQuestions.Select(t => (double)t.Score / t.TotalQuestions * 100).ToList();
+
+                return new
+                {
+                    TotalTestsTaken = allTests.Count,
+                    AverageScore = scores.Any() ? scores.Average() : 0.0,
+                    BestScore = scores.Any() ? scores.Max() : 0.0,
+                    HasData = allTests.Any(),
+                    SubjectBreakdown = allTests
+                        .GroupBy(t => t.Subject ?? "Unknown")
+                        .Select(g => new
+                        {
+                            Subject = g.Key,
+                            TestCount = g.Count(),
+                            AverageScore = g.Where(t => t.TotalQuestions > 0)
+                                           .Select(t => (double)t.Score / t.TotalQuestions * 100)
+                                           .DefaultIfEmpty(0)
+                                           .Average(),
+                            LastTestDate = g.Max(t => t.Timestamp)
+                        })
+                        .ToList()
+                };
+            }
+            catch (Exception)
+            {
+                return new
+                {
+                    TotalTestsTaken = 0,
+                    AverageScore = 0.0,
+                    BestScore = 0.0,
+                    HasData = false,
+                    Message = "Unable to retrieve mock test statistics at the moment."
+                };
+            }
         }
     }
 }
