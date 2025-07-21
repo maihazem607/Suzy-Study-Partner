@@ -9,73 +9,104 @@
 }
 
 <style>
-    /* --- STYLES REPLACED WITH THE FUTURISTIC CARD DESIGN --- */
-    :root {
-        --primary: #00bcd4;
-        --danger: #f44336;
-        --text-light: #f1f1f1;
-        --text-dark: #1a1a1a;
-        --card-bg-light: rgba(255, 255, 255, 0.85);
-        --card-bg-dark: rgba(18, 18, 18, 0.85);
-        --glow-dark: 0 0 20px #00bcd4;
-        --glass-blur: blur(10px);
-    }
-
-    body.light-mode .futuristic-card {
-        background-color: var(--card-bg-light);
-        color: var(--text-dark);
+    /* Dashboard Cards using Login Page Color Scheme */
+    .futuristic-card {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        border: 1px solid var(--border);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        backdrop-filter: var(--glass-blur);
+        backdrop-filter: blur(10px);
     }
 
-    body.dark-mode .futuristic-card {
-        background-color: var(--card-bg-dark);
-        color: var(--text-light);
-        box-shadow: var(--glow-dark);
-        backdrop-filter: var(--glass-blur);
+    .theme-dark .futuristic-card {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        box-shadow: 0 8px 24px rgba(251, 246, 234, 0.1);
     }
 
     .futuristic-card {
-        border-radius: 2rem;
+        border-radius: 1.5rem;
         padding: 2rem;
-        border: 1px solid var(--primary);
-        transition: all 0.4s ease-in-out;
+        border: 1px solid var(--border);
+        transition: all 0.3s ease-in-out;
         text-align: center;
-        height: 100%; /* Ensures all cards in a row are the same height */
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .futuristic-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--warm-brown), var(--soft-orange));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
     }
 
     .futuristic-card:hover {
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+        border-color: var(--warm-brown);
     }
-    
-    body.dark-mode .futuristic-card:hover {
-        box-shadow: 0 0 30px #00bcd4;
+
+    .futuristic-card:hover::before {
+        opacity: 0.05;
+    }
+
+    .theme-dark .futuristic-card:hover {
+        box-shadow: 0 16px 32px rgba(251, 246, 234, 0.15);
+        border-color: var(--warm-brown);
+    }
+
+    .theme-dark .futuristic-card:hover::before {
+        opacity: 0.1;
     }
 
     .futuristic-card i {
         font-size: 2.5rem;
         margin-bottom: 1rem;
-        color: var(--primary);
+        color: var(--warm-brown);
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-card:hover i {
+        color: var(--soft-orange);
+        transform: scale(1.1);
     }
 
     .futuristic-card h6 {
         font-weight: 600;
         font-size: 1.1rem;
-        color: inherit;
+        color: var(--foreground);
         margin-bottom: 0.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .futuristic-card:hover h6 {
+        color: var(--warm-brown);
     }
 
     .futuristic-card p {
         font-size: 0.9rem;
         line-height: 1.5;
-        color: inherit;
-        opacity: 0.8;
+        color: var(--muted-foreground);
+        opacity: 0.9;
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-card:hover p {
+        color: var(--foreground);
+        opacity: 1;
     }
 </style>
 
 <div class="page-container">
-@await Html.PartialAsync("_Sidebar")
+    @await Html.PartialAsync("_Sidebar")
 
     <div class="page-content">
         <div class="container-fluid p-3">

@@ -41,50 +41,70 @@
 
         /* Navbar theme styling */
         .navbar {
-            background-color: var(--color-light) !important;
-            border-color: var(--color-border) !important;
+            background-color: var(--card) !important;
+            border-color: var(--border) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-dark .navbar {
+            box-shadow: 0 2px 8px rgba(251, 246, 234, 0.1);
         }
 
         .navbar .text-color {
-            color: var(--text-color) !important;
+            color: var(--foreground) !important;
+            font-weight: 600;
         }
 
         .navbar .text-muted {
-            color: var(--color-text-muted) !important;
+            color: var(--muted-foreground) !important;
+        }
+
+        .navbar h4 {
+            color: var(--warm-brown) !important;
+        }
+
+        .navbar h4 i {
+            color: var(--soft-orange);
         }
 
         /* Button styling in navbar */
         .navbar .btn-outline-primary {
-            color: var(--color-primary);
-            border-color: var(--color-primary);
+            color: var(--warm-brown);
+            border-color: var(--warm-brown);
+            transition: all 0.3s ease;
         }
 
         .navbar .btn-outline-primary:hover {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-            color: white;
+            background-color: var(--warm-brown);
+            border-color: var(--warm-brown);
+            color: var(--primary-foreground);
+            transform: translateY(-1px);
         }
 
         .navbar .btn-outline-danger {
             color: var(--color-danger);
             border-color: var(--color-danger);
+            transition: all 0.3s ease;
         }
 
         .navbar .btn-outline-danger:hover {
             background-color: var(--color-danger);
             border-color: var(--color-danger);
             color: white;
+            transform: translateY(-1px);
         }
 
         .navbar .btn-outline-secondary {
-            color: var(--color-text-muted);
-            border-color: var(--color-border);
+            color: var(--muted-foreground);
+            border-color: var(--border);
+            transition: all 0.3s ease;
         }
 
         .navbar .btn-outline-secondary:hover {
-            background-color: var(--color-text-muted);
-            border-color: var(--color-text-muted);
-            color: white;
+            background-color: var(--warm-brown);
+            border-color: var(--warm-brown);
+            color: var(--primary-foreground);
+            transform: translateY(-1px);
         }
 
         /* Fix for fixed navbar spacing */
@@ -144,6 +164,14 @@
             color: hsl(20, 85%, 60%);
             vertical-align: middle;
         }
+
+        .header-heart {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: hsl(20, 85%, 60%);
+            vertical-align: middle;
+            margin-right: 5px;
+        }
     </style>
 
     @await RenderSectionAsync("Head", required: false)
@@ -158,7 +186,7 @@
                 <div class="d-flex align-items-center">
                     <a href="/Index" class="text-decoration-none">
                         <h4 class="m-0 text-color">
-                            <i class="fas fa-graduation-cap me-2"></i>Suzy
+                            <i data-lucide="heart" class="header-heart"></i>Suzy
                         </h4>
                     </a>
 
@@ -222,17 +250,17 @@
     </div>
 
     <footer class="border-top footer text-muted mt-4"
-        style="border-color: var(--color-border); background-color: var(--color-light);">
+        style="border-color: var(--border); background-color: var(--card);">
         <div class="container text-center">
-            <p class="footer-copyright mb-2">
+            <p class="footer-copyright mb-2" style="color: var(--muted-foreground);">
                 &copy; 2025 Suzy. Made with <i data-lucide="heart" class="footer-heart"></i> for learners everywhere.
             </p>
-            <p class="mb-0">
-                <a href="https://github.com/maihazem607/SmartPrep" target="_blank">Developed by</a>
-                <a href="https://www.linkedin.com/in/ajay-anand-s-8a30a62b7/" target="_blank">Ajay Anand</a>,
-                <a href="https://www.linkedin.com/in/mai-hazem-7a5459251/" target="_blank">Mai Hazem</a>,
-                <a href="https://www.linkedin.com/in/haya-zaheer-715b871b0/" target="_blank">Haya Zaheer</a> –
-                <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <p class="mb-0" style="color: var(--muted-foreground);">
+                <a href="https://github.com/maihazem607/SmartPrep" target="_blank" style="color: var(--warm-brown);">Developed by</a>
+                <a href="https://www.linkedin.com/in/ajay-anand-s-8a30a62b7/" target="_blank" style="color: var(--warm-brown);">Ajay Anand</a>,
+                <a href="https://www.linkedin.com/in/mai-hazem-7a5459251/" target="_blank" style="color: var(--warm-brown);">Mai Hazem</a>,
+                <a href="https://www.linkedin.com/in/haya-zaheer-715b871b0/" target="_blank" style="color: var(--warm-brown);">Haya Zaheer</a> –
+                <a asp-area="" asp-page="/Privacy" style="color: var(--warm-brown);">Privacy</a>
             </p>
         </div>
     </footer>

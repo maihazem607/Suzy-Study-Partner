@@ -189,7 +189,7 @@
                         container.empty();
 
                         paths.forEach(function (path) {
-                               const pathElemen t = $(`
+                               const pathElement = $(`
                                                     <a href="#" class="chat-path-item" data-path-type="${path.type}">
                                                         <div class="chat-path-content">
                                                             <div class="chat-path-main">
@@ -287,7 +287,7 @@
                 const alignment = isUser ? 'user-message-container' : 'bot-message-container';
                 const username = isUser ? 'You' : 'Suzy 🤖';
 
-                  const messageHtm  l = $(`
+                  const messageHtml = $(`
                                         <div class="message-wrapper ${alignment}">
                                             <div class="message-bubble ${messageClass}">
                                                 <div class="message-header">${username}</div>
@@ -301,7 +301,7 @@
             }
 
             function addTypingIndicator() {
-                  const typingHtml   = $(`
+                  const typingHtml = $(`
                                         <div class="message-wrapper bot-message-container" id="typingIndicator">
                                             <div class="message-bubble bot-message">
                                                 <div class="message-header">Suzy 🤖</div>

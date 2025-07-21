@@ -262,19 +262,29 @@ textarea::placeholder {
 .theme-toggle-btn {
   font-size: 0.9rem;
   padding: 6px 12px;
-  border: 1px solid #000;
-  background-color: #000; /* Always black */
-  color: #fff; /* Always white icon */
+  border: 1px solid var(--warm-brown);
+  background-color: var(--warm-brown);
+  color: var(--primary-foreground);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
+.theme-toggle-btn:hover {
+  background-color: var(--soft-orange);
+  border-color: var(--soft-orange);
+  transform: translateY(-1px);
+}
+
 body.theme-dark .theme-toggle-btn {
-  /* Keep styles same in dark mode */
-  background-color: #000;
-  color: #fff;
-  border: 1px solid #fff;
+  background-color: var(--warm-brown);
+  color: var(--primary-foreground);
+  border: 1px solid var(--warm-brown);
+}
+
+body.theme-dark .theme-toggle-btn:hover {
+  background-color: var(--soft-orange);
+  border-color: var(--soft-orange);
 }
 
 /* === Input Fields === */
