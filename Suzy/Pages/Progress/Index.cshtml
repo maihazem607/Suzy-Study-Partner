@@ -6,21 +6,20 @@
 }
 
 <style>
-    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid var(--warm-brown); margin-top: 2rem; background: var(--bg-main); }
-    .futuristic-btn { background: linear-gradient(145deg, var(--warm-brown), var(--deep-brown)); border: none; padding: 0.5rem 1rem; color: white !important; border-radius: 12px; text-decoration: none; display: inline-block; transition: all 0.3s ease; }
-    .futuristic-btn:hover { background: linear-gradient(145deg, var(--soft-orange), var(--warm-brown)); transform: translateY(-2px); }
+    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid #00bcd4; margin-top: 2rem; background: rgba(255, 255, 255, 0.85); }
+    .futuristic-btn { background: linear-gradient(145deg, #00acc1, #008ba3); border: none; padding: 0.5rem 1rem; color: white !important; border-radius: 12px; text-decoration: none; display: inline-block; }
     .score-circle {
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background-color:  var(--bg-main);
-        color: var(--deep-brown);
+        background-color: #e0f7fa;
+        color: #00796b;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
         font-weight: bold;
-        border: 4px solid var(--warm-brown);
+        border: 4px solid #00bcd4;
     }
 </style>
 
@@ -29,23 +28,7 @@
 
     <div class="page-content p-4">
         <div class="container-fluid">
-            <h2 class="mb-4 futuristic-heading">Mock Test History</h2>
-
-            @if (TempData["Message"] != null)
-            {
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    @TempData["Message"]
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            }
-            @if (TempData["Error"] != null)
-            {
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    @TempData["Error"]
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            }
-
+            <h2 class="mb-4">Mock Test History</h2>
 
             @if (Model.TestHistory.Any())
             {
@@ -60,18 +43,18 @@
                                     </div>
                                     <div>
                                         <h5 class="mb-0">@result.Subject</h5>
-                                        <small class="text-subtle">@result.Timestamp.ToString("MMMM dd, yyyy 'at' hh:mm tt")</small>
+                                        <small class="text-muted">@result.Timestamp.ToString("MMMM dd, yyyy 'at' hh:mm tt")</small>
                                     </div>
                                 </div>
                                 
                                 @if (result.SourceDocuments.Any())
                                 {
                                     <div class="mt-2">
-                                        <h6 class="text-subtle small">Generated From:</h6>
+                                        <h6 class="text-muted small">Generated From:</h6>
                                         <ul class="list-unstyled mb-0">
                                             @foreach (var doc in result.SourceDocuments)
                                             {
-                                                <li><small><i class="fas fa-file-alt me-2 text-subtle"></i>@doc.SourceDocumentName</small></li>
+                                                <li><small><i class="fas fa-file-alt me-2 text-muted"></i>@doc.SourceDocumentName</small></li>
                                             }
                                         </ul>
                                     </div>
@@ -79,10 +62,6 @@
                                 
                                 <div class="mt-auto pt-3 text-end">
                                     <a href="/MockTest/Result/@result.Id" class="futuristic-btn">View Details</a>
-                                    
-                                    <form method="post" asp-page-handler="Delete" asp-route-id="@result.Id" style="display:inline;" onsubmit="return confirm('Are you sure you want to permanently delete this test result?');">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger ms-2">Delete</button>
-                                    </form>
                                 </div>
                             </div>
                         </div>

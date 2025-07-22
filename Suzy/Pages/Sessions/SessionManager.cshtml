@@ -10,11 +10,6 @@
     <link rel="stylesheet" href="~/css/study-sessions.css" />
     <link rel="stylesheet" href="~/css/session-manager.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
-    <style>
-        .text-info {
-            color: var(--warm-brown) !important;
-        }
-    </style>
 }
 
 <div class="page-container">
@@ -245,63 +240,63 @@
 
             if (sessions.length === 0) {
                 container.innerHTML = `
-                                    <div class="empty-state">
-                                        <i class="fas fa-users fa-2x"></i>
-                                        <p class="mt-2">${isMySession ? 'You haven\'t created any sessions yet.' : 'No sessions available.'}</p>
-                                    </div>
-                                `;
+                                <div class="empty-state">
+                                    <i class="fas fa-users fa-2x"></i>
+                                    <p class="mt-2">${isMySession ? 'You haven\'t created any sessions yet.' : 'No sessions available.'}</p>
+                                </div>
+                            `;
                 return;
             }
 
             container.innerHTML = sessions.map(session => `
-                                <div class="session-card">
-                                    <div class="session-header">
-                                        <div class="session-title">${session.title}</div>
-                                        <div class="session-badge ${session.isPublic ? 'badge-public' : 'badge-private'}">
-                                            ${session.isPublic ? 'Public' : 'Private'}
-                                            ${session.requiresCode && !isMySession ? ' - Code Required' : ''}
-                                        </div>
-                                        ${isMySession ? `
-                                            <div class="session-actions">
-                                                <button class="btn btn-sm btn-outline-danger" 
-                                                        onclick="event.stopPropagation(); deleteSession(${session.id}, '${session.title}')"
-                                                        title="Delete Session">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        ` : ''}
+                            <div class="session-card">
+                                <div class="session-header">
+                                    <div class="session-title">${session.title}</div>
+                                    <div class="session-badge ${session.isPublic ? 'badge-public' : 'badge-private'}">
+                                        ${session.isPublic ? 'Public' : 'Private'}
+                                        ${session.requiresCode && !isMySession ? ' - Code Required' : ''}
                                     </div>
-                    
-                                    <div class="session-clickable" onclick="${isMySession ? `joinSession(${session.id})` : (session.requiresCode ? `joinPrivateSession(${session.id}, '${session.title}')` : `joinSession(${session.id})`)}">
-                                        ${session.description ? `<p class="text-muted mb-2">${session.description}</p>` : ''}
-                        
-                                        <div class="timer-info">
-                                            <div class="timer-type">
-                                                ${getTimerTypeDisplay(session.timerType, session.studyDuration, session.breakDuration)}
-                                            </div>
-                                            <div class="participants-info">
-                                                <i class="fas fa-users"></i>
-                                                ${session.currentParticipants}/${session.maxParticipants}
-                                            </div>
+                                    ${isMySession ? `
+                                        <div class="session-actions">
+                                            <button class="btn btn-sm btn-outline-danger" 
+                                                    onclick="event.stopPropagation(); deleteSession(${session.id}, '${session.title}')"
+                                                    title="Delete Session">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
-                        
-                                        ${isMySession && !session.isPublic ? `
-                                            <div class="mt-2">
-                                                <small class="text-muted">Invite Code: <strong>${session.inviteCode}</strong></small>
-                                            </div>
-                                        ` : ''}
-                            
-                                        ${session.requiresCode && !isMySession ? `
-                                            <div class="mt-2">
-                                                <small class="text-info">
-                                                    <i class="fas fa-lock me-1"></i>
-                                                    Click to enter invite code
-                                                </small>
-                                            </div>
-                                        ` : ''}
-                                    </div>
+                                    ` : ''}
                                 </div>
-                            `).join('');
+                    
+                                <div class="session-clickable" onclick="${isMySession ? `joinSession(${session.id})` : (session.requiresCode ? `joinPrivateSession(${session.id}, '${session.title}')` : `joinSession(${session.id})`)}">
+                                    ${session.description ? `<p class="text-muted mb-2">${session.description}</p>` : ''}
+                        
+                                    <div class="timer-info">
+                                        <div class="timer-type">
+                                            ${getTimerTypeDisplay(session.timerType, session.studyDuration, session.breakDuration)}
+                                        </div>
+                                        <div class="participants-info">
+                                            <i class="fas fa-users"></i>
+                                            ${session.currentParticipants}/${session.maxParticipants}
+                                        </div>
+                                    </div>
+                        
+                                    ${isMySession && !session.isPublic ? `
+                                        <div class="mt-2">
+                                            <small class="text-muted">Invite Code: <strong>${session.inviteCode}</strong></small>
+                                        </div>
+                                    ` : ''}
+                            
+                                    ${session.requiresCode && !isMySession ? `
+                                        <div class="mt-2">
+                                            <small class="text-info">
+                                                <i class="fas fa-lock me-1"></i>
+                                                Click to enter invite code
+                                            </small>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('');
         }
 
         function getTimerTypeDisplay(timerType, studyDuration, breakDuration) {

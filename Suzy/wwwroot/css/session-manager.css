@@ -14,7 +14,7 @@
 .session-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: var(--warm-brown);
+  border-color: var(--color-primary);
 }
 
 .theme-dark .session-card:hover {
@@ -42,22 +42,22 @@
 }
 
 .badge-public {
-  background: var(--warm-brown);
+  background: var(--color-success);
   color: white;
 }
 
 .theme-dark .badge-public {
-  background: var(--warm-brown);
+  background: var(--color-success);
   color: white;
 }
 
 .badge-private {
-  background: var(--soft-orange);
+  background: var(--color-danger);
   color: white;
 }
 
 .theme-dark .badge-private {
-  background: var(--soft-orange);
+  background: var(--color-danger);
   color: white;
 }
 
@@ -123,7 +123,7 @@
 }
 
 .btn-create {
-  background: var(--warm-brown);
+  background: var(--color-primary);
   color: white;
   border: none;
   padding: 12px 25px;
@@ -133,7 +133,7 @@
 }
 
 .btn-create:hover {
-  background: var(--soft-orange);
+  background: var(--color-primary-dark);
   transform: translateY(-1px);
   color: white;
 }
@@ -161,8 +161,8 @@
 }
 
 .tab-button.active {
-  color: var(--warm-brown);
-  border-bottom-color: var(--warm-brown);
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
 }
 
 .tab-content {
