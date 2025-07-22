@@ -34,6 +34,7 @@ namespace Suzy.Pages.MockTest
             _geminiService = new GeminiService();
         }
 
+        // ... (No changes to properties or OnGetAsync) ...
         [BindProperty]
         public int SubjectId { get; set; }
 
@@ -41,9 +42,9 @@ namespace Suzy.Pages.MockTest
         public List<string> SelectedContent { get; set; }
 
         public List<SelectListItem> SubjectOptions { get; set; }
-        
+
         public List<QuizQuestion> QuizQuestions { get; set; }
-        
+
         public int? Score { get; set; }
         public List<QuizQuestion> TestResults { get; set; }
 
@@ -76,9 +77,10 @@ namespace Suzy.Pages.MockTest
                 .Where(pc => pc.CategoryId == subjectId && pc.PastTestPaper.UserId == user.Id)
                 .Select(pc => new { Id = $"pasttest_{pc.PastTestPaperId}", Text = $"Past Test: {pc.PastTestPaper.Title}" })
                 .ToListAsync();
-            
+
             return new JsonResult(notes.Concat(pastTests));
         }
+
 
         public async Task<JsonResult> OnPostGenerateTestAsync()
         {
@@ -99,7 +101,7 @@ namespace Suzy.Pages.MockTest
                 if (type == "note")
                 {
                     var note = await _context.Notes.FindAsync(id);
-                    if(note != null) combinedContent.AppendLine(note.Content);
+                    if (note != null) combinedContent.AppendLine(note.Content);
                 }
                 else if (type == "pasttest")
                 {
@@ -109,22 +111,41 @@ namespace Suzy.Pages.MockTest
                         var filePath = Path.Combine(_env.WebRootPath, test.FilePath.TrimStart('/'));
                         if (System.IO.File.Exists(filePath))
                         {
-                            combinedContent.AppendLine(ReadPdfContent(filePath));
+                            // --- ✅ MODIFIED LOGIC STARTS HERE ---
+                            string fileExtension = Path.GetExtension(filePath).ToLowerInvariant();
+
+                            if (fileExtension == ".pdf")
+                            {
+                                // If it's a PDF, use the PDF reader
+                                combinedContent.AppendLine(ReadPdfContent(filePath));
+                            }
+                            else if (fileExtension == ".txt")
+                            {
+                                // If it's a TXT file, use the new text reader
+                                combinedContent.AppendLine(await ReadTextFileContentAsync(filePath));
+                            }
+                            else
+                            {
+                                // Handle other file types gracefully
+                                combinedContent.AppendLine($"\n[Content from '{test.Title}' could not be read. Unsupported file type: {fileExtension}]\n");
+                            }
+                            // --- ✅ MODIFIED LOGIC ENDS HERE ---
                         }
                     }
                 }
             }
-            
+
             var prompt = $"Based on the following text, generate exactly 10 multiple-choice questions for a test. Each question must have four options. Format the entire output as a single, valid JSON array. Each object in the array should have three properties: \"QuestionText\" (string), \"Options\" (an array of 4 strings), and \"CorrectAnswer\" (a string that exactly matches one of the options). Do not include any text, markdown like ```json, or formatting outside of the JSON array. \n\n---TEXT---\n{combinedContent}";
-            
-            try 
+
+            try
             {
+                // ... (No changes to the Gemini service call and response parsing) ...
                 var rawResponse = await _geminiService.GenerateContentWithRetryAsync(prompt);
                 var root = JsonDocument.Parse(rawResponse).RootElement;
                 var responseText = root
                     .GetProperty("candidates")[0].GetProperty("content")
                     .GetProperty("parts")[0].GetProperty("text").GetString() ?? "";
-                
+
                 responseText = responseText.Trim();
                 if (responseText.StartsWith("```"))
                 {
@@ -143,7 +164,7 @@ namespace Suzy.Pages.MockTest
                 {
                     throw new Exception("AI returned an empty or invalid list of questions.");
                 }
-                
+
                 TempData["QuizAnswers"] = JsonSerializer.Serialize(questions);
                 return new JsonResult(new { success = true, questions = questions });
             }
@@ -153,6 +174,7 @@ namespace Suzy.Pages.MockTest
             }
         }
 
+        // ... (No changes to OnPostSubmitTest) ...
         public async Task<IActionResult> OnPostSubmitTest([FromForm] Dictionary<int, string> answers)
         {
             var answersJson = TempData["QuizAnswers"]?.ToString();
@@ -163,7 +185,7 @@ namespace Suzy.Pages.MockTest
                 TempData["Error"] = "Quiz session expired. Please generate a new one.";
                 return RedirectToPage();
             }
-            
+
             var user = await _userManager.GetUserAsync(User);
             var generatedQuestions = JsonSerializer.Deserialize<List<QuizQuestion>>(answersJson);
             var sourceContentIds = JsonSerializer.Deserialize<List<string>>(sourceContentIdsJson);
@@ -174,7 +196,7 @@ namespace Suzy.Pages.MockTest
                 UserId = user.Id,
                 Timestamp = DateTime.Now,
                 TotalQuestions = generatedQuestions.Count,
-                Subject = "Mock Test", 
+                Subject = "Mock Test",
                 Questions = new List<MockTestQuestion>(),
                 SourceDocuments = new List<MockTestSourceDocument>()
             };
@@ -199,7 +221,7 @@ namespace Suzy.Pages.MockTest
                     if (test != null) title = test.Title;
                     docType = "Past Test";
                 }
-                
+
                 result.SourceDocuments.Add(new MockTestSourceDocument
                 {
                     SourceDocumentName = title,
@@ -224,13 +246,21 @@ namespace Suzy.Pages.MockTest
             }
 
             result.Score = score;
-            
+
             _context.MockTestResults.Add(result);
             await _context.SaveChangesAsync();
-            
+
             return RedirectToPage("./Result", new { id = result.Id });
         }
 
+
+        // ✅ NEW: Simple method to read plain text files
+        private async Task<string> ReadTextFileContentAsync(string filePath)
+        {
+            return await System.IO.File.ReadAllTextAsync(filePath);
+        }
+
+        // This method is now only used for PDF files
         private string ReadPdfContent(string filePath)
         {
             var sb = new StringBuilder();

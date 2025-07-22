@@ -1,0 +1,10 @@
+Past Question: Fundamentals of Programming
+Instructions: Read the provided text carefully and answer all parts of the following question.
+
+Question:
+
+a) Describe the process that allows a computer to execute instructions written by a programmer in a language like Python.
+
+b) According to the document, what are three characteristics of effective code, and why are they important for a program?
+
+c) What is the term for the process of finding and fixing errors in code, and what kind of tool is mentioned as being vital for collaborative development?
