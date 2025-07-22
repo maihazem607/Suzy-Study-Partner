@@ -1,0 +1,19 @@
+Chemistry: The Study of Matter and Its Transformations
+
+Chemistry is the science of matter, its properties, composition, and the changes it undergoes. Often called the "central science," it bridges physics, biology, and other disciplines, providing insights into the building blocks of the universe. This overview explores key concepts in chemistry, including atomic structure, chemical bonding, and reaction types, suitable for a beginner's understanding.
+
+Atomic Structure
+Atoms are the fundamental units of matter, consisting of a nucleus (containing protons and neutrons) and electrons orbiting in energy levels. Protons carry a positive charge, neutrons are neutral, and electrons are negatively charged. The number of protons, known as the atomic number, defines an element. For example, carbon has six protons, giving it an atomic number of 6. The mass number is the sum of protons and neutrons, and isotopes are atoms of the same element with different neutron counts, like carbon-12 and carbon-14.
+
+Chemical Bonding
+Atoms combine to form molecules through chemical bonds, achieving stability by filling their outer electron shells. Ionic bonds form when electrons are transferred between atoms, creating charged ions. For instance, in sodium chloride (NaCl), sodium donates an electron to chlorine, forming Na+ and Cl- ions, which are held together by electrostatic attraction. Covalent bonds involve electron sharing, as in water (H2O), where oxygen shares electrons with two hydrogen atoms. Metallic bonds occur in metals, where electrons are delocalized, contributing to conductivity and malleability.
+
+Types of Chemical Reactions
+Chemical reactions rearrange atoms to form new substances. Key types include:
+- Synthesis: Two or more substances combine (e.g., 2H2 + O2 → 2H2O).
+- Decomposition: A compound breaks into simpler substances (e.g., 2H2O → 2H2 + O2).
+- Single Replacement: An element replaces another in a compound (e.g., Zn + CuSO4 → ZnSO4 + Cu).
+- Double Replacement: Ions in two compounds swap partners (e.g., AgNO3 + NaCl → AgCl + NaNO3).
+- Combustion: A substance reacts with oxygen, releasing energy (e.g., CH4 + 2O2 → CO2 + 2H2O).
+
+The Law of Conservation of Mass dictates that matter is neither created nor destroyed in reactions, so the mass of reactants equals the mass of products. Balancing chemical equations ensures this principle is followed.

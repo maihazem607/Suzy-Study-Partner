@@ -25,6 +25,12 @@
             width: 83.333333%;
         }
 
+        #footerContainer {
+            transition: margin-left 0.3s ease, width 0.3s ease;
+            margin-left: 16.666667%;
+            width: 83.333333%;
+        }
+
         .navbar-text {
             font-weight: 500;
             font-size: 0.9rem;
@@ -251,15 +257,19 @@
 
     <footer class="border-top footer text-muted mt-4"
         style="border-color: var(--border); background-color: var(--card);">
-        <div class="container text-center">
+        <div class="container text-center" id="footerContainer">
             <p class="footer-copyright mb-2" style="color: var(--muted-foreground);">
                 &copy; 2025 Suzy. Made with <i data-lucide="heart" class="footer-heart"></i> for learners everywhere.
             </p>
             <p class="mb-0" style="color: var(--muted-foreground);">
-                <a href="https://github.com/maihazem607/SmartPrep" target="_blank" style="color: var(--warm-brown);">Developed by</a>
-                <a href="https://www.linkedin.com/in/ajay-anand-s-8a30a62b7/" target="_blank" style="color: var(--warm-brown);">Ajay Anand</a>,
-                <a href="https://www.linkedin.com/in/mai-hazem-7a5459251/" target="_blank" style="color: var(--warm-brown);">Mai Hazem</a>,
-                <a href="https://www.linkedin.com/in/haya-zaheer-715b871b0/" target="_blank" style="color: var(--warm-brown);">Haya Zaheer</a> –
+                <a href="https://github.com/maihazem607/SmartPrep" target="_blank"
+                    style="color: var(--warm-brown);">Developed by</a>
+                <a href="https://www.linkedin.com/in/ajay-anand-s-8a30a62b7/" target="_blank"
+                    style="color: var(--warm-brown);">Ajay Anand</a>,
+                <a href="https://www.linkedin.com/in/mai-hazem-7a5459251/" target="_blank"
+                    style="color: var(--warm-brown);">Mai Hazem</a>,
+                <a href="https://www.linkedin.com/in/haya-zaheer-715b871b0/" target="_blank"
+                    style="color: var(--warm-brown);">Haya Zaheer</a> –
                 <a asp-area="" asp-page="/Privacy" style="color: var(--warm-brown);">Privacy</a>
             </p>
         </div>
@@ -389,32 +399,37 @@
         function adjustNavbarForSidebar() {
             const sidebar = document.getElementById('sidebar');
             const navbarContainer = document.getElementById('navbarContainer');
+            const footerContainer = document.getElementById('footerContainer');
 
-            if (sidebar && navbarContainer) {
-                const updateNavbar = () => {
+            if (sidebar && navbarContainer && footerContainer) {
+                const updateContainers = () => {
                     const isCollapsed = sidebar.classList.contains('collapsed');
                     if (isCollapsed) {
                         navbarContainer.style.marginLeft = '80px';
                         navbarContainer.style.width = 'calc(100% - 80px)';
+                        footerContainer.style.marginLeft = '80px';
+                        footerContainer.style.width = 'calc(100% - 80px)';
                     } else {
                         navbarContainer.style.marginLeft = '16.666667%';
                         navbarContainer.style.width = '83.333333%';
+                        footerContainer.style.marginLeft = '16.666667%';
+                        footerContainer.style.width = '83.333333%';
                     }
                 };
 
                 // Initial adjustment (already set in CSS, but ensure it's applied)
-                updateNavbar();
+                updateContainers();
 
                 // Listen for sidebar toggle
                 const sidebarToggle = document.getElementById('sidebarToggle');
                 if (sidebarToggle) {
                     sidebarToggle.addEventListener('click', () => {
-                        setTimeout(updateNavbar, 50); // Small delay to ensure sidebar animation completes
+                        setTimeout(updateContainers, 50); // Small delay to ensure sidebar animation completes
                     });
                 }
 
                 // Also observe for class changes (in case sidebar is toggled elsewhere)
-                const observer = new MutationObserver(updateNavbar);
+                const observer = new MutationObserver(updateContainers);
                 observer.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
             }
         }
