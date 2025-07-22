@@ -649,6 +649,40 @@ namespace Suzy.Migrations
                     b.ToTable("StudyTimerSessions");
                 });
 
+            modelBuilder.Entity("Suzy.Models.TaskItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TaskItems");
+                });
+
             modelBuilder.Entity("Suzy.Models.TodoItem", b =>
                 {
                     b.Property<int>("Id")
@@ -895,6 +929,17 @@ namespace Suzy.Migrations
                         .IsRequired();
 
                     b.Navigation("StudySession");
+                });
+
+            modelBuilder.Entity("Suzy.Models.TaskItem", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Suzy.Models.TodoItem", b =>
