@@ -6,38 +6,21 @@
 }
 
 <style>
-    :root {
-        --primary: #00bcd4;
-        --danger: #f44336;
-        --text-light: #f1f1f1;
-        --text-dark: #1a1a1a;
-        --card-bg-light: rgba(255, 255, 255, 0.85);
-        --card-bg-dark: rgba(18, 18, 18, 0.85);
-        --glow-light: 0 0 10px #00bcd4;
-        --glow-dark: 0 0 20px #00bcd4;
-        --glass-blur: blur(10px);
-    }
-
-    body.light-mode .futuristic-card {
-        background-color: var(--card-bg-light);
-        color: var(--text-dark);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        backdrop-filter: var(--glass-blur);
-    }
-
-    body.dark-mode .futuristic-card {
-        background-color: var(--card-bg-dark);
-        color: var(--text-light);
-        box-shadow: var(--glow-dark);
-        backdrop-filter: var(--glass-blur);
-    }
-
+    /* Use login page color scheme */
     .futuristic-card {
+        background-color: var(--card);
+        color: var(--card-foreground);
+        border: 1px solid var(--warm-brown);
         border-radius: 2rem;
         padding: 2rem;
-        border: 1px solid var(--primary);
         transition: all 0.4s ease-in-out;
         height: 100%;
+        box-shadow: 0 8px 24px rgba(92, 69, 47, 0.1);
+    }
+
+    .futuristic-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(92, 69, 47, 0.15);
     }
 
     .futuristic-heading { text-align: center; font-size: 2rem; font-weight: 700; letter-spacing: 1.2px; color: inherit; margin-bottom: 1.8rem; }
@@ -56,9 +39,71 @@
         perspective: 1000px; /* Creates the 3D space */
         cursor: pointer;
     }
+<<<<<<< HEAD
     .flashcard-inner {
         position: relative;
         width: 100%;
+=======
+
+    .futuristic-input,
+    .futuristic-textarea {
+        background-color: var(--card);
+        border: 2px solid var(--warm-brown);
+        color: var(--card-foreground);
+        padding: 0.7rem 1rem;
+        border-radius: var(--radius);
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-select {
+        background-color: var(--card);
+        border: 2px solid var(--warm-brown);
+        color: var(--card-foreground);
+        padding: 0.7rem 1rem;
+        border-radius: var(--radius);
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .futuristic-select option {
+        background: var(--card);
+        color: var(--card-foreground);
+    }
+
+    .futuristic-input:focus,
+    .futuristic-select:focus,
+    .futuristic-textarea:focus {
+        outline: none;
+        border-color: var(--warm-brown);
+        box-shadow: 0 0 0 3px rgba(92, 69, 47, 0.1);
+    }
+
+    .futuristic-btn {
+        background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 30%));
+        border: none;
+        padding: 0.85rem;
+        color: var(--primary-foreground);
+        font-weight: 600;
+        letter-spacing: 0.6px;
+        border-radius: var(--radius);
+        box-shadow: 0 6px 12px rgba(92, 69, 47, 0.25);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .futuristic-btn:hover {
+        background: linear-gradient(135deg, hsl(25, 45%, 25%), hsl(25, 45%, 20%));
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(92, 69, 47, 0.45);
+    }
+
+    /* Style for the generated flashcards */
+    .flashcard-futuristic {
+        border: 1px solid var(--warm-brown);
+        background-color: rgba(92, 69, 47, 0.08);
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+>>>>>>> 1c3ecea5243fda2c77752465af2aaa13f41706e8
         height: 100%;
         transition: transform 0.6s;
         transform-style: preserve-3d;
@@ -86,8 +131,15 @@
         text-align: center;
         color: inherit;
     }
+<<<<<<< HEAD
     .flashcard-front {
         background-color: rgba(0, 188, 212, 0.08);
+=======
+
+    .flashcard-futuristic:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(92, 69, 47, 0.2);
+>>>>>>> 1c3ecea5243fda2c77752465af2aaa13f41706e8
     }
     .flashcard-back {
         background-color: rgba(0, 188, 212, 0.15);
@@ -120,13 +172,15 @@
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label class="futuristic-label">Select Subject</label>
-                                        <select asp-for="SelectedCategoryId" class="futuristic-select" asp-items="Model.CategoryOptions" id="categorySelect">
+                                        <select asp-for="SelectedCategoryId" class="futuristic-select"
+                                            asp-items="Model.CategoryOptions" id="categorySelect">
                                             <option value="">-- Select Subject --</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="futuristic-label">Select Note</label>
-                                        <select asp-for="SelectedNoteId" class="futuristic-select" asp-items="Model.NoteOptions" id="noteSelect">
+                                        <select asp-for="SelectedNoteId" class="futuristic-select"
+                                            asp-items="Model.NoteOptions" id="noteSelect">
                                             <option value="">-- Select Note --</option>
                                         </select>
                                     </div>

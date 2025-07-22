@@ -6,87 +6,21 @@
 }
 
 <style>
-    /* Base theme styles */
-    :root {
-        --primary: #00bcd4;
-        --danger: #f44336;
-        --text-light: #f1f1f1;
-        --text-dark: #1a1a1a;
-        --card-bg-light: rgba(255, 255, 255, 0.85);
-        --card-bg-dark: rgba(18, 18, 18, 0.85);
-        --glow-dark: 0 0 20px #00bcd4;
-        --glass-blur: blur(10px);
-    }
-
-    body.light-mode .futuristic-card {
-        background-color: var(--card-bg-light);
-        color: var(--text-dark);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        backdrop-filter: var(--glass-blur);
-    }
-
-    body.dark-mode .futuristic-card {
-        background-color: var(--card-bg-dark);
-        color: var(--text-light);
-        box-shadow: var(--glow-dark);
-        backdrop-filter: var(--glass-blur);
-    }
-
-    .futuristic-card {
-        border-radius: 2rem;
-        padding: 2rem;
-        border: 1px solid var(--primary);
-        transition: all 0.4s ease-in-out;
-        height: 100%;
-    }
-    
-    .futuristic-heading {
-        text-align: center;
-        font-size: 2rem;
-        font-weight: 700;
-        letter-spacing: 1.2px;
-        color: inherit;
-    }
-
-    .futuristic-btn {
-        background: linear-gradient(145deg, #00acc1, #008ba3);
-        border: none;
-        padding: 0.5rem 1rem;
-        color: white !important;
-        font-weight: 600;
-        border-radius: 12px;
-        text-decoration: none;
-        display: inline-block;
-        box-shadow: 0 6px 12px rgba(0, 188, 212, 0.25);
-        transition: all 0.3s ease-in-out;
-    }
-    
-    .futuristic-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(0, 188, 212, 0.45);
-    }
-
+    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid var(--warm-brown); margin-top: 2rem; background: var(--bg-main); }
+    .futuristic-btn { background: linear-gradient(145deg, var(--warm-brown), var(--deep-brown)); border: none; padding: 0.5rem 1rem; color: white !important; border-radius: 12px; text-decoration: none; display: inline-block; transition: all 0.3s ease; }
+    .futuristic-btn:hover { background: linear-gradient(145deg, var(--soft-orange), var(--warm-brown)); transform: translateY(-2px); }
     .score-circle {
         width: 80px;
         height: 80px;
         border-radius: 50%;
+        background-color:  var(--bg-main);
+        color: var(--deep-brown);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
         font-weight: bold;
-        border: 4px solid var(--primary);
-        background-color: rgba(0, 188, 212, 0.1);
-        color: var(--primary);
-    }
-
-    body.dark-mode .score-circle {
-        background-color: rgba(0, 188, 212, 0.2);
-        color: var(--text-light);
-    }
-    
-    .text-subtle {
-        opacity: 0.75;
+        border: 4px solid var(--warm-brown);
     }
 </style>
 
