@@ -154,6 +154,51 @@
         margin-bottom: 0.5rem;
         text-transform: uppercase;
     }
+
+    /* Navigation styles */
+    .flashcard-navigation {
+        text-align: center;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .nav-btn {
+        background: var(--warm-brown);
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        margin: 0 0.5rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .nav-btn:hover {
+        background: var(--soft-orange);
+        transform: translateY(-2px);
+    }
+
+    .nav-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .flashcard-counter {
+        display: inline-block;
+        margin: 0 1rem;
+        font-weight: 600;
+        color: var(--warm-brown);
+    }
+
+    .flashcard-display {
+        display: none;
+    }
+
+    .flashcard-display.active {
+        display: block;
+    }
 </style>
 
 <div class="page-container">
@@ -169,8 +214,7 @@
 
                             @if (TempData["Message"] != null)
                             {
-                                <div class="alert alert-success">@TempData["Message"]
-                                </div>
+                                <div class="alert alert-success">@TempData["Message"]</div>
                             }
                             @if (TempData["Error"] != null)
                             {
@@ -217,11 +261,27 @@
                             @if (Model.Flashcards.Any())
                             {
                                 <hr />
-                                <h5 class="mt-4 mb-3">Generated Flashcards (Click to flip)</h5>
-                                <div class="row">
-                                    @foreach (var card in Model.Flashcards)
+                                <h5 class="mt-4 mb-3">Generated Flashcards (Click to view the answer)</h5>
+
+                                <!-- Navigation Controls -->
+                                <div class="flashcard-navigation">
+                                    <button type="button" class="nav-btn" id="prevBtn" onclick="previousCard()">
+                                        <i class="fas fa-chevron-left"></i> Previous
+                                    </button>
+                                    <span class="flashcard-counter">
+                                        <span id="currentCard">1</span> of <span id="totalCards">@Model.Flashcards.Count()</span>
+                                    </span>
+                                    <button type="button" class="nav-btn" id="nextBtn" onclick="nextCard()">
+                                        Next <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Single Flashcard Display -->
+                                <div class="row justify-content-center">
+                                    @for (int i = 0; i < Model.Flashcards.Count(); i++)
                                     {
-                                        <div class="col-md-6 mb-4">
+                                        var card = Model.Flashcards.ElementAt(i);
+                                        <div class="col-md-8 flashcard-display @(i == 0 ? "active" : "")" data-card-index="@i">
                                             <div class="flashcard-container">
                                                 <div class="flashcard-inner">
                                                     <div class="flashcard-front">
@@ -271,15 +331,109 @@
                 });
         });
 
-        // ✅ NEW JAVASCRIPT TO HANDLE THE FLIP ANIMATION
+        // ✅ FLASHCARD NAVIGATION FUNCTIONALITY
+        let currentCardIndex = 0;
+        let totalCards = 0;
+
         document.addEventListener('DOMContentLoaded', function () {
-            // This code runs after the page is fully loaded
-            const flashcards = document.querySelectorAll('.flashcard-container');
-            flashcards.forEach(card => {
-                card.addEventListener('click', () => {
-                    card.querySelector('.flashcard-inner').classList.toggle('is-flipped');
-                });
+            // Initialize flashcard functionality
+            initializeFlashcards();
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    previousCard();
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    nextCard();
+                } else if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    flipCurrentCard();
+                }
             });
         });
+
+        function initializeFlashcards() {
+            const flashcardDisplays = document.querySelectorAll('.flashcard-display');
+            totalCards = flashcardDisplays.length;
+
+            if (totalCards > 0) {
+                // Add click event to current visible flashcard
+                addFlipEventToCurrentCard();
+                updateNavigationButtons();
+            }
+        }
+
+        function addFlipEventToCurrentCard() {
+            const currentFlashcard = document.querySelector('.flashcard-display.active .flashcard-container');
+            if (currentFlashcard) {
+                currentFlashcard.addEventListener('click', function () {
+                    this.querySelector('.flashcard-inner').classList.toggle('is-flipped');
+                });
+            }
+        }
+
+        function previousCard() {
+            if (currentCardIndex > 0) {
+                showCard(currentCardIndex - 1);
+            }
+        }
+
+        function nextCard() {
+            if (currentCardIndex < totalCards - 1) {
+                showCard(currentCardIndex + 1);
+            }
+        }
+
+        function showCard(index) {
+            // Hide current card
+            const currentCard = document.querySelector('.flashcard-display.active');
+            if (currentCard) {
+                currentCard.classList.remove('active');
+                // Reset flip state when switching cards
+                const flipCard = currentCard.querySelector('.flashcard-inner');
+                if (flipCard) {
+                    flipCard.classList.remove('is-flipped');
+                }
+            }
+
+            // Show new card
+            const newCard = document.querySelector(`[data-card-index="${index}"]`);
+            if (newCard) {
+                newCard.classList.add('active');
+                currentCardIndex = index;
+
+                // Add flip event to new card
+                addFlipEventToCurrentCard();
+
+                // Update UI
+                updateNavigationButtons();
+                updateCounter();
+            }
+        }
+
+        function flipCurrentCard() {
+            const currentFlashcard = document.querySelector('.flashcard-display.active .flashcard-inner');
+            if (currentFlashcard) {
+                currentFlashcard.classList.toggle('is-flipped');
+            }
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (prevBtn) prevBtn.disabled = (currentCardIndex === 0);
+            if (nextBtn) nextBtn.disabled = (currentCardIndex === totalCards - 1);
+        }
+
+        function updateCounter() {
+            const currentCardSpan = document.getElementById('currentCard');
+            if (currentCardSpan) {
+                currentCardSpan.textContent = currentCardIndex + 1;
+            }
+        }
     </script>
 }
+  
