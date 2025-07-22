@@ -23,6 +23,7 @@ namespace Suzy.Data
         public DbSet<MockTestResult> MockTestResults { get; set; }
         public DbSet<MockTestQuestion> MockTestQuestions { get; set; }
         public DbSet<MockTestSourceDocument> MockTestSourceDocuments { get; set; }
+        public DbSet<Suzy.Models.TaskItem> TaskItems { get; set; }
         // Chat Analytics models
         public DbSet<ChatConversation> ChatConversations { get; set; } = null!;
         public DbSet<ChatMessage> ChatMessages { get; set; } = null!;

@@ -11,7 +11,7 @@
         padding: 2rem;
         border: 1px solid var(--warm-brown);
         margin-top: 2rem;
-        background: rgba(255, 255, 255, 0.85);
+        background: var(--bg-main);
     }
 
     .futuristic-input {
@@ -67,7 +67,7 @@
 
     <div class="page-content p-4">
         <div class="container-fluid">
-            <h2>Settings</h2>
+            <h2 class="futuristic-heading mb-4">Settings</h2>
 
             @if (!string.IsNullOrEmpty(Model.StatusMessage))
             {
@@ -77,18 +77,18 @@
                 </div>
             }
 
-            <div class="row">
+            <div class="row g-4">
                 <div class="col-lg-8">
                     <div class="futuristic-card">
                         <h5>Profile Information</h5>
                         <form id="profile-form" method="post" asp-page-handler="UpdateProfile">
                             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                             <div class="mb-3">
-                                <label class="form-label">Username (cannot be changed)</label>
+                                <label class="futuristic-label">Username (cannot be changed)</label>
                                 <input class="futuristic-input" value="@Model.Username" disabled />
                             </div>
                             <div class="mb-3">
-                                <label asp-for="Input.Email" class="form-label"></label>
+                                <label asp-for="Input.Email" class="futuristic-label"></label>
                                 <input asp-for="Input.Email" class="futuristic-input" />
                                 <span asp-validation-for="Input.Email" class="text-danger"></span>
                             </div>
@@ -97,21 +97,21 @@
                         </form>
                     </div>
 
-                    <div class="futuristic-card">
+                    <div class="futuristic-card mt-4">
                         <h5>Change Password</h5>
                         <form id="change-password-form" method="post" asp-page-handler="ChangePassword">
                             <div class="mb-3">
-                                <label asp-for="Input.OldPassword" class="form-label"></label>
+                                <label asp-for="Input.OldPassword" class="futuristic-label"></label>
                                 <input asp-for="Input.OldPassword" class="futuristic-input" type="password" />
                                 <span asp-validation-for="Input.OldPassword" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                <label asp-for="Input.NewPassword" class="form-label"></label>
+                                <label asp-for="Input.NewPassword" class="futuristic-label"></label>
                                 <input asp-for="Input.NewPassword" class="futuristic-input" type="password" />
                                 <span asp-validation-for="Input.NewPassword" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+                                <label asp-for="Input.ConfirmPassword" class="futuristic-label"></label>
                                 <input asp-for="Input.ConfirmPassword" class="futuristic-input" type="password" />
                                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                             </div>
@@ -168,10 +168,10 @@
                         </div>
                     </div>
 
-                    <div class="futuristic-card">
+                    <div class="futuristic-card mt-4">
                         <h5>Appearance & Data</h5>
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <span>Theme</span>
+                            <span class="futuristic-label" style="margin-bottom:0;">Theme</span>
                             <div class="theme-switch-wrapper">
                                 <label class="theme-switch" for="theme-toggle">
                                     <input type="checkbox" id="theme-toggle" />

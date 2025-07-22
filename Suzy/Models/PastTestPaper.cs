@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic; // Added for ICollection
 using System.ComponentModel.DataAnnotations;
 
 namespace Suzy.Models
 {
-    // This is a new, self-contained model for your test papers.
-    // It has NO connection to Category or Note.
     public class PastTestPaper
     {
         public int Id { get; set; }
@@ -14,6 +13,9 @@ namespace Suzy.Models
 
         [Required]
         public string FilePath { get; set; }
+
+        // ✅ ADD THIS PROPERTY TO STORE THE FILE'S CONTENT
+        public string Content { get; set; }
 
         [Required]
         public string UserId { get; set; }

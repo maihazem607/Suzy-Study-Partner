@@ -97,20 +97,21 @@
         <div class="futuristic-card">
             @if (Model.TestResults != null)
             {
-                <h3>Test Results</h3>
-                <h4>Your Score: @Model.Score / @Model.TestResults.Count</h4>
-                <hr />
+                <h3 class="futuristic-heading">Test Results</h3>
+                <h4 class="text-center mb-4">Your Score: @Model.Score / @Model.TestResults.Count</h4>
+                <hr style="border-color: rgba(0, 188, 212, 0.3);" />
+
                 @foreach (var result in Model.TestResults)
                 {
-                    <div class="question-block">
+                    <div class="question-block pt-3">
                         <p><strong>@result.QuestionText</strong></p>
                         @foreach (var option in result.Options)
                         {
                             var isCorrect = option == result.CorrectAnswer;
                             var isUserChoice = option == result.UserAnswer;
                             string bgClass = "";
-                            if (isCorrect) bgClass = "correct-answer";
-                            else if (isUserChoice) bgClass = "wrong-answer";
+                            if (isCorrect) { bgClass = "correct-answer"; }
+                            else if (isUserChoice) { bgClass = "wrong-answer"; }
 
                             <div class="p-2 my-1 @bgClass">
                                 @option
@@ -132,7 +133,8 @@
             }
             else
             {
-                <h3>Generate a New Mock Test</h3>
+                <h3 class="futuristic-heading">Generate a New Mock Test</h3>
+
                 <form id="generateForm" method="post" asp-page-handler="GenerateTest">
                     <div class="mb-3">
                         <label asp-for="SubjectId" class="form-label">1. Select Subject</label>
@@ -149,7 +151,7 @@
                             <option value="" disabled>-- Select a subject first --</option>
                         </select>
                     </div>
-                    <button type="button" id="generateTestBtn" class="futuristic-btn">
+                    <button type="button" id="generateTestBtn" class="futuristic-btn mt-3">
                         <span id="btn-text">Generate Test</span>
                         <span id="btn-spinner" class="spinner-border spinner-border-sm d-none" role="status"
                             aria-hidden="true"></span>
@@ -164,7 +166,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="quizModalLabel">Mock Test in Progress</h5>
+                <h5 class="modal-title futuristic-heading" style="font-size: 1.5rem; margin-bottom: 0; color: black !important;" id="quizModalLabel">Mock Test in Progress</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="quizModalBody">
@@ -218,11 +220,27 @@
                     method: 'POST',
                     body: formData
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            let quizHtml = '<form method="post" action="/MockTest/Index?handler=SubmitTest">';
-                            quizHtml += $('input[name="__RequestVerificationToken"]').prop('outerHTML');
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        let quizHtml = '<form method="post" action="/MockTest/Index?handler=SubmitTest">';
+                        quizHtml += $('input[name="__RequestVerificationToken"]').prop('outerHTML');
+
+                        data.questions.forEach((q, i) => {
+                            quizHtml += `<div class="futuristic-card static-light mb-4" style="padding: 1.5rem;"> 
+                                             <p class="mb-3"><strong>${i + 1}. ${q.questionText}</strong></p>`;
+
+                            q.options.forEach((opt, j) => {
+                                // --- ✅ MODIFICATION IS HERE ---
+                                // Reverted to the original, simpler format with just a margin for spacing.
+                                quizHtml += `<div class="form-check mb-2"> 
+                                                 <input class="form-check-input" type="radio" name="answers[${i}]" value="${opt}" id="q${i}-opt${j}" required />
+                                                 <label class="form-check-label" for="q${i}-opt${j}">${opt}</label>
+                                             </div>`;
+                            });
+                            quizHtml += `</div>`;
+                        });
+                        quizHtml += '<div class="d-grid"><button type="submit" class="futuristic-btn">Submit Test</button></div></form>';
 
                             data.questions.forEach((q, i) => {
                                 quizHtml += `<div class="question-block">
