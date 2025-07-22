@@ -6,16 +6,70 @@
 }
 
 <style>
-    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid #00bcd4; margin-top: 2rem; background: rgba(255, 255, 255, 0.85); }
-    .futuristic-select, .futuristic-multiselect { width: 100%; padding: 0.7rem; border-radius: 14px; border: 2px solid #00bcd4; }
-    .futuristic-btn { background: linear-gradient(145deg, #00acc1, #008ba3); border: none; padding: 0.85rem; color: white; border-radius: 16px; width: 100%; }
-    .question-block { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; }
-    .correct-answer { background-color: #d4edda; border-color: #c3e6cb; border-radius: 5px; }
-    .wrong-answer { background-color: #f8d7da; border-color: #f5c6cb; border-radius: 5px; }
+    /* Base variables from your consistent theme */
+    :root {
+        --primary: #00bcd4;
+        --danger: #f44336;
+        --success: #4CAF50;
+        --text-light: #f1f1f1;
+        --text-dark: #1a1a1a;
+        --card-bg-light: rgba(255, 255, 255, 0.85);
+        --card-bg-dark: rgba(18, 18, 18, 0.85);
+        --glow-dark: 0 0 20px #00bcd4;
+        --glass-blur: blur(10px);
+    }
+
+    /* Base card styling */
+    body.light-mode .futuristic-card { background-color: var(--card-bg-light); color: var(--text-dark); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); backdrop-filter: var(--glass-blur); }
+    body.dark-mode .futuristic-card { background-color: var(--card-bg-dark); color: var(--text-light); box-shadow: var(--glow-dark); backdrop-filter: var(--glass-blur); }
+    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid var(--primary); transition: all 0.4s ease-in-out; }
+
+    /* Static card style for quiz questions */
+    .futuristic-card.static-light { background-color: var(--card-bg-light); color: var(--text-dark); backdrop-filter: var(--glass-blur); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
+    body.dark-mode .futuristic-card.static-light { background-color: var(--card-bg-light); color: var(--text-dark); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
+
+    /* Component styles */
+    .futuristic-heading { text-align: center; font-size: 2rem; font-weight: 700; letter-spacing: 1.2px; color: inherit; margin-bottom: 1.8rem; }
+    .futuristic-label { font-weight: 600; font-size: 0.95rem; color: inherit; margin-bottom: 0.4rem; display: block; }
+    .futuristic-input { background-color: rgba(255, 255, 255, 0.03); border: 2px solid var(--primary); color: inherit; padding: 0.7rem 1rem; border-radius: 14px; width: 100%; transition: all 0.3s ease; box-shadow: inset 0 0 8px rgba(0, 188, 212, 0.15); }
+
+    /* Permanent black style for the dropdowns */
+    .futuristic-select, .futuristic-multiselect { background-color: var(--text-dark); border: 2px solid var(--primary); color: var(--text-light); padding: 0.7rem 1rem; border-radius: 14px; width: 100%; transition: all 0.3s ease; box-shadow: inset 0 0 8px rgba(0, 188, 212, 0.15); }
+    .futuristic-select option, .futuristic-multiselect option { background: var(--text-dark); color: var(--text-light); }
     
-    .modal-content { background-color: rgba(255, 255, 255, 0.85); border: 1px solid #00bcd4; border-radius: 2rem; backdrop-filter: blur(10px); }
-    body.dark-mode .modal-content { background-color: rgba(18, 18, 18, 0.85); color: #f1f1f1; }
-    .modal-header, .modal-footer { border-bottom: 1px solid rgba(0, 188, 212, 0.2); border-top: 1px solid rgba(0, 188, 212, 0.2); }
+    .futuristic-input:focus, .futuristic-select:focus, .futuristic-multiselect:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 12px rgba(0, 188, 212, 0.6); }
+
+    /* Button styles */
+    .futuristic-btn { background: linear-gradient(145deg, #00acc1, #008ba3); border: none; padding: 0.85rem; color: white; font-weight: 600; letter-spacing: 0.6px; border-radius: 16px; box-shadow: 0 6px 12px rgba(0, 188, 212, 0.25); transition: all 0.3s ease-in-out; width: 100%; }
+    .futuristic-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 188, 212, 0.45); }
+    
+    /* Styles specific to Mock Test Results (on main page) */
+    .question-block { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(0, 188, 212, 0.2); }
+    .question-block p { font-size: 1.1rem; }
+    
+    /* Theme-aware answer highlights */
+    .correct-answer { background-color: rgba(76, 175, 80, 0.15); border: 1px solid rgba(76, 175, 80, 0.4); border-radius: 8px; color: inherit; }
+    .wrong-answer { background-color: rgba(244, 67, 54, 0.15); border: 1px solid rgba(244, 67, 54, 0.4); border-radius: 8px; color: inherit; }
+    body.dark-mode .correct-answer { background-color: rgba(76, 175, 80, 0.3); }
+    body.dark-mode .wrong-answer { background-color: rgba(244, 67, 54, 0.3); }
+
+    /* Modal styles */
+    .modal-content { background-color: var(--card-bg-light); border: 1px solid var(--primary); border-radius: 2rem; backdrop-filter: var(--glass-blur); }
+    body.dark-mode .modal-content { background-color: var(--card-bg-dark); color: var(--text-light); }
+    .modal-header, .modal-footer { border-color: rgba(0, 188, 212, 0.2); }
+    body.dark-mode .btn-close { filter: invert(1) grayscale(100) brightness(200%); }
+    
+    /* --- ✅ MODIFICATION --- */
+    /* The ugly .quiz-option style has been REMOVED. */
+    /* This rule is kept to ensure radio buttons are visible on the static light card */
+    .static-light .form-check-input {
+        background-color: #eee;
+        border-color: #ccc;
+    }
+    .static-light .form-check-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
 </style>
 
 <div class="page-container">
@@ -25,25 +79,26 @@
         <div class="futuristic-card">
             @if (Model.TestResults != null)
             {
-                <h3>Test Results</h3>
-                <h4>Your Score: @Model.Score / @Model.TestResults.Count</h4>
-                <hr />
+                <h3 class="futuristic-heading">Test Results</h3>
+                <h4 class="text-center mb-4">Your Score: @Model.Score / @Model.TestResults.Count</h4>
+                <hr style="border-color: rgba(0, 188, 212, 0.3);" />
+
                 @foreach (var result in Model.TestResults)
                 {
-                    <div class="question-block">
+                    <div class="question-block pt-3">
                         <p><strong>@result.QuestionText</strong></p>
                         @foreach (var option in result.Options)
                         {
                             var isCorrect = option == result.CorrectAnswer;
                             var isUserChoice = option == result.UserAnswer;
                             string bgClass = "";
-                            if (isCorrect) bgClass = "correct-answer";
-                            else if (isUserChoice) bgClass = "wrong-answer";
+                            if (isCorrect) { bgClass = "correct-answer"; }
+                            else if (isUserChoice) { bgClass = "wrong-answer"; }
 
                             <div class="p-2 my-1 @bgClass">
                                 @option
-                                @if(isCorrect) { <i class="fas fa-check-circle text-success ms-2"></i> }
-                                @if(isUserChoice && !isCorrect) { <i class="fas fa-times-circle text-danger ms-2"></i> }
+                                @if (isCorrect) { <i class="fas fa-check-circle text-success ms-2"></i> }
+                                @if (isUserChoice && !isCorrect) { <i class="fas fa-times-circle text-danger ms-2"></i> }
                             </div>
                         }
                     </div>
@@ -52,21 +107,22 @@
             }
             else
             {
-                <h3>Generate a New Mock Test</h3>
+                <h3 class="futuristic-heading">Generate a New Mock Test</h3>
+
                 <form id="generateForm" method="post" asp-page-handler="GenerateTest">
                     <div class="mb-3">
-                        <label asp-for="SubjectId" class="form-label">1. Select Subject</label>
+                        <label asp-for="SubjectId" class="futuristic-label">1. Select Subject</label>
                         <select id="subject-select" asp-for="SubjectId" class="futuristic-select" asp-items="Model.SubjectOptions">
                             <option value="">-- Select a Subject --</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="SelectedContent" class="form-label">2. Select Content (Hold Ctrl/Cmd to select multiple)</label>
+                        <label asp-for="SelectedContent" class="futuristic-label">2. Select Content (Hold Ctrl/Cmd to select multiple)</label>
                         <select id="content-select" asp-for="SelectedContent" class="futuristic-multiselect" multiple size="8">
                             <option value="" disabled>-- Select a subject first --</option>
                         </select>
                     </div>
-                    <button type="button" id="generateTestBtn" class="futuristic-btn">
+                    <button type="button" id="generateTestBtn" class="futuristic-btn mt-3">
                         <span id="btn-text">Generate Test</span>
                         <span id="btn-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                     </button>
@@ -80,7 +136,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="quizModalLabel">Mock Test in Progress</h5>
+                <h5 class="modal-title futuristic-heading" style="font-size: 1.5rem; margin-bottom: 0; color: black !important;" id="quizModalLabel">Mock Test in Progress</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="quizModalBody">
@@ -123,7 +179,7 @@
             generateBtn.on('click', function () {
                 const btnSpinner = $('#btn-spinner');
                 const btnText = $('#btn-text');
-                
+
                 btnText.addClass('d-none');
                 btnSpinner.removeClass('d-none');
                 generateBtn.prop('disabled', true);
@@ -142,19 +198,22 @@
                     if (data.success) {
                         let quizHtml = '<form method="post" action="/MockTest/Index?handler=SubmitTest">';
                         quizHtml += $('input[name="__RequestVerificationToken"]').prop('outerHTML');
-                        
+
                         data.questions.forEach((q, i) => {
-                            quizHtml += `<div class="question-block">
-                                            <p><strong>${i + 1}. ${q.questionText}</strong></p>`;
+                            quizHtml += `<div class="futuristic-card static-light mb-4" style="padding: 1.5rem;"> 
+                                             <p class="mb-3"><strong>${i + 1}. ${q.questionText}</strong></p>`;
+
                             q.options.forEach((opt, j) => {
-                                quizHtml += `<div class="form-check">
-                                                <input class="form-check-input" type="radio" name="answers[${i}]" value="${opt}" id="q${i}-opt${j}" required />
-                                                <label class="form-check-label" for="q${i}-opt${j}">${opt}</label>
-                                            </div>`;
+                                // --- ✅ MODIFICATION IS HERE ---
+                                // Reverted to the original, simpler format with just a margin for spacing.
+                                quizHtml += `<div class="form-check mb-2"> 
+                                                 <input class="form-check-input" type="radio" name="answers[${i}]" value="${opt}" id="q${i}-opt${j}" required />
+                                                 <label class="form-check-label" for="q${i}-opt${j}">${opt}</label>
+                                             </div>`;
                             });
                             quizHtml += `</div>`;
                         });
-                        quizHtml += '<button type="submit" class="futuristic-btn">Submit Test</button></form>';
+                        quizHtml += '<div class="d-grid"><button type="submit" class="futuristic-btn">Submit Test</button></div></form>';
 
                         quizModalBody.html(quizHtml);
                         quizModal.show();

@@ -6,20 +6,89 @@
 }
 
 <style>
-    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid #00bcd4; margin-top: 2rem; background: rgba(255, 255, 255, 0.85); }
-    .futuristic-btn { background: linear-gradient(145deg, #00acc1, #008ba3); border: none; padding: 0.5rem 1rem; color: white !important; border-radius: 12px; text-decoration: none; display: inline-block; }
+    /* Base theme styles */
+    :root {
+        --primary: #00bcd4;
+        --danger: #f44336;
+        --text-light: #f1f1f1;
+        --text-dark: #1a1a1a;
+        --card-bg-light: rgba(255, 255, 255, 0.85);
+        --card-bg-dark: rgba(18, 18, 18, 0.85);
+        --glow-dark: 0 0 20px #00bcd4;
+        --glass-blur: blur(10px);
+    }
+
+    body.light-mode .futuristic-card {
+        background-color: var(--card-bg-light);
+        color: var(--text-dark);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        backdrop-filter: var(--glass-blur);
+    }
+
+    body.dark-mode .futuristic-card {
+        background-color: var(--card-bg-dark);
+        color: var(--text-light);
+        box-shadow: var(--glow-dark);
+        backdrop-filter: var(--glass-blur);
+    }
+
+    .futuristic-card {
+        border-radius: 2rem;
+        padding: 2rem;
+        border: 1px solid var(--primary);
+        transition: all 0.4s ease-in-out;
+        height: 100%;
+    }
+    
+    .futuristic-heading {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        color: inherit;
+    }
+
+    .futuristic-btn {
+        background: linear-gradient(145deg, #00acc1, #008ba3);
+        border: none;
+        padding: 0.5rem 1rem;
+        color: white !important;
+        font-weight: 600;
+        border-radius: 12px;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 6px 12px rgba(0, 188, 212, 0.25);
+        transition: all 0.3s ease-in-out;
+    }
+    
+    .futuristic-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 188, 212, 0.45);
+    }
+
     .score-circle {
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background-color: #e0f7fa;
-        color: #00796b;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
         font-weight: bold;
-        border: 4px solid #00bcd4;
+        border: 4px solid var(--primary);
+        background-color: rgba(0, 188, 212, 0.1);
+        color: var(--primary);
+    }
+
+    body.dark-mode .score-circle {
+        background-color: rgba(0, 188, 212, 0.2);
+        color: var(--text-light);
+    }
+
+    /* ✅ NEW, SIMPLER RULE */
+    /* This class will make text slightly transparent, which looks "muted" in both light and dark modes. */
+    .text-subtle {
+        opacity: 0.75;
     }
 </style>
 
@@ -28,7 +97,7 @@
 
     <div class="page-content p-4">
         <div class="container-fluid">
-            <h2 class="mb-4">Mock Test History</h2>
+            <h2 class="mb-4 futuristic-heading">Mock Test History</h2>
 
             @if (Model.TestHistory.Any())
             {
@@ -43,18 +112,18 @@
                                     </div>
                                     <div>
                                         <h5 class="mb-0">@result.Subject</h5>
-                                        <small class="text-muted">@result.Timestamp.ToString("MMMM dd, yyyy 'at' hh:mm tt")</small>
+                                        <small class="text-subtle">@result.Timestamp.ToString("MMMM dd, yyyy 'at' hh:mm tt")</small>
                                     </div>
                                 </div>
                                 
                                 @if (result.SourceDocuments.Any())
                                 {
                                     <div class="mt-2">
-                                        <h6 class="text-muted small">Generated From:</h6>
+                                        <h6 class="text-subtle small">Generated From:</h6>
                                         <ul class="list-unstyled mb-0">
                                             @foreach (var doc in result.SourceDocuments)
                                             {
-                                                <li><small><i class="fas fa-file-alt me-2 text-muted"></i>@doc.SourceDocumentName</small></li>
+                                                <li><small><i class="fas fa-file-alt me-2 text-subtle"></i>@doc.SourceDocumentName</small></li>
                                             }
                                         </ul>
                                     </div>

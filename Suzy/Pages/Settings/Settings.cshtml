@@ -6,10 +6,109 @@
 }
 
 <style>
-    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid #00bcd4; margin-top: 2rem; background: rgba(255, 255, 255, 0.85); }
-    .futuristic-input { width: 100%; padding: 0.7rem; border-radius: 14px; border: 2px solid #00bcd4; margin-bottom: 1rem; }
-    .futuristic-btn { background: linear-gradient(145deg, #00acc1, #008ba3); border: none; padding: 0.85rem; color: white !important; border-radius: 16px; text-decoration: none; display: inline-block; }
-    .danger-zone { border-color: #f44336; }
+    /* Complete theme styles from your other pages for consistency */
+    :root {
+        --primary: #00bcd4;
+        --danger: #f44336;
+        --success: #4CAF50;
+        --secondary: #6c757d;
+        --text-light: #f1f1f1;
+        --text-dark: #1a1a1a;
+        --card-bg-light: rgba(255, 255, 255, 0.85);
+        --card-bg-dark: rgba(18, 18, 18, 0.85);
+        --glow-dark: 0 0 20px #00bcd4;
+        --glass-blur: blur(10px);
+    }
+
+    body.light-mode .futuristic-card {
+        background-color: var(--card-bg-light);
+        color: var(--text-dark);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        backdrop-filter: var(--glass-blur);
+    }
+
+    body.dark-mode .futuristic-card {
+        background-color: var(--card-bg-dark);
+        color: var(--text-light);
+        box-shadow: var(--glow-dark);
+        backdrop-filter: var(--glass-blur);
+    }
+
+    .futuristic-card {
+        border-radius: 2rem;
+        padding: 2rem;
+        border: 1px solid var(--primary);
+        transition: all 0.4s ease-in-out;
+    }
+    
+    .futuristic-heading {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        color: inherit;
+    }
+
+    .futuristic-label {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: inherit;
+        margin-bottom: 0.4rem;
+        display: block;
+    }
+
+    .futuristic-input {
+        background-color: rgba(255, 255, 255, 0.03);
+        border: 2px solid var(--primary);
+        color: inherit;
+        padding: 0.7rem 1rem;
+        border-radius: 14px;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 0 8px rgba(0, 188, 212, 0.15);
+    }
+    .futuristic-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 12px rgba(0, 188, 212, 0.6); }
+
+    .futuristic-btn {
+        background: linear-gradient(145deg, #00acc1, #008ba3);
+        border: none;
+        padding: 0.85rem;
+        color: white !important;
+        font-weight: 600;
+        border-radius: 16px;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 6px 12px rgba(0, 188, 212, 0.25);
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+    }
+    
+    .futuristic-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 188, 212, 0.45);
+    }
+    
+    /* Button color variations */
+    .futuristic-btn.btn-secondary { background: linear-gradient(145deg, #868e96, #5a6268); }
+    .futuristic-btn.btn-danger { background: linear-gradient(145deg, #f85032, #e73827); }
+
+    /* Danger Zone card styling */
+    .futuristic-card.danger-zone { border-color: var(--danger); }
+    body.dark-mode .futuristic-card.danger-zone { background-color: rgba(244, 67, 54, 0.1); color: #ffcdd2; }
+    body.dark-mode .futuristic-card.danger-zone .text-danger { color: #ef9a9a !important; }
+
+    /* Collapsible instruction card */
+    .collapse .card {
+        background-color: rgba(0, 188, 212, 0.05);
+        border: 1px solid rgba(0, 188, 212, 0.2);
+        color: inherit;
+    }
+    body.dark-mode .collapse .card { background-color: rgba(0, 188, 212, 0.1); }
+    .collapse .card-body a { color: var(--primary); font-weight: 500; }
+    
+    /* Theme switch styles (assuming base styles are global) */
+    .theme-switch-wrapper { display: flex; align-items: center; }
+
 </style>
 
 <div class="page-container">
@@ -17,7 +116,7 @@
 
     <div class="page-content p-4">
         <div class="container-fluid">
-            <h2>Settings</h2>
+            <h2 class="futuristic-heading mb-4">Settings</h2>
 
             @if (!string.IsNullOrEmpty(Model.StatusMessage))
             {
@@ -27,18 +126,18 @@
                 </div>
             }
 
-            <div class="row">
+            <div class="row g-4">
                 <div class="col-lg-8">
                     <div class="futuristic-card">
                         <h5>Profile Information</h5>
                         <form id="profile-form" method="post" asp-page-handler="UpdateProfile">
                             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                             <div class="mb-3">
-                                <label class="form-label">Username (cannot be changed)</label>
+                                <label class="futuristic-label">Username (cannot be changed)</label>
                                 <input class="futuristic-input" value="@Model.Username" disabled />
                             </div>
                             <div class="mb-3">
-                                <label asp-for="Input.Email" class="form-label"></label>
+                                <label asp-for="Input.Email" class="futuristic-label"></label>
                                 <input asp-for="Input.Email" class="futuristic-input" />
                                 <span asp-validation-for="Input.Email" class="text-danger"></span>
                             </div>
@@ -46,21 +145,21 @@
                         </form>
                     </div>
 
-                    <div class="futuristic-card">
+                    <div class="futuristic-card mt-4">
                         <h5>Change Password</h5>
                         <form id="change-password-form" method="post" asp-page-handler="ChangePassword">
                             <div class="mb-3">
-                                <label asp-for="Input.OldPassword" class="form-label"></label>
+                                <label asp-for="Input.OldPassword" class="futuristic-label"></label>
                                 <input asp-for="Input.OldPassword" class="futuristic-input" type="password" />
                                 <span asp-validation-for="Input.OldPassword" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                <label asp-for="Input.NewPassword" class="form-label"></label>
+                                <label asp-for="Input.NewPassword" class="futuristic-label"></label>
                                 <input asp-for="Input.NewPassword" class="futuristic-input" type="password" />
                                 <span asp-validation-for="Input.NewPassword" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+                                <label asp-for="Input.ConfirmPassword" class="futuristic-label"></label>
                                 <input asp-for="Input.ConfirmPassword" class="futuristic-input" type="password" />
                                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                             </div>
@@ -82,40 +181,40 @@
                         }
 
                         <form method="post" asp-page-handler="UpdateApiKey" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label asp-for="ApiKeyFile" class="form-label">Upload New Key File</label>
-        <input asp-for="ApiKeyFile" type="file" class="futuristic-input" accept=".json" />
-        <span asp-validation-for="ApiKeyFile" class="text-danger"></span>
-    </div>
-    <button type="submit" class="futuristic-btn w-100">Update Key</button>
-</form>
-<hr/>
-<p>
-    <a class="btn btn-sm btn-outline-info w-100" data-bs-toggle="collapse" href="#instructions" role="button">
-        How to get a JSON Key?
-    </a>
-</p>
-<div class="collapse" id="instructions">
-  <div class="card card-body">
-    <ol class="small text-start">
-        <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a>.</li>
-        <li>Select your project from the top dropdown.</li>
-        <li>In the navigation menu (<i class="fas fa-bars"></i>), go to <strong>IAM & Admin > Service Accounts</strong>.</li>
-        <li>Find the service account named <strong>suzy-net@@...</strong> and click on it.</li>
-        <li>Go to the <strong>KEYS</strong> tab.</li>
-        <li>Click <strong>ADD KEY</strong>, then <strong>Create new key</strong>.</li>
-        <li>Choose <strong>JSON</strong> as the key type and click <strong>CREATE</strong>.</li>
-        <li>Your browser will download the key file.</li>
-        <li>Upload that downloaded file here.</li>
-    </ol>
-  </div>
-</div>
+                            <div class="mb-3">
+                                <label asp-for="ApiKeyFile" class="futuristic-label">Upload New Key File</label>
+                                <input asp-for="ApiKeyFile" type="file" class="futuristic-input" accept=".json" />
+                                <span asp-validation-for="ApiKeyFile" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="futuristic-btn w-100">Update Key</button>
+                        </form>
+                        <hr style="border-color: rgba(0, 188, 212, 0.3);"/>
+                        <p class="text-center mb-2">
+                            <a class="futuristic-btn w-100" data-bs-toggle="collapse" href="#instructions" role="button">
+                                How to get a JSON Key?
+                            </a>
+                        </p>
+                        <div class="collapse" id="instructions">
+                          <div class="card card-body">
+                            <ol class="small text-start">
+                                <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a>.</li>
+                                <li>Select your project from the top dropdown.</li>
+                                <li>In the navigation menu (<i class="fas fa-bars"></i>), go to <strong>IAM & Admin > Service Accounts</strong>.</li>
+                                <li>Find the service account named <strong>suzy-net@@...</strong> and click on it.</li>
+                                <li>Go to the <strong>KEYS</strong> tab.</li>
+                                <li>Click <strong>ADD KEY</strong>, then <strong>Create new key</strong>.</li>
+                                <li>Choose <strong>JSON</strong> as the key type and click <strong>CREATE</strong>.</li>
+                                <li>Your browser will download the key file.</li>
+                                <li>Upload that downloaded file here.</li>
+                            </ol>
+                          </div>
+                        </div>
                     </div>
 
-                    <div class="futuristic-card">
+                    <div class="futuristic-card mt-4">
                         <h5>Appearance & Data</h5>
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <span>Theme</span>
+                            <span class="futuristic-label" style="margin-bottom:0;">Theme</span>
                             <div class="theme-switch-wrapper">
                                 <label class="theme-switch" for="theme-toggle">
                                     <input type="checkbox" id="theme-toggle" />
@@ -127,15 +226,15 @@
                             <button type="submit" class="futuristic-btn w-100">Export My Data</button>
                         </form>
                         <form id="logout-form" method="post" asp-page-handler="Logout">
-                            <button type="submit" class="futuristic-btn w-100" style="background: #6c757d;">Log Out</button>
+                             <button type="submit" class="futuristic-btn btn-secondary w-100">Log Out</button>
                         </form>
                     </div>
                     
-                    <div class="futuristic-card danger-zone">
+                    <div class="futuristic-card danger-zone mt-4">
                         <h5 class="text-danger">Danger Zone</h5>
                         <p><small>This action is irreversible. All your notes, tests, and data will be permanently deleted.</small></p>
                         <form id="delete-account-form" method="post" asp-page-handler="DeleteAccount" onsubmit="return confirm('Are you absolutely sure you want to delete your account? This cannot be undone.');">
-                            <button type="submit" class="btn btn-danger w-100">Delete My Account</button>
+                            <button type="submit" class="futuristic-btn btn-danger w-100">Delete My Account</button>
                         </form>
                     </div>
                 </div>
