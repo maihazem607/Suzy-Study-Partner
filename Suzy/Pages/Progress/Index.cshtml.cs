@@ -33,8 +33,6 @@ namespace Suzy.Pages.Progress
                 return Challenge();
             }
 
-            // Fetch all test results for the current user, including the source documents.
-            // Order them by the most recent test first.
             TestHistory = await _context.MockTestResults
                 .Where(r => r.UserId == user.Id)
                 .Include(r => r.SourceDocuments) 
@@ -42,6 +40,39 @@ namespace Suzy.Pages.Progress
                 .ToListAsync();
 
             return Page();
+        }
+
+        // ✅ NEW: Handler to delete a specific test result
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge();
+            }
+
+            // Find the test result by its ID
+            var testResult = await _context.MockTestResults.FindAsync(id);
+
+            // Security check: ensure the result exists and belongs to the current user
+            if (testResult == null || testResult.UserId != user.Id)
+            {
+                TempData["Error"] = "Test result not found or you are not authorized to delete it.";
+                return RedirectToPage();
+            }
+
+            try
+            {
+                _context.MockTestResults.Remove(testResult);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Test result deleted successfully.";
+            }
+            catch (System.Exception ex)
+            {
+                TempData["Error"] = $"Error deleting test result: {ex.Message}";
+            }
+
+            return RedirectToPage();
         }
     }
 }

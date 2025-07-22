@@ -84,9 +84,7 @@
         background-color: rgba(0, 188, 212, 0.2);
         color: var(--text-light);
     }
-
-    /* ✅ NEW, SIMPLER RULE */
-    /* This class will make text slightly transparent, which looks "muted" in both light and dark modes. */
+    
     .text-subtle {
         opacity: 0.75;
     }
@@ -98,6 +96,22 @@
     <div class="page-content p-4">
         <div class="container-fluid">
             <h2 class="mb-4 futuristic-heading">Mock Test History</h2>
+
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
 
             @if (Model.TestHistory.Any())
             {
@@ -131,6 +145,10 @@
                                 
                                 <div class="mt-auto pt-3 text-end">
                                     <a href="/MockTest/Result/@result.Id" class="futuristic-btn">View Details</a>
+                                    
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@result.Id" style="display:inline;" onsubmit="return confirm('Are you sure you want to permanently delete this test result?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger ms-2">Delete</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

@@ -134,7 +134,7 @@
 @section Scripts {
         <!-- Ensure jQuery is loaded -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
         <script>
             let currentConversationId = null;
             let currentPath = null;
@@ -422,37 +422,47 @@
             }
 
             function addMessage(content, isUser) {
-                const messageClass = isUser ? 'user-message' : 'bot-message';
-                const alignment = isUser ? 'user-message-container' : 'bot-message-container';
-                const username = isUser ? 'You' : 'Suzy';
+    const messageClass = isUser ? 'user-message' : 'bot-message';
+    const alignment = isUser ? 'user-message-container' : 'bot-message-container';
+    const username = isUser ? 'You' : 'Suzy';
 
-                let messageHtml;
-                if (isUser) {
-                    messageHtml = $(`
-                        <div class="message-wrapper ${alignment}">
-                            <div class="message-bubble ${messageClass}">
-                                <div class="message-header">${username}</div>
-                                <div class="message-content">${content}</div>
-                            </div>
-                        </div>
-                    `);
-                } else {
-                    messageHtml = $(`
-                        <div class="message-wrapper ${alignment}">
-                            <div class="suzy-profile">
-                                <img src="/lib/assets/SuzyChatIcon.png" alt="Suzy" class="suzy-avatar-small">
-                            </div>
-                            <div class="message-bubble ${messageClass}">
-                                <div class="message-header">${username}</div>
-                                <div class="message-content">${content}</div>
-                            </div>
-                        </div>
-                    `);
-                }
+    // Convert bot's markdown response to HTML before displaying
+    let formattedContent;
+    if (isUser) {
+        // User messages are plain text
+        formattedContent = content;
+    } else {
+        // Bot messages are parsed from Markdown to HTML
+        formattedContent = marked.parse(content);
+    }
 
-                $('#messagesContainer').append(messageHtml);
-                scrollToBottom();
-            }
+    let messageHtml;
+    if (isUser) {
+        messageHtml = $(`
+            <div class="message-wrapper ${alignment}">
+                <div class="message-bubble ${messageClass}">
+                    <div class="message-header">${username}</div>
+                    <div class="message-content">${formattedContent}</div>
+                </div>
+            </div>
+        `);
+    } else {
+        messageHtml = $(`
+            <div class="message-wrapper ${alignment}">
+                <div class="suzy-profile">
+                    <img src="/lib/assets/SuzyChatIcon.png" alt="Suzy" class="suzy-avatar-small">
+                </div>
+                <div class="message-bubble ${messageClass}">
+                    <div class="message-header">${username}</div>
+                    <div class="message-content">${formattedContent}</div>
+                </div>
+            </div>
+        `);
+    }
+
+    $('#messagesContainer').append(messageHtml);
+    scrollToBottom();
+}
 
             function addTypingIndicator() {
                 const typingHtml = $(`
@@ -911,5 +921,33 @@
                     font-size: 0.9rem;
                 }
             }
+            /* === STYLES FOR MARKDOWN CONTENT === */
+.message-content strong, .message-content b {
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.message-content ul, .message-content ol {
+    padding-left: 20px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.message-content li {
+    margin-bottom: 0.25rem;
+    line-height: 1.6;
+}
+
+/* Make headings smaller inside a chat bubble */
+.message-content h1, .message-content h2, .message-content h3, .message-content h4, .message-content h5 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+.message-content h1 { font-size: 1.25em; }
+.message-content h2 { font-size: 1.15em; }
+.message-content h3 { font-size: 1.1em; }
+.message-content p { margin-bottom: 0.75rem; }
         </style>
 }            
