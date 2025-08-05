@@ -1,0 +1,42 @@
+
+Title: Cell Structure and Function
+
+Introduction
+Cells are the basic structural and functional units of life. All living organisms, from the smallest bacteria to the largest mammals, are composed of cells. While there are many types of cells, they generally fall into two categories: prokaryotic and eukaryotic.
+
+1. Prokaryotic Cells
+Prokaryotic cells are simple, small, and lack membrane-bound organelles. The most common examples are bacteria and archaea. Key features include:
+
+- Plasma Membrane: A boundary that controls what enters and exits the cell.
+- Cytoplasm: Gel-like substance inside the cell where metabolic activities occur.
+- DNA: Usually in a single circular chromosome located in a region called the nucleoid.
+- Ribosomes: Small structures responsible for protein synthesis.
+- Cell Wall: Provides structure and protection; made of peptidoglycan in bacteria.
+
+2. Eukaryotic Cells
+Eukaryotic cells are larger and more complex, found in plants, animals, fungi, and protists. These cells contain membrane-bound organelles, including a nucleus. Key organelles include:
+
+- Nucleus: Contains the cell’s DNA and directs all cellular activities.
+- Mitochondria: The powerhouse of the cell; generates ATP through cellular respiration.
+- Endoplasmic Reticulum (ER):
+  - Rough ER (with ribosomes): synthesizes proteins.
+  - Smooth ER: synthesizes lipids and detoxifies chemicals.
+- Golgi Apparatus: Modifies, sorts, and packages proteins and lipids for transport.
+- Lysosomes: Contains digestive enzymes to break down waste.
+- Chloroplasts (in plant cells): Carry out photosynthesis.
+- Cell Wall (in plants and fungi): Provides structure and support.
+- Vacuole: Stores water, nutrients, and waste; especially large in plant cells.
+
+3. The Cell Membrane
+The plasma membrane is made of a phospholipid bilayer with embedded proteins. It is selectively permeable, allowing some substances to pass while blocking others. Proteins in the membrane help with transport, communication, and structural support.
+
+4. Cell Functions
+Cells perform various essential functions:
+
+- Metabolism: Chemical reactions to maintain life, including respiration and photosynthesis.
+- Protein Synthesis: DNA is transcribed into RNA, which is translated into proteins.
+- Reproduction: Cells divide by mitosis (in somatic cells) or meiosis (in gametes).
+- Response to Stimuli: Cells can detect changes in their environment and respond appropriately.
+
+Conclusion
+Understanding the structure and function of cells is fundamental to biology. From the simplest bacteria to the most complex multicellular organisms, life is based on the activities of cells.

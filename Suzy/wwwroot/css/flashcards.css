@@ -1,0 +1,188 @@
+/* Use login page color scheme */
+.futuristic-card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--warm-brown);
+  border-radius: 2rem;
+  padding: 2rem;
+  transition: all 0.4s ease-in-out;
+  height: 100%;
+  box-shadow: 0 8px 24px rgba(92, 69, 47, 0.1);
+}
+
+.futuristic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(92, 69, 47, 0.15);
+}
+
+.futuristic-heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: inherit;
+  margin-bottom: 1.8rem;
+}
+
+.futuristic-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: inherit;
+  margin-bottom: 0.4rem;
+}
+
+.futuristic-input,
+.futuristic-textarea {
+  background-color: var(--card);
+  border: 2px solid var(--warm-brown);
+  color: var(--card-foreground);
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius);
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.futuristic-select {
+  background-color: var(--card);
+  border: 2px solid var(--warm-brown);
+  color: var(--card-foreground);
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius);
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.futuristic-select option {
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
+.futuristic-input:focus,
+.futuristic-select:focus,
+.futuristic-textarea:focus {
+  outline: none;
+  border-color: var(--warm-brown);
+  box-shadow: 0 0 0 3px rgba(92, 69, 47, 0.1);
+}
+
+.futuristic-btn {
+  background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 30%));
+  border: none;
+  padding: 0.85rem;
+  color: var(--primary-foreground);
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 12px rgba(92, 69, 47, 0.25);
+  transition: all 0.3s ease-in-out;
+}
+
+.futuristic-btn:hover {
+  background: linear-gradient(135deg, hsl(25, 45%, 25%), hsl(25, 45%, 20%));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(92, 69, 47, 0.45);
+}
+
+/* --- ✅ NEW STYLES FOR FLIPPING FLASHCARDS --- */
+.flashcard-container {
+  background-color: transparent;
+  height: 250px;
+  /* Fixed height for consistent flipping */
+  perspective: 1000px;
+  /* Creates the 3D space */
+  cursor: pointer;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flashcard-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  /* Safari */
+  backface-visibility: hidden;
+  border-radius: 1.5rem;
+  border: 1px solid var(--warm-brown);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: inherit;
+}
+
+.flashcard-front {
+  background-color: rgba(92, 69, 47, 0.08);
+}
+
+.flashcard-back {
+  background-color: rgba(92, 69, 47, 0.15);
+  transform: rotateY(180deg);
+  /* Start with the back face flipped away */
+}
+
+.flashcard-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+/* Navigation styles */
+.flashcard-navigation {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.nav-btn {
+  background: var(--warm-brown);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.nav-btn:hover {
+  background: var(--soft-orange);
+  transform: translateY(-2px);
+}
+
+.nav-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.flashcard-counter {
+  display: inline-block;
+  margin: 0 1rem;
+  font-weight: 600;
+  color: var(--warm-brown);
+}
+
+.flashcard-display {
+  display: none;
+}
+
+.flashcard-display.active {
+  display: block;
+}

@@ -1,0 +1,110 @@
+Chemistry Multiple Choice Question Exam
+
+Instructions: Choose the correct answer for each question. Each question is worth 1 point.
+
+1. What is the basic unit of matter?
+   a) Molecule
+   b) Atom
+   c) Ion
+   d) Electron
+
+2. What particle in an atom has a negative charge?
+   a) Proton
+   b) Neutron
+   c) Electron
+   d) Nucleus
+
+3. What is the atomic number of an element determined by?
+   a) Number of neutrons
+   b) Number of protons
+   c) Number of electrons
+   d) Total mass of the atom
+
+4. Which type of bond involves the transfer of electrons?
+   a) Covalent
+   b) Ionic
+   c) Metallic
+   d) Hydrogen
+
+5. In a water molecule (H2O), what type of bond forms between oxygen and hydrogen?
+   a) Ionic
+   b) Covalent
+   c) Metallic
+   d) Van der Waals
+
+6. What is an isotope?
+   a) A charged atom
+   b) An atom with a different number of neutrons
+   c) An atom with a different number of electrons
+   d) A molecule with a different structure
+
+7. Which reaction type involves two substances combining to form one product?
+   a) Decomposition
+   b) Synthesis
+   c) Single Replacement
+   d) Double Replacement
+
+8. What happens in a decomposition reaction?
+   a) A compound breaks into simpler substances
+   b) An element replaces another in a compound
+   c) Ions swap between two compounds
+   d) A substance reacts with oxygen
+
+9. In the reaction Zn + CuSO4 → ZnSO4 + Cu, what type of reaction is this?
+   a) Synthesis
+   b) Decomposition
+   c) Single Replacement
+   d) Combustion
+
+10. What does the Law of Conservation of Mass state?
+    a) Energy cannot be created or destroyed
+    b) Matter cannot be created or destroyed
+    c) Atoms always form covalent bonds
+    d) Electrons determine the mass of an atom
+
+11. What is the charge of a neutron?
+    a) Positive
+    b) Negative
+    c) Neutral
+    d) Variable
+
+12. In sodium chloride (NaCl), what holds Na+ and Cl- together?
+    a) Covalent bond
+    b) Electrostatic attraction
+    c) Metallic bond
+    d) Hydrogen bond
+
+13. What type of bond is found in metals, allowing conductivity?
+    a) Ionic
+    b) Covalent
+    c) Metallic
+    d) Polar
+
+14. In the combustion reaction CH4 + 2O2 → CO2 + 2H2O, what is a product?
+    a) CH4
+    b) O2
+    c) CO2
+    d) None of the above
+
+15. How is a chemical equation balanced?
+    a) By changing the subscripts
+    b) By adjusting coefficients
+    c) By altering the atomic number
+    d) By removing products
+
+Answer Key:
+1. b) Atom
+2. c) Electron
+3. b) Number of protons
+4. b) Ionic
+5. b) Covalent
+6. b) An atom with a different number of neutrons
+7. b) Synthesis
+8. a) A compound breaks into simpler substances
+9. c) Single Replacement
+10. b) Matter cannot be created or destroyed
+11. c) Neutral
+12. b) Electrostatic attraction
+13. c) Metallic
+14. c) CO2
+15. b) By adjusting coefficients
