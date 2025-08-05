@@ -166,7 +166,9 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title futuristic-heading" style="font-size: 1.5rem; margin-bottom: 0; color: black !important;" id="quizModalLabel">Mock Test in Progress</h5>
+                <h5 class="modal-title futuristic-heading"
+                    style="font-size: 1.5rem; margin-bottom: 0; color: black !important;" id="quizModalLabel">Mock Test
+                    in Progress</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="quizModalBody">
@@ -220,40 +222,27 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        let quizHtml = '<form method="post" action="/MockTest/Index?handler=SubmitTest">';
-                        quizHtml += $('input[name="__RequestVerificationToken"]').prop('outerHTML');
-
-                        data.questions.forEach((q, i) => {
-                            quizHtml += `<div class="futuristic-card static-light mb-4" style="padding: 1.5rem;"> 
-                                             <p class="mb-3"><strong>${i + 1}. ${q.questionText}</strong></p>`;
-
-                            q.options.forEach((opt, j) => {
-                                // --- ✅ MODIFICATION IS HERE ---
-                                // Reverted to the original, simpler format with just a margin for spacing.
-                                quizHtml += `<div class="form-check mb-2"> 
-                                                 <input class="form-check-input" type="radio" name="answers[${i}]" value="${opt}" id="q${i}-opt${j}" required />
-                                                 <label class="form-check-label" for="q${i}-opt${j}">${opt}</label>
-                                             </div>`;
-                            });
-                            quizHtml += `</div>`;
-                        });
-                        quizHtml += '<div class="d-grid"><button type="submit" class="futuristic-btn">Submit Test</button></div></form>';
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            let quizHtml = '<form method="post" action="/MockTest/Index?handler=SubmitTest">';
+                            quizHtml += $('input[name="__RequestVerificationToken"]').prop('outerHTML');
 
                             data.questions.forEach((q, i) => {
-                                quizHtml += `<div class="question-block">
-                                                        <p><strong>${i + 1}. ${q.questionText}</strong></p>`;
+                                quizHtml += `<div class="futuristic-card static-light mb-4" style="padding: 1.5rem;"> 
+                                                 <p class="mb-3"><strong>${i + 1}. ${q.questionText}</strong></p>`;
+
                                 q.options.forEach((opt, j) => {
-                                    quizHtml += `<div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="answers[${i}]" value="${opt}" id="q${i}-opt${j}" required />
-                                                            <label class="form-check-label" for="q${i}-opt${j}">${opt}</label>
-                                                        </div>`;
+                                    // --- ✅ MODIFICATION IS HERE ---
+                                    // Reverted to the original, simpler format with just a margin for spacing.
+                                    quizHtml += `<div class="form-check mb-2"> 
+                                                     <input class="form-check-input" type="radio" name="answers[${i}]" value="${opt}" id="q${i}-opt${j}" required />
+                                                     <label class="form-check-label" for="q${i}-opt${j}">${opt}</label>
+                                                 </div>`;
                                 });
                                 quizHtml += `</div>`;
                             });
-                            quizHtml += '<button type="submit" class="futuristic-btn">Submit Test</button></form>';
+                            quizHtml += '<div class="d-grid"><button type="submit" class="futuristic-btn">Submit Test</button></div></form>';
 
                             quizModalBody.html(quizHtml);
                             quizModal.show();
