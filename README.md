@@ -4,7 +4,7 @@ A productivity-focused web application designed to help students study more effe
 
 ## 📹 Demo Video
 
-_Video will be added here_
+https://github.com/user-attachments/assets/3364fb57-7e89-4a4a-85aa-8f1d68a838bf
 
 ---
 
