@@ -146,5 +146,4 @@ Suzy/
 
 <div align="center">
   <p>Made with ❤️ for learners everywhere</p>
-  <p>© 2025 Suzy. All rights reserved.</p>
 </div>
