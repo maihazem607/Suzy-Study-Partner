@@ -1,0 +1,34 @@
+.futuristic-card {
+  border-radius: 2rem;
+  padding: 2rem;
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--warm-brown);
+  margin-top: 2rem;
+}
+
+.futuristic-input {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 14px;
+  border: 1px solid var(--warm-brown);
+  margin-bottom: 1rem;
+}
+
+.futuristic-btn {
+  background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 30%));
+  border: none;
+  padding: 0.85rem;
+  color: white !important;
+  border-radius: 16px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.danger-zone {
+  border-color: #f44336;
+}
+
+.json {
+  margin-left: 25px;
+}

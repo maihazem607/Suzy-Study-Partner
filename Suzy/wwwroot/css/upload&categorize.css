@@ -1,0 +1,187 @@
+/* Use login page color scheme */
+.futuristic-card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--warm-brown);
+  border-radius: 2rem;
+  padding: 2rem;
+  transition: all 0.4s ease-in-out;
+  height: 100%;
+  box-shadow: 0 8px 24px rgba(92, 69, 47, 0.1);
+}
+
+.futuristic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(92, 69, 47, 0.15);
+}
+
+/* Static white card for the right side */
+.futuristic-card.card-static-white {
+  background-color: var(--bg-main);
+  color: var(--deep-brown);
+  backdrop-filter: none;
+}
+
+.futuristic-heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: inherit;
+  margin-bottom: 1.8rem;
+}
+
+.futuristic-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: inherit;
+  margin-bottom: 0.4rem;
+}
+
+.futuristic-input {
+  background-color: var(--card);
+  border: 2px solid var(--warm-brown);
+  color: var(--card-foreground);
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius);
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.futuristic-input:focus {
+  outline: none;
+  border-color: var(--warm-brown);
+  box-shadow: 0 0 0 3px rgba(92, 69, 47, 0.1);
+}
+
+.futuristic-btn {
+  background: linear-gradient(135deg, var(--warm-brown), hsl(25, 45%, 30%));
+  border: none;
+  padding: 0.85rem;
+  color: var(--primary-foreground);
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 12px rgba(92, 69, 47, 0.25);
+  transition: all 0.3s ease-in-out;
+}
+
+.futuristic-btn:hover {
+  background: linear-gradient(135deg, hsl(25, 45%, 25%), hsl(25, 45%, 20%));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(92, 69, 47, 0.45);
+}
+
+.futuristic-btn.btn-secondary {
+  background: var(--soft-orange);
+  color: var(--primary-foreground);
+  box-shadow: 0 6px 12px rgba(255, 139, 102, 0.25);
+}
+
+.futuristic-btn.btn-secondary:hover {
+  background: hsl(20, 85%, 55%);
+  box-shadow: 0 10px 20px rgba(255, 139, 102, 0.45);
+}
+
+.futuristic-table th,
+.futuristic-table td {
+  color: inherit;
+  vertical-align: middle;
+  background-color: transparent !important;
+}
+
+.futuristic-table {
+  border: 1px solid var(--warm-brown);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(92, 69, 47, 0.15);
+}
+
+.futuristic-table thead {
+  background-color: rgba(92, 69, 47, 0.1);
+}
+
+.futuristic-table tr:hover {
+  background-color: rgba(92, 69, 47, 0.05);
+}
+
+.futuristic-list-item {
+  background-color: transparent;
+  border: 1px solid var(--warm-brown);
+  color: inherit;
+  margin-bottom: 0.5rem;
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.futuristic-list-item:hover {
+  background-color: rgba(92, 69, 47, 0.05);
+  transform: translateX(4px);
+}
+
+.modal-content {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--warm-brown);
+  border-radius: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.modal-header,
+.modal-footer {
+  border-bottom: 1px solid rgba(92, 69, 47, 0.2);
+  border-top: 1px solid rgba(92, 69, 47, 0.2);
+}
+
+.futuristic-accordion .accordion-item {
+  background-color: rgba(92, 69, 47, 0.1);
+  border: 1px solid rgba(92, 69, 47, 0.3);
+  border-radius: var(--radius) !important;
+  margin-bottom: 0.75rem;
+}
+
+.futuristic-accordion .accordion-button:hover {
+  background-color: rgba(92, 69, 47, 0.15);
+}
+
+.futuristic-accordion .accordion-button:not(.collapsed) {
+  box-shadow: none;
+  background-color: rgba(92, 69, 47, 0.2);
+}
+
+.futuristic-accordion .accordion-button:focus {
+  box-shadow: 0 0 10px rgba(92, 69, 47, 0.5);
+  border: none;
+}
+.futuristic-accordion .accordion-header {
+  border-radius: var(--radius);
+}
+
+.futuristic-accordion .accordion-button {
+  background-color: transparent;
+  font-weight: 500;
+  font-size: 1.25rem;
+  border-radius: var(--radius) !important;
+  transition: background-color 0.3s ease;
+}
+
+.futuristic-accordion .accordion-body ul {
+  padding-left: 1.2rem;
+  margin-bottom: 0;
+}
+
+.futuristic-accordion .accordion-body ul li {
+  padding: 0.2rem 0;
+}
+
+.futuristic-accordion .accordion-button,
+.futuristic-accordion .accordion-body {
+  color: var(--card-foreground);
+}
+
+/* Override for accordion inside the static white card */
+.card-static-white .futuristic-accordion .accordion-button,
+.card-static-white .futuristic-accordion .accordion-body {
+  color: var(--deep-brown) !important;
+}

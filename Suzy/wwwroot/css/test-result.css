@@ -1,0 +1,48 @@
+.text-subtle {
+  opacity: 0.75;
+}
+
+.question-block {
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--warm-brown);
+}
+.question-block:last-of-type {
+  border-bottom: none;
+}
+.question-block p {
+  font-size: 1.1rem;
+}
+
+.correct-answer {
+  background-color: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  border-radius: 8px;
+  color: inherit;
+}
+.wrong-answer {
+  background-color: rgba(244, 67, 54, 0.15);
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  border-radius: 8px;
+  color: inherit;
+}
+body.dark-mode .correct-answer {
+  background-color: rgba(76, 175, 80, 0.3);
+}
+body.dark-mode .wrong-answer {
+  background-color: rgba(244, 67, 54, 0.3);
+}
+
+.list-group-item {
+  color: inherit !important; /* This is the fix */
+  border: 1px solid var(--warm-brown);
+}
+
+/* ✅ NEW RULES TO FIX ICON COLORS IN DARK MODE */
+body.dark-mode .text-success {
+  color: #81c784 !important; /* A lighter, more visible green */
+}
+body.dark-mode .text-danger {
+  color: #e57373 !important; /* A lighter, more visible red */
+}

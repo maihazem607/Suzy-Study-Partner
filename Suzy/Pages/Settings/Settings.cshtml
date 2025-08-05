@@ -5,12 +5,9 @@
     Layout = "_Layout";
 }
 
-<style>
-    .futuristic-card { border-radius: 2rem; padding: 2rem; border: 1px solid #00bcd4; margin-top: 2rem; background: rgba(255, 255, 255, 0.85); }
-    .futuristic-input { width: 100%; padding: 0.7rem; border-radius: 14px; border: 2px solid #00bcd4; margin-bottom: 1rem; }
-    .futuristic-btn { background: linear-gradient(145deg, #00acc1, #008ba3); border: none; padding: 0.85rem; color: white !important; border-radius: 16px; text-decoration: none; display: inline-block; }
-    .danger-zone { border-color: #f44336; }
-</style>
+@section Head {
+    <link rel="stylesheet" href="~/css/settings.css" />
+}
 
 <div class="page-container">
     @await Html.PartialAsync("_Sidebar")
@@ -42,7 +39,8 @@
                                 <input asp-for="Input.Email" class="futuristic-input" />
                                 <span asp-validation-for="Input.Email" class="text-danger"></span>
                             </div>
-                            <button id="update-profile-button" type="submit" class="futuristic-btn">Update Profile</button>
+                            <button id="update-profile-button" type="submit" class="futuristic-btn">Update
+                                Profile</button>
                         </form>
                     </div>
 
@@ -70,7 +68,7 @@
                 </div>
 
                 <div class="col-lg-4">
-                     <div class="futuristic-card">
+                    <div class="futuristic-card">
                         <h5>API Configuration</h5>
                         @if (Model.IsApiKeyFilePresent)
                         {
@@ -82,34 +80,38 @@
                         }
 
                         <form method="post" asp-page-handler="UpdateApiKey" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label asp-for="ApiKeyFile" class="form-label">Upload New Key File</label>
-        <input asp-for="ApiKeyFile" type="file" class="futuristic-input" accept=".json" />
-        <span asp-validation-for="ApiKeyFile" class="text-danger"></span>
-    </div>
-    <button type="submit" class="futuristic-btn w-100">Update Key</button>
-</form>
-<hr/>
-<p>
-    <a class="btn btn-sm btn-outline-info w-100" data-bs-toggle="collapse" href="#instructions" role="button">
-        How to get a JSON Key?
-    </a>
-</p>
-<div class="collapse" id="instructions">
-  <div class="card card-body">
-    <ol class="small text-start">
-        <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a>.</li>
-        <li>Select your project from the top dropdown.</li>
-        <li>In the navigation menu (<i class="fas fa-bars"></i>), go to <strong>IAM & Admin > Service Accounts</strong>.</li>
-        <li>Find the service account named <strong>suzy-net@@...</strong> and click on it.</li>
-        <li>Go to the <strong>KEYS</strong> tab.</li>
-        <li>Click <strong>ADD KEY</strong>, then <strong>Create new key</strong>.</li>
-        <li>Choose <strong>JSON</strong> as the key type and click <strong>CREATE</strong>.</li>
-        <li>Your browser will download the key file.</li>
-        <li>Upload that downloaded file here.</li>
-    </ol>
-  </div>
-</div>
+                            <div class="mb-3">
+                                <label asp-for="ApiKeyFile" class="form-label">Upload New Key File</label>
+                                <input asp-for="ApiKeyFile" type="file" class="futuristic-input" accept=".json" />
+                                <span asp-validation-for="ApiKeyFile" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="futuristic-btn w-100">Update Key</button>
+                        </form>
+                        <hr />
+                        <p>
+                            <a class="futuristic-btn json" data-bs-toggle="collapse" href="#instructions" role="button">
+                                How to get a JSON Key?
+                            </a>
+                        </p>
+                        <div class="collapse" id="instructions">
+                            <div class="card card-body">
+                                <ol class="small text-start">
+                                    <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google
+                                            Cloud Console</a>.</li>
+                                    <li>Select your project from the top dropdown.</li>
+                                    <li>In the navigation menu (<i class="fas fa-bars"></i>), go to <strong>IAM & Admin
+                                            > Service Accounts</strong>.</li>
+                                    <li>Find the service account named <strong>suzy-net@@...</strong> and click on it.
+                                    </li>
+                                    <li>Go to the <strong>KEYS</strong> tab.</li>
+                                    <li>Click <strong>ADD KEY</strong>, then <strong>Create new key</strong>.</li>
+                                    <li>Choose <strong>JSON</strong> as the key type and click <strong>CREATE</strong>.
+                                    </li>
+                                    <li>Your browser will download the key file.</li>
+                                    <li>Upload that downloaded file here.</li>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="futuristic-card">
@@ -127,14 +129,17 @@
                             <button type="submit" class="futuristic-btn w-100">Export My Data</button>
                         </form>
                         <form id="logout-form" method="post" asp-page-handler="Logout">
-                            <button type="submit" class="futuristic-btn w-100" style="background: #6c757d;">Log Out</button>
+                            <button type="submit" class="futuristic-btn w-100" style="background: #6c757d;">Log
+                                Out</button>
                         </form>
                     </div>
-                    
+
                     <div class="futuristic-card danger-zone">
                         <h5 class="text-danger">Danger Zone</h5>
-                        <p><small>This action is irreversible. All your notes, tests, and data will be permanently deleted.</small></p>
-                        <form id="delete-account-form" method="post" asp-page-handler="DeleteAccount" onsubmit="return confirm('Are you absolutely sure you want to delete your account? This cannot be undone.');">
+                        <p><small>This action is irreversible. All your notes, tests, and data will be permanently
+                                deleted.</small></p>
+                        <form id="delete-account-form" method="post" asp-page-handler="DeleteAccount"
+                            onsubmit="return confirm('Are you absolutely sure you want to delete your account? This cannot be undone.');">
                             <button type="submit" class="btn btn-danger w-100">Delete My Account</button>
                         </form>
                     </div>
