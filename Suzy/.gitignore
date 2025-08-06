@@ -67,6 +67,9 @@ appsettings.*.json
 **/apikeys.txt
 **/secrets.txt
 **/config.private.json
+suzy-gemini-key.json
+**/*-key.json
+**/*-credentials.json
 
 # Logs
 logs
